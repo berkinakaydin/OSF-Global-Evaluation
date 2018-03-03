@@ -1,4 +1,8 @@
-var Product = new mongoose.Schema({
+const mongoose = require('mongoose')
+
+var Schema = mongoose.Schema;
+
+var Product = new Schema({
     price_max : Number, 
     page_description : String, 
     page_title : String, 
@@ -9,4 +13,10 @@ var Product = new mongoose.Schema({
     primary_category_id : String, 
     orderable : Boolean, 
     long_description : String
-   });
+});
+
+module.exports = {
+    Schema : function(){
+        return mongoose.model('product', Product);
+    }
+}
