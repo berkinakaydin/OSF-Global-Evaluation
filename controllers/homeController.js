@@ -2,9 +2,22 @@ var path    = require("path");
 var fs = require('fs')
 const mongoose = require('mongoose')
 const MongoClient = require('mongodb').MongoClient
-const file = require('../utils/file.js')
+const categoryDBModel = require('../models/category.js')
+const file = require('../utils/file')
+
+var categoryModel = new categoryDBModel.Schema(); //mongoose.model('product', Product);
+
+var result = {}
+
+
+console.log(result)
 
 
 exports.index = function(req, res){
-  res.sendFile('/views/index.html', { root : '.' });
+  categoryModel.find(function(err, categories) {
+    //TODO Categories
+    res.render('index.html', {data : 'hi' , categories : categories})
+  });
+ 
+  //res.sendFile('/views/index.html', { root : '.' , data : "hello"});
 };

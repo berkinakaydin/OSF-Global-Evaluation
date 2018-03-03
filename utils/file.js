@@ -5,10 +5,10 @@ const mongoose = require('mongoose')
 const productDBModel = require('../models/product.js')
 const categoryDBModel = require('../models/category.js')
 
-const URL = 'mongodb://localhost/testDB'
+const URL = 'mongodb://localhost/osf'
 
 mongoose.connect(URL, function (err, db) {
-    mongoose.connection.db.listCollections({name: 'products', name : 'catagories'}).next(function (err, collinfo) {
+    mongoose.connection.db.listCollections({name: 'products', name : 'categories'}).next(function (err, collinfo) {
         if (!collinfo) {
             readJSON();
             console.log("DB UPDATED")
@@ -52,8 +52,6 @@ var readJSON = function () {
 
             productEntity.save();
         }
-
-        console.log("Saved!")
 
     });
 

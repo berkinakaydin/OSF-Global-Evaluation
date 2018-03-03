@@ -17,12 +17,21 @@
           </div>
           <input type="text" placeholder="Search.." name="search">
           <ul class="nav navbar-nav">
-            <li><a href="#">Women</a></li>
-            <li><a href="#">Men</a></li>
-            <li><a href="#">Page 3</a></li>
+              <% for(var i=0; i<categories.length; i++) {%>
+                  <li><a href="#"><%= categories[i].name%></a></li>
+               <% } %>    
+            <li><a href="#">Login</a></li>
+            <li><a href="#">Register</a></li>
+            <li><a href="#"><%- data -%></a></li>
+
+               
           </ul>
         </div>
         
     </nav>
+
+    <div id='main'>
+
+    </div>
 </body>
 </html>
