@@ -8,11 +8,18 @@ var Product = new Schema({
     page_title : String, 
     name : String, 
     price : Number, 
+    variation_attributes : Array,
     id : String, 
     currency : String, 
+    master : Array,
     primary_category_id : String, 
+    image_groups : Array,
+    short_description : String,
     orderable : Boolean, 
-    long_description : String
+    variants : Array,
+    type : Array,
+    long_description : String,
+    c_isSale : Boolean
 });
 
 module.exports = {
