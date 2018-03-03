@@ -20,8 +20,12 @@
     "angular": "^1.6.9",
     "express": "^4.16.2",
     "mongodb": "^3.0.3",
+<<<<<<< HEAD
     "mongoose": "^5.0.7",
     "serialize-json": "^1.0.2"
+=======
+    "mongoose": "^5.0.7"
+>>>>>>> f6476871ed5f8b670c15896346384854b2c3c999
   },
   "devDependencies": {
     "eslint-config-google": "^0.9.1"

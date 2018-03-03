@@ -1,4 +1,5 @@
 var path    = require("path");
+<<<<<<< HEAD
 var fs = require('fs')
 const mongoose = require('mongoose')
 const MongoClient = require('mongodb').MongoClient
@@ -62,3 +63,9 @@ exports.index = function(req, res){
   res.sendFile('/views/index.html', { root : '.' });
 };
 
+=======
+
+exports.index = function(req, res){
+  res.sendFile('/views/index.html', { root : '.' });
+};
+>>>>>>> f6476871ed5f8b670c15896346384854b2c3c999
