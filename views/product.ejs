@@ -1,0 +1,44 @@
+<html>
+<head>
+  <script src="/js/jquery-3.3.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css">
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/angular.min.js"></script>
+  <title><%= title %></title>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/" style="padding-top:3px">
+              <img width="200" height="40" src="/images/logo.png" style="float:left">
+            </a>
+          </div>
+          <input type="text" placeholder="Search.." name="search">
+          <ul class="nav navbar-nav">
+                <% for(var i=0; i<allCategories.length; i++) {%>
+                        <li>
+                            <% var url = '/' %>
+                                <% url += allCategories[i].id %>
+                                    <a href="<%= url %>">
+                                        <%= allCategories[i].name%>
+                                    </a>
+                        </li>
+                        <% } %>
+            <li><a href="#">Login</a></li>
+            <li><a href="#">Register</a></li>
+
+               
+          </ul>
+        </div>
+        
+    </nav>
+
+    <div id='main'>
+      <div id=categories class="container">
+   <p>wow</p>
+      </div>
+    </div>
+</body>
+</html>

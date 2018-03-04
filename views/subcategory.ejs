@@ -10,32 +10,62 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/" style="padding-top:3px">
-                    <img width="200" height="40" src="/images/logo.png" style="float:left">
-                </a>
-            </div>
-            <input type="text" placeholder="Search.." name="search">
-            <ul class="nav navbar-nav">
+        <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                  <div class="navbar-header">
+                    <a class="navbar-brand" href="/" style="padding-top:3px">
+                      <img width="200" height="40" src="/images/logo.png" style="float:left">
+                    </a>
+                  </div>
+                  <input type="text" placeholder="Search.." name="search">
+                  <ul class="nav navbar-nav">
+                        <% for(var i=0; i<allCategories.length; i++) {%>
+                                <li>
+                                    <% var url = '/' %>
+                                        <% url += allCategories[i].id %>
+                                            <a href="<%= url %>">
+                                                <%= allCategories[i].name%>
+                                            </a>
+                                </li>
+                                <% } %>
+                    <li><a href="#">Login</a></li>
+                    <li><a href="#">Register</a></li>
+        
+                       
+                  </ul>
+                </div>
                 
-                        <li>
-                            <a href="#">Login</a>
-                        </li>
-                        <li>
-                            <a href="#">Register</a>
-                        </li>
-            </ul>
-        </div>
+            </nav>
 
-    </nav>
+            <div id='main'>
+                    <div id=categories class="container">
+                            <p><%=subcategory.name %></p>
+                            <p><%=subcategory.page_description %></p>
+                        <% for(var i=0; i<subcategory.categories.length; i++) {%>
 
-    <div id='main'>
-        <div id=categories class="container">
+
+                            <div id=category class="col-md-6">
             
-        </div>
-    </div>
+                                    <div class="card mb-6 box-shadow">
+                                            <div id='image'>
+                                                    <img  src="/images/<%=subcategory.categories[i].image%>" style="max-width: 100% !important; height: auto;width: auto;" > 
+                                            </div>
+                                            <div id='information'>
+                                                    <p>                                                                                                                 
+                                                            <%=subcategory.categories[i].page_description%>
+                                                    </p>
+                                            </div>
+                                            <% var url = subcategory.parent_category_id + '/'%>
+                                            <% url += subcategory.id + '/' %>
+                                            <% url += subcategory.categories[i].id %>
+                                            <p><a href="/<%= url %>" class="btn btn-primary" role="button">Go</a></p>
+                                    </div>
+                            </div>
+                     
+            
+                            <% } %>
+                    </div>
+                </div>
 </body>
 
 </html>
