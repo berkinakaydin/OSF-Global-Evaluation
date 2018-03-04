@@ -7,16 +7,11 @@ const file = require('../utils/file')
 
 var categoryModel = new categoryDBModel.Schema(); //mongoose.model('product', Product);
 
-var result = {}
-
-
-console.log(result)
-
 
 exports.index = function(req, res){
   categoryModel.find(function(err, categories) {
     //TODO Categories
-    res.render('index.html', {data : 'hi' , categories : categories})
+    res.render('index', {data : 'hi' , categories : categories})
   });
  
   //res.sendFile('/views/index.html', { root : '.' , data : "hello"});

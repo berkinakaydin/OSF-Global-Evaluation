@@ -1,0 +1,62 @@
+<html>
+<head>
+  <title>Express HTML</title>
+  <script src="/js/jquery-3.3.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css">
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/angular.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/" style="padding-top:3px">
+              <img width="200" height="40" src="/images/logo.png" style="float:left">
+            </a>
+          </div>
+          <input type="text" placeholder="Search.." name="search">
+          <ul class="nav navbar-nav">
+              <% for(var i=0; i<categories.length; i++) {%>
+                  <li><a href="#"><%= categories[i].name%></a></li>
+               <% } %>    
+            <li><a href="#">Login</a></li>
+            <li><a href="#">Register</a></li>
+            <li><a href="#"><%= data %></a></li>
+
+               
+          </ul>
+        </div>
+        
+    </nav>
+
+    <div id='main'>
+      <div id=categories class="container">
+        <% for(var i=0; i<categories.length; i++) {%>
+
+          <div id=category class="col-md-6">
+            <div class="card mb-4 box-shadow">
+              <% if(i==0) {%>
+                <img class="card-img-top" src="/images/man.png" data-holder-rendered="true" width="200" height="200" style='display:block; margin:auto'>
+              <% }else{ %>           
+                <img class="card-img-top" src="/images/woman.png" data-holder-rendered="true" width="200" height="200" style='display:block; margin:auto'>              
+              <% } %>
+              <div id='information'>
+                <h3 style='text-align:center'>                
+                  <%= categories[i].name %>
+                </h3>
+                <h5>
+                    <%= categories[i].page_description %>
+                  </h5>      
+                  <h5>
+                      <%= categories[i].page_title %>
+                  </h5>                                                      
+              </div>
+            </div>
+          </div>
+          
+       <% } %>    
+      </div>
+    </div>
+</body>
+</html>

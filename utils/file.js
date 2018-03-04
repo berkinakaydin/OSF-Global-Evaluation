@@ -11,9 +11,9 @@ mongoose.connect(URL, function (err, db) {
     mongoose.connection.db.listCollections({name: 'products', name : 'categories'}).next(function (err, collinfo) {
         if (!collinfo) {
             readJSON();
-            console.log("DB UPDATED")
+            //console.log("DB UPDATED")
         } else {
-            console.log("DB IS UP-TO-DATE")
+            //console.log("DB IS UP-TO-DATE")
         }
     });
 });
