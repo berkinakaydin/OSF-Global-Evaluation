@@ -17,5 +17,7 @@ const categoryController = require('./controllers/categoryController');
 app.get('/', homeController.index);
 app.get('/mens', categoryController.index);
 app.get('/womens', categoryController.index);
+app.get('/womens/*', categoryController.subcatagory);
+app.get('/mens/*', categoryController.subcatagory);
 
 app.listen(3000, () => console.log('Example app listening on port 80!'))
