@@ -38,10 +38,16 @@ exports.products = function(req, res){
 
     categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
         productModel.find({primary_category_id:productCategory},function(err, products) { //QUERIED RESULTS FROM URL
-            res.render('category_product', {title:'wow', allCategories : allCategories, products : products})
+
+            var productCategory = products[0].primary_category_id.replace(/-/g, " ");
+            productCategory = titleCase(productCategory);        
+            
+            var title = productCategory
+            res.render('category_product', {title:title, allCategories : allCategories, products : products})
           });
-          
     });
 };
 
-  
+function titleCase(str) {
+    return str.toLowerCase().split(' ').map(x=>x[0].toUpperCase()+x.slice(1)).join(' ');
+  }

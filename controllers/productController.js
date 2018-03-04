@@ -15,7 +15,6 @@ exports.index = function(req, res){
 
     categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
         productModel.find({'primary_category_id':productCategory},function(err, products) { //QUERIED RESULTS FROM URL
-           console.log('amk')
             res.render('category_product', {title:'wow', allCategories : allCategories, products : products})
           });
           
