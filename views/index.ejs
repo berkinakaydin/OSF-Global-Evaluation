@@ -18,7 +18,11 @@
           <input type="text" placeholder="Search.." name="search">
           <ul class="nav navbar-nav">
               <% for(var i=0; i<categories.length; i++) {%>
-                  <li><a href="#"><%= categories[i].name%></a></li>
+                  <li>
+                      <% var url = '/' %>
+                      <% url += categories[i].id %>       
+                      <a href= "<%= url %>">
+                        <%= categories[i].name%></a></li>
                <% } %>    
             <li><a href="#">Login</a></li>
             <li><a href="#">Register</a></li>
@@ -36,11 +40,16 @@
 
           <div id=category class="col-md-6">
             <div class="card mb-4 box-shadow">
+                <% var url = '/' %>
+                <% url += categories[i].id %>       
+                <a href= "<%= url %>">              
               <% if(i==0) {%>
+                
                 <img class="card-img-top" src="/images/man.png" data-holder-rendered="true" width="200" height="200" style='display:block; margin:auto'>
               <% }else{ %>           
                 <img class="card-img-top" src="/images/woman.png" data-holder-rendered="true" width="200" height="200" style='display:block; margin:auto'>              
               <% } %>
+            </a>
               <div id='information'>
                 <h3 style='text-align:center'>                
                   <%= categories[i].name %>

@@ -10,9 +10,6 @@ var categoryModel = new categoryDBModel.Schema(); //mongoose.model('product', Pr
 
 exports.index = function(req, res){
   categoryModel.find(function(err, categories) {
-    //TODO Categories
     res.render('index', {data : 'hi' , categories : categories})
   });
- 
-  //res.sendFile('/views/index.html', { root : '.' , data : "hello"});
 };

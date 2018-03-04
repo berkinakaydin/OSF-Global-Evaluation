@@ -12,8 +12,10 @@ app.set('views', __dirname + '/views');
 app.use(express.static(path.resolve('./public')));   
 
 const homeController = require('./controllers/homeController');
-
+const categoryController = require('./controllers/categoryController');
 
 app.get('/', homeController.index);
+app.get('/mens', categoryController.index);
+app.get('/womens', categoryController.index);
 
 app.listen(3000, () => console.log('Example app listening on port 80!'))
