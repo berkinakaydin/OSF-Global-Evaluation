@@ -1,6 +1,5 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const mongodb = require('mongodb')
 const path = require('path')
 
 
@@ -18,8 +17,11 @@ const productController = require('./controllers/productController')
 app.get('/', homeController.index);
 app.get('/mens', categoryController.index);
 app.get('/womens', categoryController.index);
+app.get('/womens/womens-*/*/*', productController.index);
+app.get('/mens/mens-*/*/*', productController.index);
 app.get('/womens/womens-*/*', categoryController.products);
 app.get('/mens/mens-*/*', categoryController.products);
+
 app.get('/womens/*', categoryController.subcatagory);
 app.get('/mens/*', categoryController.subcatagory);
 

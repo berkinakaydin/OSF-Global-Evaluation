@@ -34,8 +34,9 @@ exports.subcatagory = function(req,res){
 
 exports.products = function(req, res){
     var url = req.path.replace('/','')
+  
     var productCategory = url.split('/')[2]
-
+    console.log(url)
     categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
         productModel.find({primary_category_id:productCategory},function(err, products) { //QUERIED RESULTS FROM URL
 
@@ -43,7 +44,7 @@ exports.products = function(req, res){
             productCategory = titleCase(productCategory);        
             
             var title = productCategory
-            res.render('category_product', {title:title, allCategories : allCategories, products : products})
+            res.render('category_product', {title:title, allCategories : allCategories, products : products, parentUrl : url})
           });
     });
 };

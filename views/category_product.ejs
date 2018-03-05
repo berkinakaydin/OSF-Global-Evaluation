@@ -48,15 +48,16 @@
                                 </div>
                                 <div id='information'>
                                         <p>
-                                                <%=products[i].name%>
-                                                
-                                              
+                                                <%=products[i].name%>                                                                                        
                                         </p>
                                         <p>
                                             <%=products[i].page_description%>
                                         </p>
                                 </div>
-                                
+                                <%var url = '/'%>
+                                <% url += parentUrl + '/'%>
+                                <% url += products[i].id %>
+                                <p><a href="<%= url %>" class="btn btn-primary" role="button">Go</a></p>
                         </div>
                 </div>
          

@@ -1,7 +1,6 @@
 var path = require("path");
 var fs = require('fs')
 const mongoose = require('mongoose')
-
 const productDBModel = require('../models/product.js')
 const categoryDBModel = require('../models/category.js')
 

@@ -1,44 +1,85 @@
 <html>
+
 <head>
   <script src="/js/jquery-3.3.1.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css">
   <script src="/js/bootstrap.min.js"></script>
   <script src="/js/angular.min.js"></script>
-  <title><%= title %></title>
+  <script src="/js/productPage.js"></script>
+  <title>
+    <%= title %>
+  </title>
 </head>
-<body>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="/" style="padding-top:3px">
-              <img width="200" height="40" src="/images/logo.png" style="float:left">
-            </a>
-          </div>
-          <input type="text" placeholder="Search.." name="search">
-          <ul class="nav navbar-nav">
-                <% for(var i=0; i<allCategories.length; i++) {%>
-                        <li>
-                            <% var url = '/' %>
-                                <% url += allCategories[i].id %>
-                                    <a href="<%= url %>">
-                                        <%= allCategories[i].name%>
-                                    </a>
-                        </li>
-                        <% } %>
-            <li><a href="#">Login</a></li>
-            <li><a href="#">Register</a></li>
 
-               
-          </ul>
-        </div>
-        
-    </nav>
-
-    <div id='main'>
-      <div id=categories class="container">
-   <p>wow</p>
+<body ng-app="product">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/" style="padding-top:3px">
+          <img width="200" height="40" src="/images/logo.png" style="float:left">
+        </a>
       </div>
+      <input type="text" placeholder="Search.." name="search">
+      <ul class="nav navbar-nav">
+        <% for(var i=0; i<allCategories.length; i++) {%>
+          <li>
+            <% var url = '/' %>
+              <% url += allCategories[i].id %>
+                <a href="<%= url %>">
+                  <%= allCategories[i].name%>
+                </a>
+          </li>
+          <% } %>
+            <li>
+              <a href="#">Login</a>
+            </li>
+            <li>
+              <a href="#">Register</a>
+            </li>
+
+
+      </ul>
     </div>
+
+  </nav>
+
+  <div id='main'>
+    <div id=product class="container" >
+
+      <%if(product.variation_attributes[0]){%>
+        <div id='image' ng-controller="productColor">
+          <select>             
+              <!--<option value="color" ng-repeat="color in colors">{{color}}</option>-->
+
+            <<% for(var i=0; i<product.variation_attributes[0].values.length; i++) {%>
+              <option value="color">
+                <%=product.variation_attributes[0].values[i].name%>
+              </option>
+              <% }%>
+          </select>
+        </div>
+        <%}%>
+          <div id='information'>
+            <p>
+              <%=product.name%>
+            </p>
+            <p>
+              <%=product.price%>
+            </p>
+            <p>
+              <%=product.page_description%>
+            </p>
+            <p>
+              <%=product.currency%>
+            </p>
+            <p>
+              <%-product.long_description%>
+            </p>
+          </div>
+
+    </div>
+  </div>
 </body>
+
 </html>

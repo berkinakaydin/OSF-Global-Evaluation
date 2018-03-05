@@ -1,7 +1,6 @@
 var path    = require("path");
 var fs = require('fs')
 const mongoose = require('mongoose')
-const MongoClient = require('mongodb').MongoClient
 const categoryDBModel = require('../models/category.js')
 const file = require('../utils/file')
 
