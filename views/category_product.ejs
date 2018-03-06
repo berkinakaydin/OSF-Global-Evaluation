@@ -54,8 +54,8 @@
                                             <%=products[i].page_description%>
                                         </p>
                                 </div>
-                                <%var url = '/'%>
-                                <% url += parentUrl + '/'%>
+                               
+                                <%var url = parentURL + '/'%>
                                 <% url += products[i].id %>
                                 <p><a href="<%= url %>" class="btn btn-primary" role="button">Go</a></p>
                         </div>

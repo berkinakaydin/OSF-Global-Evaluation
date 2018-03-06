@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css">
   <script src="/js/bootstrap.min.js"></script>
   <script src="/js/angular.min.js"></script>
-  <script src="/js/productPage.js"></script>
+  <script src="/js/productHandler.js"></script>
   <title>
     <%= title %>
   </title>
@@ -52,7 +52,7 @@
           <select>             
               <!--<option value="color" ng-repeat="color in colors">{{color}}</option>-->
 
-            <<% for(var i=0; i<product.variation_attributes[0].values.length; i++) {%>
+            <% for(var i=0; i<product.variation_attributes[0].values.length; i++) {%>
               <option value="color">
                 <%=product.variation_attributes[0].values[i].name%>
               </option>

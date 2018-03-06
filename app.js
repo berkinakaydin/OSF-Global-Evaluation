@@ -8,22 +8,29 @@ app.engine('html', require('ejs').renderFile);
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
-app.use(express.static(path.resolve('./public')));   
+app.use(express.static(path.resolve('./public')));     
+
+
+app.get('/favicon.ico', function(req, res) {
+    res.status(204);
+});
+
+
+
 
 const homeController = require('./controllers/homeController');
 const categoryController = require('./controllers/categoryController');
 const productController = require('./controllers/productController')
 
 app.get('/', homeController.index);
-app.get('/mens', categoryController.index);
-app.get('/womens', categoryController.index);
-app.get('/womens/womens-*/*/*', productController.index);
-app.get('/mens/mens-*/*/*', productController.index);
-app.get('/womens/womens-*/*', categoryController.products);
-app.get('/mens/mens-*/*', categoryController.products);
+app.get('/:category', categoryController.index);
+app.get('/:category/:subcategory', categoryController.subcategory);
+app.get('/:category/:subcategory/:category_product', categoryController.products);
+app.get('/:category/:subcategory/:category_product/:product', productController.index);
 
-app.get('/womens/*', categoryController.subcatagory);
-app.get('/mens/*', categoryController.subcatagory);
+
+app.get('/mens/mens-*/color', productController.colors);
+
 
 
 app.listen(3000, () => console.log('Example app listening on port 80!'))

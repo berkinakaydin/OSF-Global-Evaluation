@@ -48,7 +48,11 @@
             
                                     <div class="card mb-6 box-shadow">
                                             <div id='image'>
+                                                        <%if(subcategory.categories[i].image){%>   <!--IMPORTANT!! IF CATEGORY HASNT GOT ANY IMAGE, FAVICON CALLS A PAGE TWO TIMES WTF?-->
                                                     <img  src="/images/<%=subcategory.categories[i].image%>" style="max-width: 100% !important; height: auto;width: auto;" > 
+                                                    <%}else{%>
+                                                        <img  src="/images/categories/default.png" style="max-width: 100px !important; height: auto;width: auto;" > 
+                                                        <%}%>
                                             </div>
                                             <div id='information'>
                                                     <p>                                                                                                                 
