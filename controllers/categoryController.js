@@ -19,21 +19,28 @@ exports.index = function(req, res){
     });
   };
 
-  exports.subcategory = function(req,res){
+  exports.subcategory = function(req,res,next){
     var category = req.params.category
     var subcategory= req.params.subcategory
 
     categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
         categoryModel.find({'id':category},{'categories': {$elemMatch: {'id': subcategory}}},function (err, subcategory) {
+
+            if(typeof subcategory[0] === 'undefined'){ //ERROR HANDLE
+                console.log('vuh')
+                return next()
+            }
+                
             var title = subcategory[0].categories[0].page_title
             var subcategory = subcategory[0].categories[0]
             res.render('subcategory',{title:title, subcategory : subcategory, allCategories : allCategories})  //WOW
           });
     });
+    
 };
 
 
-exports.products = function(req, res){
+exports.products = function(req, res,next){
     var parentURL = req.path
     var productCategory = req.params.category_product
 
@@ -49,10 +56,9 @@ exports.products = function(req, res){
             else{
                 res.render('category_product', {title:title, allCategories : allCategories, products : {}, parentURL : parentURL})
             }
-            
-           
           });
     });
+    
 };
 
 
