@@ -39,12 +39,18 @@ exports.products = function(req, res){
 
     categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
         productModel.find({primary_category_id:productCategory},function(err, products) { //QUERIED RESULTS FROM URL
-
-            var productCategory = products[0].primary_category_id.replace(/-/g, " ");
-            productCategory = titleCase(productCategory);        
+            if(typeof products[0] !== 'undefined'){  //SOME CATEGORIES HAVE NO PRODUCT!
+                var productCategory = products[0].primary_category_id.replace(/-/g, " ");
+                productCategory = titleCase(productCategory);        
+                
+                var title = productCategory
+                res.render('category_product', {title:title, allCategories : allCategories, products : products, parentURL : parentURL})
+            }
+            else{
+                res.render('category_product', {title:title, allCategories : allCategories, products : {}, parentURL : parentURL})
+            }
             
-            var title = productCategory
-            res.render('category_product', {title:title, allCategories : allCategories, products : products, parentURL : parentURL})
+           
           });
     });
 };
