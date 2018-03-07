@@ -1,12 +1,11 @@
 <html>
 
 <head>
-  <script src="/js/jquery-3.3.1.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css">
-  <script src="/js/bootstrap.min.js"></script>
-  <script src="/js/angular.min.js"></script>
-  <script src="/js/productHandler.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+  <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script> 
+  <script src="/js/angular.js" type="text/javascript"></script>
+  <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="/js/productHandler.js" type="text/javascript"></script>
   <title>
     <%= title %>
   </title>
@@ -47,16 +46,10 @@
   <div id='main'>
     <div id=product class="container" >
 
-      <%if(product.variation_attributes[0]){%>
+      <%if(product.variation_attributes[0]){%>  <!--TO PREVENT EMPTY DROPDOWN LISTS-->
         <div id='image' ng-controller="productColor">
           <select>             
-              <!--<option value="color" ng-repeat="color in colors">{{color}}</option>-->
-
-            <% for(var i=0; i<product.variation_attributes[0].values.length; i++) {%>
-              <option value="color">
-                <%=product.variation_attributes[0].values[i].name%>
-              </option>
-              <% }%>
+              <option value="color" ng-repeat="color in colors">{{color}}</option>
           </select>
         </div>
         <%}%>

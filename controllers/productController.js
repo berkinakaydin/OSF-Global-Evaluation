@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const MongoClient = require('mongodb').MongoClient;
 
 const categoryDBModel = require('../models/category.js')
 const productDBModel = require('../models/product.js')
@@ -8,6 +9,7 @@ var categoryModel = new categoryDBModel.Schema(); //mongoose.model('product', Pr
 var productModel = new productDBModel.Schema();
 
 exports.index = function(req, res){
+    console.log(req.params.product)
     var productId = req.params.product
 
     categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
@@ -19,15 +21,12 @@ exports.index = function(req, res){
     });
 };
 
-exports.colors = function(req, res){
-
-    var url = req.path.replace('/','')
-    var productId = '25604524';//url.split('/')[3]
+exports.getColor = function(req, res){
+    var productId = req.params.pid
 
     categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
         productModel.find({'id':productId},function(err, product) { //QUERIED RESULTS FROM URL
-
-            res.json({product : product[0]})
+            res.json({product : product[0].variation_attributes[0].values})
           });
     });
 };

@@ -1,15 +1,26 @@
 var app = angular.module('product', []);
 
-app.controller('productColor',['$scope', '$http', function($scope,$http) {
-    //var url = 'http://localhost:3000/mens/mens-clothing/color'
+app.controller('productColor',['$scope', '$location' ,'$http', function($scope,$location,$http) {
+    var url = $location.absUrl();
+    var pid = url.split('/').pop()
+
+    var jsonURL = '/api/' + pid
+
     $scope.colors = []
     
-    $http.get(url).then(function(response) {  
-        //$scope.colors = response
+    $http({
+        method: 'GET',
+        url: jsonURL
+    })
+    .then(function onSuccess(response) {
+        for(var i = 0; i < response.data.product.length; i++){
+            var color = response.data.product[i].name
+            $scope.colors.push(color)
+        }
         
-        //console.log(response.product)
-        console.log('hello')
-        console.log((response.data.product.variation_attributes[0].values))
+    })
+    .catch(function onError(error) {
+        console.log(error);         
     });
 
 }]);
