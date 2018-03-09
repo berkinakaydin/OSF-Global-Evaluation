@@ -1,67 +1,78 @@
 <html>
+
 <head>
-  <title>Express HTML</title>
-  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-  <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script> 
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/css/index.css">
+  <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
   <script src="/js/angular.js" type="text/javascript"></script>
   <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+  <title>
+    OSF GLOBAL
+  </title>
 </head>
+
 <body>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="/" style="padding-top:3px">
-              <img width="200" height="40" src="/images/logo.png" style="float:left">
-            </a>
-          </div>
-          <input type="text" placeholder="Search.." name="search">
+  <header>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/" style="padding-top:3px">
+            <img width="200" height="40" src="/images/logo.png" style="float:left">
+          </a>
+        </div>
+        <div id='navbar' class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-              <% for(var i=0; i<categories.length; i++) {%>
-                  <li>
-                      <% var url = '/' %>
-                      <% url += categories[i].id %>                  
-                      <a href= "<%= url %>">
-                        <%= categories[i].name%></a></li>
-               <% } %>    
-            <li><a href="#">Login</a></li>
-            <li><a href="#">Register</a></li>        
+            <% for(var i=0; i<categories.length; i++) {%>
+              <li>
+                <% var url = '/' %>
+                  <% url += categories[i].id %>
+                    <a href="<%= url %>">
+                      <%= categories[i].name%>
+                    </a>
+              </li>
+              <% } %>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="#">Login</a>
+            </li>
+            <li>
+              <a href="#">Register</a>
+            </li>
           </ul>
         </div>
-        
+      </div>
     </nav>
+  </header>
 
-    <div id='main'>
-      <div id=categories class="container">
-        <% for(var i=0; i<categories.length; i++) {%>
-
-          <div id=category class="col-md-6">
-            <div class="card mb-4 box-shadow">
-                <% var url = '/' %>
-                <% url += categories[i].id %>       
-                <a href= "<%= url %>">              
+  <div id='main' class="container jumbotron">
+    <% for(var i=0; i<categories.length; i++) {%>
+      <div id='category' class="well col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <%= categories[i].name %>
+          </div>
+          <div class="panel-body">
+            <div id='image' style="height:100px;width:100px; display: table; float: left; margin-right:10px">
               <% if(i==0) {%>
-                
-                <img class="card-img-top" src="/images/man.png" data-holder-rendered="true" width="200" height="200" style='display:block; margin:auto'>
-              <% }else{ %>           
-                <img class="card-img-top" src="/images/woman.png" data-holder-rendered="true" width="200" height="200" style='display:block; margin:auto'>              
-              <% } %>
-            </a>
-              <div id='information'>
-                <h3 style='text-align:center'>                
-                  <%= categories[i].name %>
-                </h3>
-                <h5>
-                    <%= categories[i].page_description %>
-                  </h5>      
-                  <h5>
-                      <%= categories[i].page_title %>
-                  </h5>                                                      
-              </div>
+                <img class="card-img-top" src="/images/man.png" data-holder-rendered="true" style='display:block; margin:auto;width:100%; height:100%;'>
+                <% }else{ %>
+                  <img class="card-img-top" src="/images/woman.png" data-holder-rendered="true" style='display:block; margin:auto;width:100%; height:100%'>
+                  <% } %>
+            </div>
+            <div class='well well-sm' id='information' style=" overflow: hidden; height:100px">
+              <h5>
+                <%= categories[i].page_description %>
+              </h5>
+            </div>
+            <div id="button" style="text-align: center">
+              <a class='btn btn-primary' href="/<%= categories[i].id %>">View Categories</a>
             </div>
           </div>
-          
-       <% } %>    
+        </div>
       </div>
-    </div>
+      <% } %>
+  </div>
 </body>
+
 </html>

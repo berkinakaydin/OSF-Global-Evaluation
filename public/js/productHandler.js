@@ -1,32 +1,32 @@
 var app = angular.module('product', []);
 
-app.service('productColorService',['$location', '$http', function($location,$http){
+app.service('productColorService', ['$location', '$http', function ($location, $http) {
 
     var url = $location.absUrl();
     var pid = url.split('/').pop()
 
     var jsonURL = '/api/' + pid
 
-    var getColors = function(){
+    var getColors = function () {
         var colors = []
-       
+
         return $http({
             method: 'GET',
             url: jsonURL
         }).then(function onSuccess(response) {
-            for(var i = 0; i < response.data.productColors.length; i++){
-                var color = response.data.productColors[i]              
+            for (var i = 0; i < response.data.productColors.length; i++) {
+                var color = response.data.productColors[i]
 
-                colors.push(color)                               
-            }      
+                colors.push(color)
+            }
             return colors
-         
-        }) .catch(function onError(error) {
-            console.log(error);         
+
+        }).catch(function onError(error) {
+            console.log(error);
         });
     }
-   
-    var getImages = function(type){
+
+    var getImages = function (type) {
         var images = []
 
         return $http({
@@ -34,55 +34,69 @@ app.service('productColorService',['$location', '$http', function($location,$htt
             url: jsonURL
         }).then(function onSuccess(response) {
             var images = response.data.productImages
-          
-            var obj = images.find((o,i)=>{
-                if(o.variation_value === type){
+
+            var obj = images.find((o, i) => {
+                if (o.variation_value === type) {
                     return images[i]
-                }         
+                }
             });
-            if(obj === undefined){
-                obj = {variation_value : 'default'}
+            if (obj === undefined) {
+                obj = {
+                    variation_value: 'default'
+                }
             }
-            console.log(obj)
             return obj
-         
-        }) .catch(function onError(error) {
-            console.log(error);         
+
+        }).catch(function onError(error) {
+            console.log(error);
         });
     }
 
-    return {getColors : getColors, getImages : getImages}
+    return {
+        getColors: getColors,
+        getImages: getImages
+    }
 }]);
 
-app.controller('productColor', function($scope, productColorService) {
+app.controller('productColor', function ($scope, productColorService) {
     var colors = productColorService.getColors()
-    colors.then(function(data) {
+    colors.then(function (data) {
         $scope.colors = data
-        $scope.selectedColor= $scope.colors[0];
+        $scope.selectedColor = $scope.colors[0];
 
         var images = productColorService.getImages($scope.selectedColor.value)
-        images.then(function(data) { 
-           if(data.variation_value === 'default' ){
-                $scope.selectedImage =  '/images/products/default.png'
-            }else{
-                $scope.selectedImage =  '/images/'+ data.images[0].link
-            }
-            
-          });
-      });
-     
-    $scope.selected= function() {
+        images.then(function (data) {
+            printImage(data)
+        });
+    });
+
+    $scope.selected = function () {
         $scope.value = $scope.selectedColor;
 
         var images = productColorService.getImages($scope.selectedColor.value)
-        images.then(function(data) {
-            if(data.variation_value === 'default' ){
-                $scope.selectedImage =  '/images/products/default.png'
-            }else{
-                $scope.selectedImage =  '/images/'+ data.images[0].link
-            }
-          });
+        images.then(function (data) {
+            printImage(data)
+        });
     };
 
+    var printImage = function (data) {
+        if (data.variation_value === 'default') {
+            $scope.selectedImage = '/images/products/default.png'
+        } else {
+            $scope.selectedImage = '/images/' + data.images[0].link
+        }
+    }
+});
+
+app.controller('price', function ($scope) {
+
     
+    $scope.currencies = [
+        "TRY",
+        "EUR",
+        "USD",
+        "GBP",
+        "RON"
+    ]
+
 });

@@ -1,0 +1,18 @@
+a {
+    color: #0060B6;
+    text-decoration: none;
+}
+
+a:hover 
+{
+     color:#00A0C6; 
+     text-decoration:none; 
+     cursor:pointer;  
+}
+
+.clickable {
+    left: 0;
+    top: 0;
+    position: absolute;     
+    z-index: 1;
+  }
