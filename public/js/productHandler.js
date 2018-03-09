@@ -34,13 +34,16 @@ app.service('productColorService',['$location', '$http', function($location,$htt
             url: jsonURL
         }).then(function onSuccess(response) {
             var images = response.data.productImages
-
+          
             var obj = images.find((o,i)=>{
                 if(o.variation_value === type){
                     return images[i]
                 }         
             });
-            
+            if(obj === undefined){
+                obj = {variation_value : 'default'}
+            }
+            console.log(obj)
             return obj
          
         }) .catch(function onError(error) {
@@ -59,7 +62,12 @@ app.controller('productColor', function($scope, productColorService) {
 
         var images = productColorService.getImages($scope.selectedColor.value)
         images.then(function(data) { 
-            $scope.selectedImage =  '/images/'+ data.images[0].link
+           if(data.variation_value === 'default' ){
+                $scope.selectedImage =  '/images/products/default.png'
+            }else{
+                $scope.selectedImage =  '/images/'+ data.images[0].link
+            }
+            
           });
       });
      
@@ -68,14 +76,13 @@ app.controller('productColor', function($scope, productColorService) {
 
         var images = productColorService.getImages($scope.selectedColor.value)
         images.then(function(data) {
-            $scope.selectedImage = '/images/'+ data.images[0].link
+            if(data.variation_value === 'default' ){
+                $scope.selectedImage =  '/images/products/default.png'
+            }else{
+                $scope.selectedImage =  '/images/'+ data.images[0].link
+            }
           });
     };
 
     
-});
-
-app.controller('productImage', function($scope, productColorService) {
-    
-
 });

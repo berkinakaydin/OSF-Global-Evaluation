@@ -1,8 +1,8 @@
 <html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-  <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script> 
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+  <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
   <script src="/js/angular.js" type="text/javascript"></script>
   <script src="/js/bootstrap.min.js" type="text/javascript"></script>
   <script src="/js/productHandler.js" type="text/javascript"></script>
@@ -44,14 +44,17 @@
   </nav>
 
   <div id='main'>
-    <div id=product class="container" >
+    <div id=product class="container">
 
-      <%if(product.variation_attributes[0]){%>  <!--TO PREVENT EMPTY DROPDOWN LISTS-->
+      <%if(product.variation_attributes[0]){%> <!--TO PREVENT EMPTY DROPDOWN LISTS-->
+       
         <div id='image' ng-controller="productColor">
-          <img >
-          <select ng-change="selected()"  ng-model="selectedColor" ng-options="s.name for s in colors" ng-init="selectedColor=colors[0]">{{color.name}}</select>
           <img ng-src={{selectedImage}}>
+          <div id='dropdown'>
+            <select ng-change="selected()" ng-model="selectedColor" ng-options="s.name for s in colors" ng-init="selectedColor=colors[0]">{{color.name}}</select>
+          </div>
         </div>
+
         <%}%>
           <div id='information'>
             <p>
