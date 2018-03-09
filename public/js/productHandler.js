@@ -1,26 +1,44 @@
 var app = angular.module('product', []);
 
-app.controller('productColor',['$scope', '$location' ,'$http', function($scope,$location,$http) {
-    var url = $location.absUrl();
-    var pid = url.split('/').pop()
+app.service('productColorService',['$location','$q', '$http', function($location,$q,$http){
 
-    var jsonURL = '/api/' + pid
-
-    $scope.colors = []
+    var getColors = function(){
+        var url = $location.absUrl();
+        var pid = url.split('/').pop()
     
-    $http({
-        method: 'GET',
-        url: jsonURL
-    })
-    .then(function onSuccess(response) {
-        for(var i = 0; i < response.data.product.length; i++){
-            var color = response.data.product[i].name
-            $scope.colors.push(color)
-        }
-        
-    })
-    .catch(function onError(error) {
-        console.log(error);         
-    });
+        var jsonURL = '/api/' + pid
+    
+        var colors = []
+        var deferred = $q.defer();
 
+        return $http({
+            method: 'GET',
+            url: jsonURL
+        }).then(function onSuccess(response) {
+            for(var i = 0; i < response.data.productColors.length; i++){
+                var color = response.data.productColors[i]              
+
+                colors.push(color)                               
+            }      
+            return colors
+            //deferred.resolve(colors);
+        }) .catch(function onError(error) {
+            console.log(error);         
+        });
+    }
+   
+    return {getColors : getColors}
 }]);
+
+app.controller('productColor', function($scope, productColorService) {
+   
+    var colors = productColorService.getColors()
+    colors.then(function(data) {
+        $scope.colors = data
+      });
+  
+    $scope.selected= function() {
+        $scope.value = $scope.selectedColor;
+        console.log($scope.value);
+    };
+});

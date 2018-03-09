@@ -48,9 +48,10 @@
 
       <%if(product.variation_attributes[0]){%>  <!--TO PREVENT EMPTY DROPDOWN LISTS-->
         <div id='image' ng-controller="productColor">
-          <select>             
-              <option value="color" ng-repeat="color in colors">{{color}}</option>
+          <select ng-change="selected()"  ng-model="selectedColor" >             
+              <option id="option" value="{{color.value}}" ng-repeat="color in colors">{{color.name}}</option>        
           </select>
+          <p>hi : {{selectedColor}}</p>
         </div>
         <%}%>
 
