@@ -26,7 +26,10 @@ exports.getColor = function(req, res){
 
     categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
         productModel.find({'id':productId},function(err, product) { //QUERIED RESULTS FROM URL
-            res.json({productColors : product[0].variation_attributes[0].values})
+            res.json({
+                productColors : product[0].variation_attributes[0].values,
+                productImages : product[0].image_groups
+            })
           });
     });
 };
