@@ -33,3 +33,15 @@ exports.getColor = function(req, res){
           });
     });
 };
+
+exports.getPrice = function(req,res){
+    var productId = req.params.pid
+
+    categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
+        productModel.find({'id':productId},function(err, product) { //QUERIED RESULTS FROM URL
+            res.json({
+                price : product[0].price
+            })
+          });
+    });
+}

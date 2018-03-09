@@ -5,8 +5,8 @@ const productController = require('../controllers/productController')
 module.exports = function(app){
     
     app.get('/', homeController.index);
-    app.get('/api/:pid', productController.getColor);
-
+    app.get('/color/:pid', productController.getColor);
+    app.get('/price/:pid', productController.getPrice);
     app.get('/:category/:subcategory/:category_product/:product', productController.index);
     app.get('/:category/:subcategory/:category_product', categoryController.products);
     app.get('/:category/:subcategory', categoryController.subcategory);

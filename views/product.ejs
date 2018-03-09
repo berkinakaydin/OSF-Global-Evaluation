@@ -1,11 +1,10 @@
 <html>
 
 <head>
-  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-  
-  <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
-  <script src="/js/angular.js" type="text/javascript"></script>
-  <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script src="/js/angular.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
   <script src="/js/productHandler.js" type="text/javascript"></script>
   
   <title>
@@ -16,37 +15,37 @@
 <body ng-app="product">
     <header>
         <nav class="navbar navbar-default navbar-fixed-top">
-          <div class="container">
-            <div class="navbar-header">
-              <a class="navbar-brand" href="/" style="padding-top:3px">
-                <img width="200" height="40" src="/images/logo.png" style="float:left">
-              </a>
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/" style="padding-top:3px">
+                        <img width="200" height="40" src="/images/logo.png" style="float:left">
+                    </a>
+                </div>
+                <div id='navbar' class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <% for(var i=0; i<allCategories.length; i++) {%>
+                            <li>
+                                <% var url = '/' %>
+                                    <% url += allCategories[i].id %>
+                                        <a href="<%= url %>">
+                                            <%= allCategories[i].name%>
+                                        </a>
+                            </li>
+                            <% } %>
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#">Login</a>
+                        </li>
+                        <li>
+                            <a href="#">Register</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div id='navbar' class="navbar-collapse collapse">
-              <ul class="nav navbar-nav">
-                <% for(var i=0; i<allCategories.length; i++) {%>
-                  <li>
-                    <% var url = '/' %>
-                      <% url += allCategories[i].id %>
-                        <a href="<%= url %>">
-                          <%= allCategories[i].name%>
-                        </a>
-                  </li>
-                  <% } %>
-    
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-                <li>
-                  <a href="#">Login</a>
-                </li>
-                <li>
-                  <a href="#">Register</a>
-                </li>
-              </ul>
-            </div>
-          </div>
         </nav>
-      </header>
+    </header>
 
   <div id='main'>
     <div id=product class="container">
@@ -68,12 +67,12 @@
             <p>
               <%=product.name%>
             </p>
-            <div id='price' ng-controller="price">
-              <p>
-                <%=product.price%> 
-                <select ng-model="selectedCurrency" ng-options="currency for currency in currencies" ng-init="selectedCurrency=currencies[0]">{{currencies}}</select>
-                <%=product.currency%>
-              </p>
+            <div ng-controller="price">
+              <p id='price'>
+               {{newPrice}}
+              
+                <select ng-change="selected()" ng-model="selectedCurrency" ng-options="currency for currency in currencies" ng-init="selectedCurrency=currencies[0]">{{currencies}}</select>             
+            </p>
               <p>
                   
                 </p>

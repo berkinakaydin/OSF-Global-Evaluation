@@ -5,7 +5,7 @@ app.service('productColorService', ['$location', '$http', function ($location, $
     var url = $location.absUrl();
     var pid = url.split('/').pop()
 
-    var jsonURL = '/api/' + pid
+    var jsonURL = '/color/' + pid
 
     var getColors = function () {
         var colors = []
@@ -58,6 +58,32 @@ app.service('productColorService', ['$location', '$http', function ($location, $
     }
 }]);
 
+app.service('productPriceService', ['$location', '$http', function ($location, $http) {
+
+    var url = $location.absUrl();
+    var pid = url.split('/').pop()
+
+    var jsonURL = '/price/' + pid
+
+    var getPrice = function () {
+        return $http({
+            method: 'GET',
+            url: jsonURL
+        }).then(function onSuccess(response) {
+            var price = response.data.price
+
+            return price
+        }).catch(function onError(error) {
+            console.log(error);
+        });
+    }
+
+    return {
+        getPrice: getPrice
+    }
+}]);
+
+
 app.controller('productColor', function ($scope, productColorService) {
     var colors = productColorService.getColors()
     colors.then(function (data) {
@@ -88,15 +114,45 @@ app.controller('productColor', function ($scope, productColorService) {
     }
 });
 
-app.controller('price', function ($scope) {
+app.controller('price', function ($scope, productPriceService) {
 
-    
-    $scope.currencies = [
-        "TRY",
-        "EUR",
-        "USD",
-        "GBP",
-        "RON"
-    ]
+    var price = productPriceService.getPrice()
+
+    price.then(function (price) {
+        $scope.newPrice = price
+        $scope.selected = function () {
+            $scope.value = $scope.selectedCurrency;
+
+            var newPrice = 0
+            switch ($scope.value) {
+                case 'TRY':
+                    newPrice = 3.81155664 * price;
+                    break;
+                case 'USD':
+                    newPrice = price;
+                    break;
+                case 'EUR':
+                    newPrice = 0.812512696 * price;
+                    break;
+                case 'GBP':
+                    newPrice = 0.721870511 * price;
+                    break;
+                case 'RON':
+                    newPrice = 3.7852979 * price;
+                    break;
+            }
+          
+            $scope.newPrice = newPrice.toFixed(2)
+
+        };
+    });
+
+$scope.currencies = [
+    "USD",
+     "TRY",
+    "EUR",
+    "GBP",
+    "RON"
+]
 
 });
