@@ -9,12 +9,11 @@ var productModel = new productDBModel.Schema();
 
 exports.index = function(req, res){ 
     var category = req.params.category
-    console.log(category)
     
     categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
         categoryModel.find({id:category},function(err, category) { //QUERIED RESULTS FROM URL
             var title = category[0].page_title
-            res.render('category', {title:title, allCategories : allCategories , category : category})
+            res.render('./category/category', {title:title, allCategories : allCategories , category : category})
           });
     });
   };
@@ -27,13 +26,12 @@ exports.index = function(req, res){
         categoryModel.find({'id':category},{'categories': {$elemMatch: {'id': subcategory}}},function (err, subcategory) {
 
             if(typeof subcategory[0] === 'undefined'){ //ERROR HANDLE
-                console.log('vuh')
                 return next()
             }
                 
             var title = subcategory[0].categories[0].page_title
             var subcategory = subcategory[0].categories[0]
-            res.render('subcategory',{title:title, subcategory : subcategory, allCategories : allCategories})  //WOW
+            res.render('./category/subcategory',{title:title, subcategory : subcategory, allCategories : allCategories})  //WOW
           });
     });
     
@@ -51,10 +49,10 @@ exports.products = function(req, res,next){
                 productCategory = titleCase(productCategory);        
                 
                 var title = productCategory
-                res.render('category_product', {title:title, allCategories : allCategories, products : products, parentURL : parentURL})
+                res.render('./category/category_product', {title:title, allCategories : allCategories, products : products, parentURL : parentURL})
             }
             else{
-                res.render('category_product', {title:title, allCategories : allCategories, products : {}, parentURL : parentURL})
+                res.render('./category/category_product', {title:title, allCategories : allCategories, products : {}, parentURL : parentURL})
             }
           });
     });
