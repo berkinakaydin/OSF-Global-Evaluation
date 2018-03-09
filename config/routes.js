@@ -11,4 +11,5 @@ module.exports = function(app){
     app.get('/:category/:subcategory/:category_product', categoryController.products);
     app.get('/:category/:subcategory', categoryController.subcategory);
     app.get('/:category', categoryController.index);
+    app.get('/product/:product',productController.index)
 }
