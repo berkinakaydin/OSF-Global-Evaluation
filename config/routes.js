@@ -1,6 +1,7 @@
 const homeController = require('../controllers/homeController')
 const categoryController = require('../controllers/categoryController')
 const productController = require('../controllers/productController')
+const userController = require('../controllers/userController')
 
 module.exports = function(app){
     
@@ -12,4 +13,6 @@ module.exports = function(app){
     app.get('/:category/:subcategory', categoryController.subcategory);
     app.get('/:category', categoryController.index);
     app.get('/product/:product',productController.index)
+    app.get('/login', userController.login);
+    app.get('/register', userController.register);
 }

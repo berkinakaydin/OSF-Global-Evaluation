@@ -84,7 +84,7 @@ app.service('productPriceService', ['$location', '$http', function ($location, $
 }]);
 
 
-app.controller('productColor', function ($scope, productColorService) {
+app.controller('colorController', function ($scope, productColorService) {
     var colors = productColorService.getColors()
     colors.then(function (data) {
         $scope.colors = data
@@ -114,7 +114,7 @@ app.controller('productColor', function ($scope, productColorService) {
     }
 });
 
-app.controller('price', function ($scope, productPriceService) {
+app.controller('priceController', function ($scope, productPriceService) {
 
     var price = productPriceService.getPrice()
 

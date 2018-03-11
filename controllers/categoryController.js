@@ -7,11 +7,14 @@ var categoryModel = new categoryDBModel.Schema(); //mongoose.model('product', Pr
 var productModel = new productDBModel.Schema();
 
 
-exports.index = function(req, res){ 
+exports.index = function(req, res,next){ 
     var category = req.params.category
     
     categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
         categoryModel.find({id:category},function(err, category) { //QUERIED RESULTS FROM URL
+            if(typeof category[0] === 'undefined'){ //ERROR HANDLE
+                return next()
+            }
             var title = category[0].page_title
             res.render('./category/category', {title:title, allCategories : allCategories , category : category})
           });

@@ -3,8 +3,7 @@ var fs = require('fs')
 const mongoose = require('mongoose')
 const productDBModel = require('../models/product.js')
 const categoryDBModel = require('../models/category.js')
-
-const URL = 'mongodb://localhost/osf'
+const URL = require('../config/config.js').db
 
 mongoose.connect(URL, function (err, db) {
     mongoose.connection.db.listCollections({name: 'products', name : 'categories'}).next(function (err, collinfo) {

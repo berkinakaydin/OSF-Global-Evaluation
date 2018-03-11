@@ -1,18 +1,18 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
     <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
     <script src="/js/angular.js" type="text/javascript"></script>
     <script src="/js/bootstrap.min.js" type="text/javascript"></script>
-  <script src="/js/productHandler.js" type="text/javascript"></script>
-  
-  <title>
-    <%= title %>
-  </title>
+    <title>
+        LOGIN
+    </title>
 </head>
 
-<body ng-app="product">
+<body>
     <header>
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
@@ -32,14 +32,13 @@
                                         </a>
                             </li>
                             <% } %>
-
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#">Login</a>
+                            <a href="/login">Login</a>
                         </li>
                         <li>
-                            <a href="#">Register</a>
+                            <a href="/register">Register</a>
                         </li>
                     </ul>
                 </div>
@@ -47,45 +46,27 @@
         </nav>
     </header>
 
-  <div id='main'>
-    <div id=product class="container">
-
-      <%if(product.variation_attributes[0]){%>
-        <!--TO PREVENT EMPTY DROPDOWN LISTS-->
-
-        <div id='image' ng-controller="colorController">
-          <img ng-src={{selectedImage}}>
-
-          <div id='dropdown'>
-            <select ng-change="selected()" ng-model="selectedColor" ng-options="s.name for s in colors" ng-init="selectedColor=colors[0]">{{color.name}}</select>
-          </div>
-
-        </div>
-        <%}%>
-
-          <div id='information'>
-            <p>
-              <%=product.name%>
-            </p>
-            <div ng-controller="priceController">
-              <p id='price'>
-               {{newPrice}}
-              
-                <select ng-change="selected()" ng-model="selectedCurrency" ng-options="currency for currency in currencies" ng-init="selectedCurrency=currencies[0]">{{currencies}}</select>             
-            </p>
-              <p>
-                  
-                </p>
+    <div id='main'>
+        <div class='container'>
+            <div id='input-group' class="well col-md-6" style="    float: none;  margin: 0 auto;">
+                    <form name='login'>
+                            <div class="form-group">
+                              <label for="username">Username</label>
+                              <input class="form-control" id="username" placeholder="Enter username">                             
+                            </div>
+                            <div class="form-group">
+                              <label for="password">Password</label>
+                              <input type="password" class="form-control" id="password" placeholder="Password">
+                            </div>
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input" id="rememberMe">
+                              <label class="form-check-label" for="rememberMe">Remember Me</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                          </form>
             </div>
-
-            <p>
-              <%=product.page_description%>
-            </p>
-
-          </div>
-
+        </div>
     </div>
-  </div>
 </body>
 
 </html>
