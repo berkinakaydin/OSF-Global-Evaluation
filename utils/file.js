@@ -1,8 +1,8 @@
 var path = require("path");
 var fs = require('fs')
 const mongoose = require('mongoose')
-const productDBModel = require('../models/product.js')
-const categoryDBModel = require('../models/category.js')
+const productModel = require('../models/product.js')
+const categoryModel = require('../models/category.js')
 const URL = require('../config/config.js').db
 
 mongoose.connect(URL, function (err, db) {
@@ -25,10 +25,10 @@ var readJSON = function () {
             return JSON.parse(record)
         })
 
-        var productModel = new productDBModel.Schema(); //mongoose.model('product', Product);
+        var productDBModel = new productModel.Schema(); //mongoose.model('product', Product);
 
         for (var i = 0; i < records.length; i++) {
-            var productEntity = new productModel();
+            var productEntity = new productDBModel();
       
             productEntity.price_max = records[i].price_max
             productEntity.page_description = records[i].page_description
@@ -61,10 +61,10 @@ var readJSON = function () {
             return JSON.parse(record)
         })
 
-        var categoryModel = new categoryDBModel.Schema(); //mongoose.model('catagory', Catagory);
+        var categoryDBModel = new categoryModel.Schema(); //mongoose.model('catagory', Catagory);
         
         for(var i = 0; i < records.length; i++){
-            var categoryEntity = new categoryModel();
+            var categoryEntity = new categoryDBModel();
             categoryEntity.id = records[i].id
             categoryEntity.categories = records[i].categories
             categoryEntity.name = records[i].name
