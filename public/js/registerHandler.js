@@ -3,6 +3,7 @@ var app = angular.module('register', []);
 app.controller('registerController', ['$scope', 'userService', '$location', '$window', function ($scope, userService, $location,$window) {
     $scope.inputType = 'password'
     $scope.inputTypeForCheck = 'password'
+ 
     
 
     $scope.toggleShowPassword = function() {
@@ -20,12 +21,11 @@ app.controller('registerController', ['$scope', 'userService', '$location', '$wi
     }
 
     $scope.uniqueUsernameSet = function(){ 
-            $scope.registerForm.username.unique = false
-            
+        $scope.registerForm.username.$setValidity("unique", true)  
     }
 
     $scope.uniqueEmailSet = function(){
-        $scope.registerForm.email.unique = false  
+        $scope.registerForm.email.$setValidity("unique", true)  
     }
 
     $scope.match = function(){
@@ -52,11 +52,11 @@ app.controller('registerController', ['$scope', 'userService', '$location', '$wi
                 for(var i = 0; i < response.data.errors.length; i++){
                     var error = response.data.errors[i]
                     if(error === 'email'){                  
-                        $scope.registerForm.email.unique = true
+                        $scope.registerForm.email.$setValidity("unique", false)
                     }
                         
                     if(error === 'username'){                        
-                        $scope.registerForm.username.unique = true
+                        $scope.registerForm.username.$setValidity("unique", false)
                     }
                 }                                             
             }
