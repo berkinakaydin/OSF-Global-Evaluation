@@ -43,11 +43,9 @@ exports.register = function(req,res){
         else {
             var errors = []
             for(error in err.errors){
-                console.log(error)
                 errors.push(error)
             }
             
-            //res.sendStatus(409)
             res.json({errors : errors})
         }
     })

@@ -28,6 +28,11 @@ app.controller('registerController', ['$scope', 'userService', '$location', '$wi
         $scope.registerForm.email.unique = false  
     }
 
+    $scope.match = function(){
+        var status = ($scope.password === $scope.passwordCheck)? true:false;
+        $scope.registerForm.passwordCheck.$setValidity("match", status)
+    }
+
     
     
     $scope.register = function(){
