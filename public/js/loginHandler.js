@@ -1,35 +1,29 @@
-var app = angular.module('login', []);
+var app = angular.module('login', ['userFactory']);
 
-app.controller('loginController', function ($scope) {
-
-});
-
-
-app.factory('AuthenticationService',['Base64', '$http', '$cookieStore', '$rootScope', '$timeout',function (Base64, $http, $cookieStore, $rootScope, $timeout) {
-    var service = {};
- 
-        service.Login = function (username, password, callback) {
-  
-            $http.post('/api/authenticate', { username: username, password: password })
-               .success(function (response) {
-
-                callback(response);
-                },5000);
-        };
-        
-        service.SetCredentials = function (username, password) {
-            var authdata = Base64.encode(username + ':' + password);
-  
-            $rootScope.globals = {
-                currentUser: {
-                    username: username,
-                    authdata: authdata
-                }
-            };
-  
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; // jshint ignore:line
-            $cookieStore.put('globals', $rootScope.globals);
-        };
-
-
+app.controller('loginController',['$scope','$window','userService', function ($scope,$window,userService) {
+   $scope.save = function(){
+       var user = {}
+       user.username = $scope.username
+       user.password = $scope.password
+    
+       userService.Login(user)
+        .then(function (response) {
+            if (response.data === 'OK') {         
+                console.log("ok")        
+                $window.location.href = "/";
+            } else {           
+                console.log("fuck")
+                /*for(var i = 0; i < response.data.errors.length; i++){
+                    var error = response.data.errors[i]
+                    if(error === 'email'){                  
+                        $scope.registerForm.email.$setValidity("unique", false)
+                    }
+                        
+                    if(error === 'username'){                        
+                        $scope.registerForm.username.$setValidity("unique", false)
+                    }
+                }      */                                       
+            }
+        });
+   }
 }]);

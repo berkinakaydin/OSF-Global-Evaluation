@@ -49,25 +49,12 @@ User.methods.comparePassword = function(plainPass, hashword, callback) {
     //bcrypt.compareSync(someOtherPlaintextPassword, hash); // false
 };
 
-User.methods.generateJWT = function () {
-    var today = new Date();
-    var exp = new Date(today);
-    exp.setDate(today.getDate() + 60);
+User.methods.generateJWT = function (username) {
+    return jwt.sign({ id: username }, config.secret, {
+        expiresIn: 86400 // expires in 24 hours
+    });
+}
 
-    return jwt.sign({
-        id: this._id,
-        username: this.username,
-        exp: parseInt(exp.getTime() / 1000),
-    }, secret);
-};
-
-User.methods.toAuthJSON = function () {
-    return {
-        username: this.username,
-        email: this.email,
-        token: this.generateJWT(),
-    };
-};
 
 module.exports = {
     Schema: function () {
