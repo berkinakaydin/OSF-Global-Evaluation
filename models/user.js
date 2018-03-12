@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 var uniqueValidator = require('mongoose-unique-validator');
 //var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
-var secret = require('../config/config').secret;
+var secret = require('../config/config.js').secret;
 var bcrypt = require('bcrypt');
 
 var Schema = mongoose.Schema;
@@ -19,6 +19,7 @@ var User = new Schema({
     name: String,
     surname: String,
     password: String,
+    token : String,
     email: {
         type: String,
         unique: true,
@@ -50,7 +51,7 @@ User.methods.comparePassword = function(plainPass, hashword, callback) {
 };
 
 User.methods.generateJWT = function (username) {
-    return jwt.sign({ id: username }, config.secret, {
+    return jwt.sign({ id: username }, secret, {
         expiresIn: 86400 // expires in 24 hours
     });
 }

@@ -1,6 +1,6 @@
 var app = angular.module('login', ['userFactory']);
 
-app.controller('loginController',['$scope','$window','userService', function ($scope,$window,userService) {
+app.controller('loginController',['$scope','$window','$timeout','userService', function ($scope,$window,$timeout, userService) {
    $scope.save = function(){
        var user = {}
        user.username = $scope.username
@@ -8,21 +8,19 @@ app.controller('loginController',['$scope','$window','userService', function ($s
     
        userService.Login(user)
         .then(function (response) {
-            if (response.data === 'OK') {         
-                console.log("ok")        
-                $window.location.href = "/";
-            } else {           
-                console.log("fuck")
-                /*for(var i = 0; i < response.data.errors.length; i++){
-                    var error = response.data.errors[i]
-                    if(error === 'email'){                  
-                        $scope.registerForm.email.$setValidity("unique", false)
-                    }
-                        
-                    if(error === 'username'){                        
-                        $scope.registerForm.username.$setValidity("unique", false)
-                    }
-                }      */                                       
+            if (response.data.success=== true) {              
+                var token = response.data.token
+                console.log(token)
+                //$window.location.href = "/";
+                
+            } else {          
+                if(response.data.error === true){       
+                    $scope.alert = true
+                    $timeout(function() {
+                        $scope.alert = false
+                     }, 2000);      
+                     
+                }
             }
         });
    }

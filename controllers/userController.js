@@ -27,13 +27,22 @@ exports.registerPage = function (req, res) {
 exports.login = function (req, res) {
     var username = req.body.user.username
     var password = req.body.user.password
-    userModel.find({'username': username }, function (err, user) { //QUERIED RESULTS FROM 
-        var checkPassword = userDBModel.User().methods.comparePassword(password, user[0].password) //user.password is hashed in DB
-        console.log(checkPassword)
-        if (checkPassword)
-            res.sendStatus(200)
-        else {
-            console.log(err)
+    userModel.find({  'username': username }, function (err, user) { //QUERIED RESULTS FROM 
+        if (user[0]) { //USERNAME IS TRUE
+            var checkPassword = userDBModel.User().methods.comparePassword(password, user[0].password) //user.password is hashed in DB
+            if (checkPassword) { //ALSO PASSWORD IS TRUE
+                user = user[0];
+                var jwt = userDBModel.User().methods.generateJWT(user.username) 
+                user.token = jwt             
+                user.save()
+                res.json({success:true, token : jwt})
+            }
+            else{
+                res.json({'error' : true})
+            }
+        }
+        else{
+            res.json({'error' : true})
         }
     });
 
@@ -46,7 +55,6 @@ exports.register = function (req, res) {
     var password = req.body.user.password
     var email = req.body.user.email
     var hashedPassword = userDBModel.User().methods.cryptPassword(password)
-    //var x = userModel.User().methods.comparePassword('a', '$2a$10$QcZiYiye2dF3h3XXe/oXluGjnx1mofrpdaRQaMf335ZXec33iCx52')
 
     var userEntity = new userModel()
     userEntity.name = username
