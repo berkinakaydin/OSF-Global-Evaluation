@@ -3,6 +3,7 @@ var app = angular.module('register', []);
 app.controller('registerController', ['$scope', 'userService', '$location', '$window', function ($scope, userService, $location,$window) {
     $scope.inputType = 'password'
     $scope.inputTypeForCheck = 'password'
+    
 
     $scope.toggleShowPassword = function() {
         if ($scope.inputType == 'password')
@@ -17,6 +18,17 @@ app.controller('registerController', ['$scope', 'userService', '$location', '$wi
         else
              $scope.inputTypeForCheck = 'password';
     }
+
+    $scope.uniqueUsernameSet = function(){ 
+            $scope.registerForm.username.unique = false
+            
+    }
+
+    $scope.uniqueEmailSet = function(){
+        $scope.registerForm.email.unique = false  
+    }
+
+    
     
     $scope.register = function(){
         var user = {}
@@ -25,16 +37,23 @@ app.controller('registerController', ['$scope', 'userService', '$location', '$wi
         user.username = $scope.username
         user.password = $scope.password
         user.email = $scope.email
-        debugger
-        console.log(user)
-        debugger
+        
+        
         userService.Create(user)
         .then(function (response) {
-            if (response.data === 'OK') {         
-                console.log('hi')              
+            if (response.data === 'OK') {                 
                 $window.location.href = "/";
-            } else {
-                $window.location.href = "/register";
+            } else {           
+                for(var i = 0; i < response.data.errors.length; i++){
+                    var error = response.data.errors[i]
+                    if(error === 'email'){                  
+                        $scope.registerForm.email.unique = true
+                    }
+                        
+                    if(error === 'username'){                        
+                        $scope.registerForm.username.unique = true
+                    }
+                }                                             
             }
         });
     }

@@ -63,8 +63,9 @@
                     </div>
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input name='username' ng-model='username' class="form-control ng-valid" id="username" placeholder="Enter username" required>
+                        <input ng-change="uniqueUsernameSet()" name='username' ng-model='username' class="form-control ng-valid" id="username" placeholder="Enter username" required>
                         <span ng-show="registerForm.username.$dirty && registerForm.username.$invalid && registerForm.username.$error.required" class="error-text">Username is required</span>
+                        <span ng-show="registerForm.username.unique">Username has taken!</span>
                     </div>
                     <div class="form-group has-feedback">
                         <label for="password">Password</label>
@@ -80,8 +81,9 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input ng-model='email' type="email" class="form-control" name="email" id="email" placeholder="Email" required>
+                        <input ng-change="uniqueEmailSet()" ng-model='email' type="email" class="form-control" name="email" id="email" placeholder="Email" required>
                         <span ng-show="registerForm.email.$dirty && registerForm.email.$error.required" class="help-block">Email is required</span>
+                        <span ng-show="registerForm.email.unique">Email has taken!</span>
                     </div>
                     <button ng-disabled="registerForm.username.$invalid || registerForm.email.$invalid || registerForm.password.$invalid ||  registerForm.passwordCheck.$invalid " type="submit" class="btn btn-primary">Submit</button>
                 </form>
