@@ -25,6 +25,7 @@ exports.registerPage = function (req, res) {
 }
 
 exports.login = function (req, res) {
+
     var username = req.body.user.username
     var password = req.body.user.password
     userModel.find({  'username': username }, function (err, user) { //QUERIED RESULTS FROM 
@@ -35,6 +36,7 @@ exports.login = function (req, res) {
                 var jwt = userDBModel.User().methods.generateJWT(user.username) 
                 user.token = jwt             
                 user.save()
+                res.cookie('jwt',jwt, { maxAge: 86400, httpOnly: true });
                 res.json({success:true, token : jwt})
             }
             else{
@@ -77,4 +79,11 @@ exports.register = function (req, res) {
             })
         }
     })
+}
+
+
+exports.me = function(req,res){
+    var token = req.cookies.jwt
+    console.log("xd")
+    //console.log(token)
 }

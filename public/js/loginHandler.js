@@ -10,9 +10,8 @@ app.controller('loginController',['$scope','$window','$timeout','userService', f
         .then(function (response) {
             if (response.data.success=== true) {              
                 var token = response.data.token
-                console.log(token)
-                //$window.location.href = "/";
-                
+                //sessionStorage.accessToken = token;
+                $window.location.href = "/";
             } else {          
                 if(response.data.error === true){       
                     $scope.alert = true
