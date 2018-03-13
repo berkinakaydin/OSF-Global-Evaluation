@@ -1,4 +1,4 @@
-var app = angular.module('register', ['userFactory']);
+var app = angular.module('register', ['userFactory','index']);
 
 app.controller('registerController', ['$scope', 'userService', '$location', '$window', function ($scope, userService, $location,$window) {
     $scope.inputType = 'password'
@@ -59,3 +59,10 @@ app.controller('registerController', ['$scope', 'userService', '$location', '$wi
         });
     }
 }]);
+
+app.controller('headerController', function ($scope, indexService) {
+    var objects= indexService.getUsername()
+    objects.then(function(data){
+        $scope.objects = data
+    })
+})

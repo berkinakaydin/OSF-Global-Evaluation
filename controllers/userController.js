@@ -28,22 +28,29 @@ exports.login = function (req, res) {
 
     var username = req.body.user.username
     var password = req.body.user.password
-    userModel.find({  'username': username }, function (err, user) { //QUERIED RESULTS FROM 
+    userModel.find({
+        'username': username
+    }, function (err, user) { //QUERIED RESULTS FROM 
         if (user[0]) { //USERNAME IS TRUE
             var checkPassword = userDBModel.User().methods.comparePassword(password, user[0].password) //user.password is hashed in DB
             if (checkPassword) { //ALSO PASSWORD IS TRUE
                 user = user[0];
-                var jwt = userDBModel.User().methods.generateJWT(user.username) 
-                user.token = jwt             
-                user.save()               
-                res.json({success:true, token : jwt})
+                var jwt = userDBModel.User().methods.generateJWT(user.username)
+                user.token = jwt
+                user.save()
+                res.json({
+                    success: true,
+                    token: jwt
+                })
+            } else {
+                res.json({
+                    'error': true
+                })
             }
-            else{
-                res.json({'error' : true})
-            }
-        }
-        else{
-            res.json({'error' : true})
+        } else {
+            res.json({
+                'error': true
+            })
         }
     });
 
@@ -80,38 +87,50 @@ exports.register = function (req, res) {
     })
 }
 
-exports.logout = function(req,res){
+exports.logout = function (req, res) {
     var token = req.body.token
     res.json({})
 }
 
 
-exports.profilePage = function(req,res){
+exports.profilePage = function (req, res) {
     //var token = req.cookies.jwt
     console.log("xd")
     //console.log(token)
 }
 
 
-exports.profile = function(req,res){
+exports.profile = function (req, res) {
     //var token = req.cookies.jwt
     console.log("xd")
     //console.log(token)
 }
 
-exports.getUsername = function(req,res){
+exports.getUsername = function (req, res) {
     var token = req.body.token
-    if(token != null){  //To know that user logged in
+    if (token != null) { //To know that user logged in
         var user = userDBModel.User().methods.verifyJWT(token)
-        var username = user.username
-        res.json({username:username, success:true})
+        if (user) {
+            var username = user.username
+            res.json({
+                username: username,
+                success: true
+            })
+        }
+        else{
+            res.json({
+                success: false
+            })
+        }
+       
+    } else { //User is not logged in
+        res.json({
+            success: false
+        })
     }
-    else{  //User is not logged in
-        res.json({success:false})
-    }
-   
+
 }
 
-exports.auth = function(){
-    
+exports.auth = function () {
+
 }

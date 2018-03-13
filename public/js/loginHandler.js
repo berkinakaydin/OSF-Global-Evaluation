@@ -1,4 +1,4 @@
-var app = angular.module('login', ['userFactory']);
+var app = angular.module('login', ['userFactory','index']);
 
 app.controller('loginController',['$scope','$window','$timeout','userService', function ($scope,$window,$timeout, userService) {
    $scope.save = function(){
@@ -24,3 +24,10 @@ app.controller('loginController',['$scope','$window','$timeout','userService', f
         });
    }
 }]);
+
+app.controller('headerController', function ($scope, indexService) {
+    var objects= indexService.getUsername()
+    objects.then(function(data){
+        $scope.objects = data
+    })
+})

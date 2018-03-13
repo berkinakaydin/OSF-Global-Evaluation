@@ -57,9 +57,13 @@ User.methods.generateJWT = function (username) {
 }
 
 User.methods.verifyJWT = function(token){
-    var decoded = jwt.verify(token, secret);
-    return decoded
-    //console.log(decoded)
+    var user = null
+    try {
+        user = jwt.verify(token, secret);
+    } catch (err) {
+        user = null
+    }
+    return user
 }
 
 
