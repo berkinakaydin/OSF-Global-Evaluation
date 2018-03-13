@@ -35,8 +35,7 @@ exports.login = function (req, res) {
                 user = user[0];
                 var jwt = userDBModel.User().methods.generateJWT(user.username) 
                 user.token = jwt             
-                user.save()
-                res.cookie('jwt',jwt, { maxAge: 86400, httpOnly: true });
+                user.save()               
                 res.json({success:true, token : jwt})
             }
             else{
@@ -81,9 +80,38 @@ exports.register = function (req, res) {
     })
 }
 
+exports.logout = function(req,res){
+    var token = req.body.token
+    res.json({})
+}
 
-exports.me = function(req,res){
-    var token = req.cookies.jwt
+
+exports.profilePage = function(req,res){
+    //var token = req.cookies.jwt
     console.log("xd")
     //console.log(token)
+}
+
+
+exports.profile = function(req,res){
+    //var token = req.cookies.jwt
+    console.log("xd")
+    //console.log(token)
+}
+
+exports.getUsername = function(req,res){
+    var token = req.body.token
+    if(token != null){  //To know that user logged in
+        var user = userDBModel.User().methods.verifyJWT(token)
+        var username = user.username
+        res.json({username:username, success:true})
+    }
+    else{  //User is not logged in
+        res.json({success:false})
+    }
+   
+}
+
+exports.auth = function(){
+    
 }

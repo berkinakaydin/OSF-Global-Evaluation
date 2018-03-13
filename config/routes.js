@@ -15,7 +15,9 @@ module.exports = function(app){
     app.get('/product/:product',productController.index);
     app.get('/login', userController.loginPage);
     app.get('/register', userController.registerPage);
-    app.get('/me', userController.me);
+    app.get('/me', userController.profilePage);
+    app.post('/api/getUsername', userController.getUsername)
+    app.post('/api/me', userController.profile);
     app.post('/api/register', userController.register);
     app.post('/api/login', userController.login);
 }

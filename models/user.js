@@ -51,9 +51,15 @@ User.methods.comparePassword = function(plainPass, hashword, callback) {
 };
 
 User.methods.generateJWT = function (username) {
-    return jwt.sign({ id: username }, secret, {
+    return jwt.sign({ username: username }, secret, {
         expiresIn: 86400 // expires in 24 hours
     });
+}
+
+User.methods.verifyJWT = function(token){
+    var decoded = jwt.verify(token, secret);
+    return decoded
+    //console.log(decoded)
 }
 
 

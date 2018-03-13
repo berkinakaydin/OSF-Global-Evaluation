@@ -10,7 +10,7 @@ app.controller('loginController',['$scope','$window','$timeout','userService', f
         .then(function (response) {
             if (response.data.success=== true) {              
                 var token = response.data.token
-                //sessionStorage.accessToken = token;
+                $window.localStorage.setItem('jwt',token)
                 $window.location.href = "/";
             } else {          
                 if(response.data.error === true){       

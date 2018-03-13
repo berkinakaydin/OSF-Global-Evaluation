@@ -1,7 +1,6 @@
-var app = angular.module('product', []);
+var app = angular.module('product', ['index']);
 
 app.service('productColorService', ['$location', '$http', function ($location, $http) {
-
     var url = $location.absUrl();
     var pid = url.split('/').pop()
 
@@ -83,7 +82,6 @@ app.service('productPriceService', ['$location', '$http', function ($location, $
     }
 }]);
 
-
 app.controller('colorController', function ($scope, productColorService) {
     var colors = productColorService.getColors()
     colors.then(function (data) {
@@ -112,7 +110,16 @@ app.controller('colorController', function ($scope, productColorService) {
             $scope.selectedImage = '/images/' + data.images[0].link
         }
     }
+
+    
 });
+
+app.controller('headerController', function ($scope, indexService) {
+    var objects= indexService.getUsername()
+    objects.then(function(data){
+        $scope.objects = data
+    })
+})
 
 app.controller('priceController', function ($scope, productPriceService) {
 

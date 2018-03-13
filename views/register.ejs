@@ -10,13 +10,14 @@
     <script src="/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="/js/userFactory.js" type="text/javascript"></script>
     <script src="/js/registerHandler.js" type="text/javascript"></script>
+    <script src="/js/indexHandler.js" type="text/javascript"></script>
     <title>
         REGISTER
     </title>
 </head>
 
 <body ng-app="register">
-    <header>
+    <header ng-app="index" ng-controller="indexController">
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -36,14 +37,11 @@
                             </li>
                             <% } %>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="/login">Login</a>
-                        </li>
-                        <li>
-                            <a href="/register">Register</a>
-                        </li>
-                    </ul>
+                    <ul class="nav navbar-nav navbar-right" >
+                            <li ng-repeat="url in objects">
+                                <a href={{url.url}}>{{url.text}}</a>
+                             </li>
+                        </ul>
                 </div>
             </div>
         </nav>
