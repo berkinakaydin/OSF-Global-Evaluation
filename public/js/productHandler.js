@@ -1,4 +1,4 @@
-var app = angular.module('product', ['index']);
+var app = angular.module('product', ['index','userFactory']);
 
 app.service('productColorService', ['$location', '$http', function ($location, $http) {
     var url = $location.absUrl();
@@ -114,11 +114,15 @@ app.controller('colorController', function ($scope, productColorService) {
     
 });
 
-app.controller('headerController', function ($scope, indexService) {
+app.controller('headerController', function ($scope, indexService, userService) {
     var objects= indexService.getUsername()
     objects.then(function(data){
         $scope.objects = data
     })
+
+    $scope.logout = function () {
+        userService.Logout();
+    }
 })
 
 app.controller('priceController', function ($scope, productPriceService) {

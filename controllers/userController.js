@@ -25,7 +25,6 @@ exports.registerPage = function (req, res) {
 }
 
 exports.login = function (req, res) {
-
     var username = req.body.user.username
     var password = req.body.user.password
     userModel.find({
@@ -88,8 +87,9 @@ exports.register = function (req, res) {
 }
 
 exports.logout = function (req, res) {
-    var token = req.body.token
-    res.json({})
+    res.json({
+        success: true
+    })
 }
 
 
@@ -108,29 +108,28 @@ exports.profile = function (req, res) {
 
 exports.getUsername = function (req, res) {
     var token = req.body.token
+    var user = userDBModel.User().methods.verifyJWT(token)
+    var username = user.username
+    res.json({
+        username: username,
+        success: true
+    })
+}
+
+exports.authenticate = function (req, res, next) {
+    var token = req.body.token
     if (token != null) { //To know that user logged in
         var user = userDBModel.User().methods.verifyJWT(token)
         if (user) {
-            var username = user.username
-            res.json({
-                username: username,
-                success: true
-            })
-        }
-        else{
-            res.json({
+            return next()
+        } else {
+            return res.json({
                 success: false
             })
         }
-       
-    } else { //User is not logged in
-        res.json({
+    } else {
+        return res.json({
             success: false
         })
     }
-
-}
-
-exports.auth = function () {
-
 }

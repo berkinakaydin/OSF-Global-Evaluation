@@ -38,10 +38,11 @@
                             <% } %>
                     </ul>
                     <ul class="nav navbar-nav navbar-right" >
-                            <li ng-repeat="url in objects">
-                                <a href={{url.url}}>{{url.text}}</a>
-                             </li>
-                        </ul>
+                        <li ng-repeat="url in objects">
+                            <a ng-if="url.text !== 'Log Out'" href={{url.url}}>{{url.text}}</a>
+                            <a name="logout" ng-if="url.text === 'Log Out'" ng-click="$event.preventDefault(); logout()">{{url.text}}</a>
+                         </li>
+                    </ul>
                 </div>
             </div>
         </nav>

@@ -16,8 +16,9 @@ module.exports = function(app){
     app.get('/login', userController.loginPage);
     app.get('/register', userController.registerPage);
     app.get('/me', userController.profilePage);
-    app.post('/api/getUsername', userController.getUsername)
-    app.post('/api/me', userController.profile);
+    app.post('/api/getUsername', userController.authenticate, userController.getUsername)  //AUTHORIZATION REQUIRED
+    app.post('/api/me', userController.authenticate, userController.profile);  //AUTHORIZATION REQUIRED
     app.post('/api/register', userController.register);
     app.post('/api/login', userController.login);
+    app.post('/api/logout', userController.authenticate, userController.logout);  //AUTHORIZATION REQUIRED
 }

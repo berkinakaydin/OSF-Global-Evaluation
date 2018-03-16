@@ -23,6 +23,8 @@ app.controller('loginController',['$scope','$window','$timeout','userService', f
             }
         });
    }
+
+ 
 }]);
 
 app.controller('headerController', function ($scope, indexService) {
@@ -30,4 +32,8 @@ app.controller('headerController', function ($scope, indexService) {
     objects.then(function(data){
         $scope.objects = data
     })
+
+    $scope.logout = function () {
+        userService.Logout();
+        }
 })

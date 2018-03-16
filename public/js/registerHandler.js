@@ -58,11 +58,17 @@ app.controller('registerController', ['$scope', 'userService', '$location', '$wi
             }
         });
     }
+
+  
 }]);
 
-app.controller('headerController', function ($scope, indexService) {
+app.controller('headerController', ['$scope','indexService','userService', function ($scope, indexService, userService) {
     var objects= indexService.getUsername()
     objects.then(function(data){
         $scope.objects = data
     })
-})
+
+    $scope.logout = function () {
+        userService.Logout();
+    }
+}])
