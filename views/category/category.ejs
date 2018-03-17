@@ -22,18 +22,11 @@
                     </a>
                 </div>
                 <div id='navbar' class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <% for(var i=0; i<allCategories.length; i++) {%>
-                            <li>
-                                <% var url = '/' %>
-                                    <% url += allCategories[i].id %>
-                                        <a href="<%= url %>">
-                                            <%= allCategories[i].name%>
-                                        </a>
-                            </li>
-                            <% } %>
-
-                    </ul>
+                        <ul class="nav navbar-nav">            
+                                <li ng-repeat="category in categories">
+                                        <a href="/{{category.url}}">{{category.text}}</a>
+                                </li>
+                            </ul>
                     <ul class="nav navbar-nav navbar-right" >
                         <li ng-repeat="url in objects">
                             <a name="wishlist" ng-if="url.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer">{{url.text}}</a>
@@ -50,27 +43,27 @@
 
     <div id='main'>
         <div id=categories class="container">
-            <% for(var i=0; i<category[0].categories.length; i++) {%>
+            <% for(var i=0; i<category.categories.length; i++) {%>
                 <div id=category class="col-md-6">
 
                     <div class="card mb-6 box-shadow">
                         <div id='image'>
-                            <%if(category[0].categories[i].image){%>
+                            <%if(category.categories[i].image){%>
                                 <!--IMPORTANT!! IF CATEGORY HASNT GOT ANY IMAGE, FAVICON CALLS A PAGE TWO TIMES WTF?-->
-                                <img src="/images/<%=category[0].categories[i].image%>" style="max-width: 100% !important; height: auto;width: auto;">
+                                <img src="/images/<%=category.categories[i].image%>" style="max-width: 100% !important; height: auto;width: auto;">
                                 <%}else{%>
                                     <img src="/images/categories/default.png" style="max-width: 100px !important; height: auto;width: auto;">
                                     <%}%>
                         </div>
                         <div id='information'>
                             <p>
-                                <%=category[0].categories[i].name%>
+                                <%=category.categories[i].name%>
 
-                                    <%=category[0].categories[i].page_description%>
+                                    <%=category.categories[i].page_description%>
                             </p>
                         </div>
-                        <% var url = category[0].id + '/'%>
-                            <% url +=category[0].categories[i].id %>
+                        <% var url = category.id + '/'%>
+                            <% url +=category.categories[i].id %>
                                 <p>
                                     <a href="<%= url %>" class="btn btn-primary" role="button">Go</a>
                                 </p>

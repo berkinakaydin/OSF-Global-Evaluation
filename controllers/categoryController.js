@@ -9,57 +9,55 @@ var productModel = new productDBModel.Schema();
 
 exports.index = function(req, res,next){ 
     var category = req.params.category
-    
-    categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
-        categoryModel.find({id:category},function(err, category) { //QUERIED RESULTS FROM URL
-            if(typeof category[0] === 'undefined'){ //ERROR HANDLE
-                return next()
-            }
-            var title = category[0].page_title
-            res.render('./category/category', {title:title, allCategories : allCategories , category : category})
-          });
-    });
+
+    categoryModel.findOne({id:category},function(err, category) { //QUERIED RESULTS FROM URL
+        if(typeof category === 'undefined'){ //ERROR HANDLE
+            return next()
+        }
+        var title = category.page_title
+        res.render('./category/category', {title:title, category : category})
+      });
   };
 
   exports.subcategory = function(req,res,next){
     var category = req.params.category
     var subcategory= req.params.subcategory
 
-    categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
-        categoryModel.find({'id':category},{'categories': {$elemMatch: {'id': subcategory}}},function (err, subcategory) {
+    categoryModel.findOne({'id':category},{'categories': {$elemMatch: {'id': subcategory}}},function (err, subcategory) {
 
-            if(typeof subcategory[0] === 'undefined'){ //ERROR HANDLE
-                return next()
-            }
-                
-            var title = subcategory[0].categories[0].page_title
-            var subcategory = subcategory[0].categories[0]
-            res.render('./category/subcategory',{title:title, subcategory : subcategory, allCategories : allCategories})  //WOW
-          });
-    });
-    
+        if(typeof subcategory === 'undefined'){ //ERROR HANDLE
+            return next()
+        }
+            
+        var title = subcategory.categories[0].page_title
+        var subcategory = subcategory.categories[0]
+        res.render('./category/subcategory',{title:title, subcategory : subcategory})  //WOW
+      });
 };
 
+exports.getCategories = function(req,res){
+    var categories = categoryModel.find()
+    categories.then(function(categories){
+        res.json({categories : categories})
+    })
+}
 
 exports.products = function(req, res,next){
     var parentURL = req.path
     var productCategory = req.params.category_product
 
-    categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
-        productModel.find({primary_category_id:productCategory},function(err, products) { //QUERIED RESULTS FROM URL
-            if(typeof products[0] !== 'undefined'){  //SOME CATEGORIES HAVE NO PRODUCT!
-                var productCategory = products[0].primary_category_id.replace(/-/g, " ");
-                productCategory = titleCase(productCategory);        
-                
-                var title = productCategory
-                res.render('./category/category_product', {title:title, allCategories : allCategories, products : products, parentURL : parentURL})
-            }
-            else{
-                res.render('./category/category_product', {title:title, allCategories : allCategories, products : {}, parentURL : parentURL})
-            }
-          });
-    });
-    
+    productModel.find({primary_category_id:productCategory},function(err, products) { //QUERIED RESULTS FROM URL
+        
+        if(typeof products[0] !== 'undefined'){  //SOME CATEGORIES HAVE NO PRODUCT!
+            var productCategory = products[0].primary_category_id.replace(/-/g, " ");
+            productCategory = titleCase(productCategory);        
+            var title = productCategory
+            res.render('./category/category_product', {title:title, products : products, parentURL : parentURL})
+        }
+        else{
+            res.render('./category/category_product', {title:title, products : {}, parentURL : parentURL})
+        }
+      });
 };
 
 

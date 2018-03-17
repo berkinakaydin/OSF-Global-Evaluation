@@ -16,7 +16,10 @@ module.exports = function(app){
     app.get('/login', userController.loginPage);
     app.get('/register', userController.registerPage);
     app.get('/profile',userController.profilePage); //AUTHORIZATION REQUIRED
+    app.get('/verification', userController.verification); //AUTHORIZATION REQUIRED
+    app.post('/api/getCategories', categoryController.getCategories); //AUTHORIZATION REQUIRED
     app.post('/api/updateuser', userController.authenticate,userController.updateUser); //AUTHORIZATION REQUIRED
+    app.post('/api/emailverify', userController.authenticate,userController.emailVerify); //AUTHORIZATION REQUIRED
     app.post('/api/getUsername', userController.authenticate, userController.getUsername)  //AUTHORIZATION REQUIRED
     app.post('/api/register', userController.register);
     app.post('/api/login', userController.login);

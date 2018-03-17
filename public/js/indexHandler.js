@@ -2,10 +2,15 @@ app = angular.module('index', ['userFactory'])
 
 app.controller('indexController', ['$scope', '$location', '$window', '$http', 'indexService', 'userService', function ($scope, $location, $window, $http, indexService, userService) {
     var objects = indexService.headerButtons()
+    var categories = indexService.getCategories()
 
     objects.then(function (data) {
         $scope.objects = data
     });
+
+    categories.then(function(categories){
+        $scope.categories = categories
+    })
 
     $scope.logout = function () {
         userService.Logout();
@@ -64,6 +69,21 @@ app.service('indexService', ['$http','$location', '$window', function ($http,$lo
         });
     }
 
+    var getCategories = function () {
+        var categories = []
+        return $http.post('/api/getCategories').then(function (response) {
+            for(var i=0; i<response.data.categories.length;i++){
+                var category = {
+                    text : response.data.categories[i].name,
+                    url : response.data.categories[i].id
+                }
+                categories.push(category)
+            }
+            return categories
+        })
+            
+    }
+
     /*var profile = function () {
         var token = $window.localStorage.getItem('jwt')
         return $http.post('/api/profile',  {'token': token}).then(function (response) {
@@ -80,7 +100,8 @@ app.service('indexService', ['$http','$location', '$window', function ($http,$lo
     }*/
 
     return {
-        headerButtons: headerButtons
+        headerButtons: headerButtons,
+        getCategories: getCategories
         //profile: profile
     }
 }])

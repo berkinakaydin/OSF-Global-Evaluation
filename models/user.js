@@ -20,6 +20,7 @@ var User = new Schema({
     surname: String,
     password: String,
     token : String,
+    emailVerify : Boolean,
     email: {
         type: String,
         unique: true,

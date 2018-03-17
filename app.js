@@ -24,6 +24,7 @@ app.use(session({
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 const router = require('./config/routes.js')(app)
 
 app.listen(3000, () => console.log('Example app listening on port 80!'))

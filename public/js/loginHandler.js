@@ -23,16 +23,19 @@ app.controller('loginController',['$scope','$window','$timeout','userService', f
             }
         });
    }
-
- 
 }]);
 
 app.controller('headerController', function ($scope, indexService) {
     var objects = indexService.headerButtons()
+    var categories = indexService.getCategories()
 
     objects.then(function (data) {
         $scope.objects = data
     });
+
+    categories.then(function(categories){
+        $scope.categories = categories
+    })
 
     $scope.logout = function () {
         userService.Logout();

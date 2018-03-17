@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const MongoClient = require('mongodb').MongoClient;
 const categoryDBModel = require('../models/category.js')
 const userDBModel = require('../models/user.js')
+const nodemailer = require('nodemailer');
+
 
 const file = require('../utils/file')
 var categoryModel = new categoryDBModel.Schema(); //mongoose.model('product', Product);
@@ -64,11 +66,12 @@ exports.register = function (req, res) {
     var hashedPassword = userDBModel.User().methods.cryptPassword(password)
 
     var userEntity = new userModel()
-    userEntity.name = username
+    userEntity.name = name
     userEntity.surname = surname
     userEntity.username = username
     userEntity.password = hashedPassword
     userEntity.email = email
+    userEntity.emailVerify = false
 
     userEntity.save((err, data) => {
         if (data) {
@@ -95,18 +98,22 @@ exports.logout = function (req, res) {
 
 exports.profilePage = function (req, res) {
     var token = req.query.token
-    var user = userDBModel.User().methods.verifyJWT(token)
-    var username = user.username
-    categoryModel.find(function (err, allCategories) { //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
-        userModel.find({
-            'username': username
-        }, function (err, user) { //QUERIED RESULTS FROM 
-            res.render('profile', {
-                allCategories: allCategories,
-                user: user[0]
-            })
+    if(token != null){
+        var user = userDBModel.User().methods.verifyJWT(token)
+        var username = user.username
+        categoryModel.find(function (err, allCategories) { //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
+            userModel.find({
+                'username': username
+            }, function (err, user) { //QUERIED RESULTS FROM 
+                res.render('profile', {
+                    allCategories: allCategories,
+                    user: user[0]
+                })
+            });
         });
-    });
+    }else{
+        res.sendStatus(401);
+    }
 }
 
 exports.getUsername = function (req, res) {
@@ -170,6 +177,65 @@ exports.updateUser = function (req, res) {
             })
         }
     })
+}
+
+exports.verification = function (req, res) {
+    var token = req.query.token
+    if(token != null){
+        var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
+        var username = user.username
+        userModel.findOne({
+            'username': username
+        }, function (err, user) {
+            user.emailVerify = true
+            user.save()
+            res.render('index', {verified : true})
+        })
+    }
+    else{
+        res.sendStatus(401)
+    }
+    
+}
+
+exports.emailVerify = function (req, res, next) {
+    var token = req.body.token
+    var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
+    var username = user.username
+    userModel.findOne({
+        'username': username
+    }, function (err, user) {
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'osfmailer@gmail.com',
+                pass: 'osfmailer123'
+            }
+        });
+
+        var mailOptions = {
+            from: 'osfmailer@gmail.com',
+            to: user.email,
+            subject: 'OSF E-Commerce Verification',
+            text: 'Please click this following link to verify your email \n ' + 'http://localhost:3000/verification?token=' + user.token + '\n This link can be used once 24 hours'
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+                res.json({
+                    success: false
+                })
+            } else {
+                console.log('Email sent: ' + info.response);
+                res.json({
+                    success: true
+                })
+            }
+        });
+
+    })
+
 }
 
 exports.authenticate = function (req, res, next) {

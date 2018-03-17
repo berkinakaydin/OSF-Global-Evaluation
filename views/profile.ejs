@@ -24,24 +24,20 @@
                     </a>
                 </div>
                 <div id='navbar' class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <% for(var i=0; i<allCategories.length; i++) {%>
-                            <li>
-                                <% var url = '/' %>
-                                    <% url += allCategories[i].id %>
-                                        <a href="<%= url %>">
-                                            <%= allCategories[i].name%>
-                                        </a>
-                            </li>
-                            <% } %>
-
-                    </ul>
+                        <ul class="nav navbar-nav">            
+                                <li ng-repeat="category in categories">
+                                      <a href="{{category.url}}">{{category.text}}</a>
+                                </li>
+                            </ul>
                     <ul class="nav navbar-nav navbar-right" >
-                        <li ng-repeat="url in objects">
-                            <a ng-if="url.text !== 'Log Out'" href={{url.url}}>{{url.text}}</a>
-                            <a name="logout" ng-if="url.text === 'Log Out'" ng-click="$event.preventDefault(); logout()" style="cursor:pointer">{{url.text}}</a>
-                         </li>
-                    </ul>
+                            <li ng-repeat="url in objects">
+                                <a name="wishlist" ng-if="url.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer" >{{url.text}}</a>
+                                <a name="basket" ng-if="url.type === 'basket'" ng-click="basket()" style="cursor:pointer">{{url.text}}</a>
+                                <a name="profile" ng-if="url.type === 'profile'" ng-click="profile()" style="cursor:pointer">{{url.text}}</a>
+                                <a name="logout" ng-if="url.type === 'logout'" ng-click="logout()" style="cursor:pointer">{{url.text}}</a>         
+                                <a ng-if="url.type === 'unAuth'" href='{{url.url}}' style="cursor:pointer">{{url.text}}</a>
+                             </li>
+                        </ul>
                 </div>
             </div>
         </nav>
@@ -61,18 +57,49 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input ng-change="uniqueEmailSet()" ng-model='email' type="email" class="form-control" name="email" id="email" placeholder="<%=user.email%>" required>
+                        <input ng-change="uniqueEmailSet()" ng-model='email' type="email" class="form-control" name="email" id="email" placeholder="<%=user.email%>"
+                            required>
                         <span ng-show="updateForm.email.$dirty && updateForm.email.$error.required" class="help-block">Email is required</span>
                         <span ng-show="updateForm.email.$error.unique">Email has taken!</span>
                     </div>
-                    <button ng-disabled="updateForm.email.$invalid" type="submit" class="btn btn-primary">Submit</button>
+
+                    <div id='emailVerify' ng-controller="verifyController">
+                        <h5 ng-init='verify = <%=user.emailVerify%>;' style="float:left">
+                            {{verify}}
+                        </h5>
+
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Email Verification</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Your email has been sent</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <a ng-if='verify == false' ng-click='verifyEmail()' class='btn btn-info' type="button">Verify</a>
+                    </div>
+
+                    <button ng-disabled="updateForm.email.$invalid" type="submit" class="btn btn-primary">Update Profile</button>
                 </form>
             </div>
+
             <div class="col-md-6 alert alert-success ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alert">
                 <strong>Success!</strong> User Updated!
-            </div> 
+            </div>
         </div>
-        
+
     </div>
 </body>
 

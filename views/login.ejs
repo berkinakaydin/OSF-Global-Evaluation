@@ -26,21 +26,15 @@
                 </div>
                 <div id='navbar' class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <% for(var i=0; i<allCategories.length; i++) {%>
-                            <li>
-                                <% var url = '/' %>
-                                    <% url += allCategories[i].id %>
-                                        <a href="<%= url %>">
-                                            <%= allCategories[i].name%>
-                                        </a>
-                            </li>
-                            <% } %>
+                        <li ng-repeat="category in categories">
+                            <a href="{{category.url}}">{{category.text}}</a>
+                        </li>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right" >
+                    <ul class="nav navbar-nav navbar-right">
                         <li ng-repeat="url in objects">
                             <a ng-if="url.text !== 'Log Out'" href={{url.url}}>{{url.text}}</a>
                             <a name="logout" ng-if="url.text === 'Log Out'" ng-click="$event.preventDefault(); logout()" style="cursor:pointer">{{url.text}}</a>
-                         </li>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -50,30 +44,30 @@
     <div id='main'>
         <div class='container' ng-controller="loginController">
             <div id='input-group' class="well col-md-6" style="float: none;  margin: 0 auto;">
-                    <form role="form" ng-submit="save()" name='loginForm' >
-                            <div class="form-group" >
-                              <label for="username">Username</label>
-                              <input ng-model="username"  name="username" class="form-control" id="username" placeholder="Enter username" required>          
-                                          
-                            </div>
-                            <div class="form-group">
-                              <label for="password">Password</label>
-                              <input ng-model="password" name="password" type="password" class="form-control" id="password" placeholder="Password" required>
-                        
-                            </div>
-                            <!--<div class="form-check">
+                <form role="form" ng-submit="save()" name='loginForm'>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input ng-model="username" name="username" class="form-control" id="username" placeholder="Enter username" required>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input ng-model="password" name="password" type="password" class="form-control" id="password" placeholder="Password" required>
+
+                    </div>
+                    <!--<div class="form-check">
                               <input type="checkbox" class="form-check-input" id="rememberMe">
                               <label class="form-check-label" for="rememberMe">Remember Me</label>
                             </div>-->
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
 
-                              
-                          </form>
-                          
+
+                </form>
+
             </div>
             <div class="col-md-6 alert alert-danger ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alert">
                 <strong>Danger!</strong> Username or password is wrong.
-            </div> 
+            </div>
         </div>
     </div>
 </body>
