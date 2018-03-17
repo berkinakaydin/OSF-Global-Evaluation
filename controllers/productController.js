@@ -9,39 +9,31 @@ var categoryModel = new categoryDBModel.Schema(); //mongoose.model('product', Pr
 var productModel = new productDBModel.Schema();
 
 exports.index = function(req, res){
-    console.log(req.params.product)
     var productId = req.params.product
 
-    categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
-        productModel.find({'id':productId},function(err, product) { //QUERIED RESULTS FROM URL
-
-            var title = product[0].page_title
-            res.render('product',{title:title,allCategories : allCategories,product : product[0]})
-          });
-    });
+    productModel.findOne({'id':productId},function(err, product) { //QUERIED RESULTS FROM URL
+        var title = product.page_title
+        res.render('product',{title:title,product : product})
+      });
 };
 
 exports.getColor = function(req, res){
     var productId = req.params.pid
 
-    categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
-        productModel.find({'id':productId},function(err, product) { //QUERIED RESULTS FROM URL
-            res.json({
-                productColors : product[0].variation_attributes[0].values,
-                productImages : product[0].image_groups
-            })
-          });
-    });
+    productModel.findOne({'id':productId},function(err, product) { //QUERIED RESULTS FROM URL
+        res.json({
+            productColors : product.variation_attributes[0].values,
+            productImages : product.image_groups
+        })
+      });
 };
 
 exports.getPrice = function(req,res){
     var productId = req.params.pid
 
-    categoryModel.find(function(err, allCategories) {  //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
-        productModel.find({'id':productId},function(err, product) { //QUERIED RESULTS FROM URL
-            res.json({
-                price : product[0].price
-            })
-          });
-    });
+    productModel.findOne({'id':productId},function(err, product) { //QUERIED RESULTS FROM URL
+        res.json({
+            price : product.price
+        })
+      });
 }

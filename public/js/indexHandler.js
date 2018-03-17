@@ -75,33 +75,28 @@ app.service('indexService', ['$http','$location', '$window', function ($http,$lo
             for(var i=0; i<response.data.categories.length;i++){
                 var category = {
                     text : response.data.categories[i].name,
-                    url : response.data.categories[i].id
-                }
+                    url : response.data.categories[i].id,
+                    description : response.data.categories[i].page_description,
+                    image_url : response.data.categories[i].id + '.png'
+                }              
                 categories.push(category)
             }
             return categories
         })
-            
     }
 
-    /*var profile = function () {
+    var getUser = function(){
         var token = $window.localStorage.getItem('jwt')
-        return $http.post('/api/profile',  {'token': token}).then(function (response) {
-            console.log(response.data)
-            if(response.data.success === true){
-                console.log('ok')
-                //$window.location.href = "/profile";
-            }else{
-                console.log('no')
-                //$window.location.href = "/login";
-            }
-
-        });
-    }*/
+        return $http.post('/api/getUser', {'token': token}).then(function (response) {
+            
+            var user = response.data.user
+            return user
+        })
+    }
 
     return {
         headerButtons: headerButtons,
-        getCategories: getCategories
-        //profile: profile
+        getCategories: getCategories,
+        getUser : getUser
     }
 }])

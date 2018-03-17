@@ -100,20 +100,34 @@ exports.profilePage = function (req, res) {
     var token = req.query.token
     if(token != null){
         var user = userDBModel.User().methods.verifyJWT(token)
-        var username = user.username
-        categoryModel.find(function (err, allCategories) { //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
-            userModel.find({
+        if(user != null){
+            var username = user.username
+            userModel.findOne({
                 'username': username
             }, function (err, user) { //QUERIED RESULTS FROM 
                 res.render('profile', {
-                    allCategories: allCategories,
-                    user: user[0]
+                    user: user
                 })
             });
-        });
+        }
+        else{
+            res.sendStatus(401);
+        }
     }else{
         res.sendStatus(401);
     }
+}
+
+exports.getUser = function(req,res){
+    var token = req.body.token
+    var user = userDBModel.User().methods.verifyJWT(token)
+    var username = user.username
+    userModel.findOne({  'username': username}, function (err, user) { //QUERIED RESULTS FROM 
+        res.json({
+            user: user
+        })
+    });
+    
 }
 
 exports.getUsername = function (req, res) {
@@ -183,19 +197,23 @@ exports.verification = function (req, res) {
     var token = req.query.token
     if(token != null){
         var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
-        var username = user.username
-        userModel.findOne({
-            'username': username
-        }, function (err, user) {
-            user.emailVerify = true
-            user.save()
-            res.render('index', {verified : true})
-        })
+        if(user != null){
+            var username = user.username
+            userModel.findOne({
+                'username': username
+            }, function (err, user) {
+                user.emailVerify = true
+                user.save()
+                res.render('verify')
+            })
+        }
+        else{
+            res.sendStatus(401)
+        }
     }
     else{
         res.sendStatus(401)
     }
-    
 }
 
 exports.emailVerify = function (req, res, next) {
