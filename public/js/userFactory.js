@@ -49,8 +49,8 @@ app.factory('userService', ['$http', function ($http) {
         });
     }
 
-    function Update(user) {
-        return $http.put('/api/users/' + user.id, user).then(handleSuccess, handleError('Error updating user'));
+    function Update(user, token) {
+        return $http.post('/api/updateuser/' ,{token:token, user:user}).then(handleSuccess, handleError('Error updating user'));
     }
 
     function Delete(id) {

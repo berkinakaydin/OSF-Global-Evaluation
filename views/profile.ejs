@@ -1,0 +1,79 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/register.css">
+    <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script src="/js/angular.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/js/indexHandler.js" type="text/javascript"></script>
+    <script src="/js/userFactory.js" type="text/javascript"></script>
+    <script src="/js/profileHandler.js" type="text/javascript"></script>
+    <title>
+        <%=user.username%>
+    </title>
+</head>
+
+<body ng-app="profile">
+    <header ng-controller="headerController">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/" style="padding-top:3px">
+                        <img width="200" height="40" src="/images/logo.png" style="float:left">
+                    </a>
+                </div>
+                <div id='navbar' class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <% for(var i=0; i<allCategories.length; i++) {%>
+                            <li>
+                                <% var url = '/' %>
+                                    <% url += allCategories[i].id %>
+                                        <a href="<%= url %>">
+                                            <%= allCategories[i].name%>
+                                        </a>
+                            </li>
+                            <% } %>
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right" >
+                        <li ng-repeat="url in objects">
+                            <a ng-if="url.text !== 'Log Out'" href={{url.url}}>{{url.text}}</a>
+                            <a name="logout" ng-if="url.text === 'Log Out'" ng-click="$event.preventDefault(); logout()" style="cursor:pointer">{{url.text}}</a>
+                         </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div id='main'>
+        <div class='container' ng-controller="profileController">
+            <div id='input-group' class="well col-md-6" style="float: none;  margin: 0 auto;">
+                <form name='updateForm' ng-submit="update()" role="form">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input ng-model='name' class="form-control" id="name" placeholder="<%=user.name%>">
+                    </div>
+                    <div class="form-group">
+                        <label for="surname">Surname</label>
+                        <input ng-model='surname' class="form-control" id="surname" placeholder="<%=user.surname%>">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input ng-change="uniqueEmailSet()" ng-model='email' type="email" class="form-control" name="email" id="email" placeholder="<%=user.email%>" required>
+                        <span ng-show="updateForm.email.$dirty && updateForm.email.$error.required" class="help-block">Email is required</span>
+                        <span ng-show="updateForm.email.$error.unique">Email has taken!</span>
+                    </div>
+                    <button ng-disabled="updateForm.email.$invalid" type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <div class="col-md-6 alert alert-success ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alert">
+                <strong>Success!</strong> User Updated!
+            </div> 
+        </div>
+        
+    </div>
+</body>
+
+</html>

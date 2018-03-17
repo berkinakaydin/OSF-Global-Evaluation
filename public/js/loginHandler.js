@@ -28,10 +28,11 @@ app.controller('loginController',['$scope','$window','$timeout','userService', f
 }]);
 
 app.controller('headerController', function ($scope, indexService) {
-    var objects= indexService.getUsername()
-    objects.then(function(data){
+    var objects = indexService.headerButtons()
+
+    objects.then(function (data) {
         $scope.objects = data
-    })
+    });
 
     $scope.logout = function () {
         userService.Logout();

@@ -115,10 +115,11 @@ app.controller('colorController', function ($scope, productColorService) {
 });
 
 app.controller('headerController', function ($scope, indexService, userService) {
-    var objects= indexService.getUsername()
-    objects.then(function(data){
+    var objects = indexService.headerButtons()
+
+    objects.then(function (data) {
         $scope.objects = data
-    })
+    });
 
     $scope.logout = function () {
         userService.Logout();

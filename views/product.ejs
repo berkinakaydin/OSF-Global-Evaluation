@@ -37,8 +37,11 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right" >
                         <li ng-repeat="url in objects">
-                            <a ng-if="url.text !== 'Log Out'" href={{url.url}}>{{url.text}}</a>
-                            <a name="logout" ng-if="url.text === 'Log Out'" ng-click="$event.preventDefault(); logout()" style="cursor:pointer">{{url.text}}</a>
+                            <a name="wishlist" ng-if="url.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer" >{{url.text}}</a>
+                            <a name="basket" ng-if="url.type === 'basket'" ng-click="basket()" style="cursor:pointer">{{url.text}}</a>
+                            <a name="profile" ng-if="url.type === 'profile'" ng-click="profile()" style="cursor:pointer">{{url.text}}</a>
+                            <a name="logout" ng-if="url.type === 'logout'" ng-click="logout()" style="cursor:pointer">{{url.text}}</a>         
+                            <a ng-if="url.type === 'unAuth'" href='{{url.url}}' style="cursor:pointer">{{url.text}}</a>
                          </li>
                     </ul>
                 </div>

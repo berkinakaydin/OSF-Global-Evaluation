@@ -94,16 +94,19 @@ exports.logout = function (req, res) {
 
 
 exports.profilePage = function (req, res) {
-    //var token = req.cookies.jwt
-    console.log("xd")
-    //console.log(token)
-}
-
-
-exports.profile = function (req, res) {
-    //var token = req.cookies.jwt
-    console.log("xd")
-    //console.log(token)
+    var token = req.query.token
+    var user = userDBModel.User().methods.verifyJWT(token)
+    var username = user.username
+    categoryModel.find(function (err, allCategories) { //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
+        userModel.find({
+            'username': username
+        }, function (err, user) { //QUERIED RESULTS FROM 
+            res.render('profile', {
+                allCategories: allCategories,
+                user: user[0]
+            })
+        });
+    });
 }
 
 exports.getUsername = function (req, res) {
@@ -113,6 +116,59 @@ exports.getUsername = function (req, res) {
     res.json({
         username: username,
         success: true
+    })
+}
+
+exports.updateUser = function (req, res) {
+    var token = req.body.token
+    var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
+    var username = user.username
+
+    //INPUT FIELD
+    var name = req.body.user.name
+    var surname = req.body.user.surname
+    var email = req.body.user.email
+
+    var query = userModel.findOne({
+        'email': email
+    }) //QUERIED RESULTS FROM 
+
+    var isEmailUnique = query.then(function (query) {
+        if (query) {
+            return false
+        } else {
+            return true
+        }
+    })
+
+    isEmailUnique.then(function (isEmailUnique) {
+        if (isEmailUnique) {
+            userModel.find({
+                'username': username
+            }, function (err, user) { //QUERIED RESULTS FROM 
+                var user = user[0]
+                user.set({
+                    name: name,
+                    surname: surname,
+                    email: email
+                })
+                user.save(function (err, updatedUser) {
+                    if (err) {
+                        res.json({
+                            success: false
+                        })
+                    } else {
+                        res.json({
+                            success: true
+                        })
+                    }
+                });
+            });
+        } else {
+            res.json({
+                success: false
+            })
+        }
     })
 }
 
@@ -131,5 +187,6 @@ exports.authenticate = function (req, res, next) {
         return res.json({
             success: false
         })
+
     }
 }
