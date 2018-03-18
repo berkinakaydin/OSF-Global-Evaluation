@@ -51,25 +51,18 @@ app.service('indexService', ['$http','$location', '$window', function ($http,$lo
                     type: 'logout',
                     text: 'Log Out',
                 }
-                if(basket == null){
-                    var basket = {
-                        type: 'basket',
-                        text: 'Basket ',
-                        count : 0
-                    }
-                    objects.push(basket)
+                var basket = {
+                    type: 'basket',
+                    text: 'Basket ',
+                    count : (basket == null)?0:basket.products.length
                 }
-                if(wishlist == null){
-                    var wishlist = {
-                        type: 'wishlist',
-                        text: 'Wish List',
-                        count : 0
-                    }
-                    objects.push(wishlist)
+                var wishlist = {
+                    type: 'wishlist',
+                    text: 'Wish List',
+                    count : (wishlist == null)?0:wishlist.products.length
                 }
-                
-                
-                
+                objects.push(basket)
+                objects.push(wishlist)
                 objects.push(profile)
                 objects.push(logout)
                 return objects
