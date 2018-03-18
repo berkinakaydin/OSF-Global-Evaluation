@@ -37,3 +37,4 @@ exports.getPrice = function(req,res){
         })
       });
 }
+

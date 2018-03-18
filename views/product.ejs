@@ -23,19 +23,19 @@
                     </a>
                 </div>
                 <div id='navbar' class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">            
-                                <li ng-repeat="category in categories">
-                                        <a href="/{{category.url}}">{{category.text}}</a>
-                                </li>
-                            </ul>
-                    <ul class="nav navbar-nav navbar-right" >
+                    <ul class="nav navbar-nav">
+                        <li ng-repeat="category in categories">
+                            <a href="/{{category.url}}">{{category.text}}</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
                         <li ng-repeat="url in objects">
-                            <a name="wishlist" ng-if="url.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer" >{{url.text}}</a>
+                            <a name="wishlist" ng-if="url.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer">{{url.text}}</a>
                             <a name="basket" ng-if="url.type === 'basket'" ng-click="basket()" style="cursor:pointer">{{url.text}}</a>
                             <a name="profile" ng-if="url.type === 'profile'" ng-click="profile()" style="cursor:pointer">{{url.text}}</a>
-                            <a name="logout" ng-if="url.type === 'logout'" ng-click="logout()" style="cursor:pointer">{{url.text}}</a>         
+                            <a name="logout" ng-if="url.type === 'logout'" ng-click="logout()" style="cursor:pointer">{{url.text}}</a>
                             <a ng-if="url.type === 'unAuth'" href='{{url.url}}' style="cursor:pointer">{{url.text}}</a>
-                         </li>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -72,13 +72,37 @@
 
                             </p>
                         </div>
-
                         <p>
                             <%=product.page_description%>
                         </p>
+                    </div>
+                    <div id='buttons' ng-controller="buttonController">
+                        <button ng-click='addBasket()' type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-shopping-cart"></span> Add To Basket
+                        </button>
+
+                        <button ng-click='addWishlist()' type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-star"></span> Add To Wishlist
+                        </button>
+
+
+                        <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="basketAlert">
+                            <strong>Confirm!</strong> This product has been added to your basket.
+                        </div>
+
+                        <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="wishlistAlert">
+                            <strong>Confirm!</strong> This product has been added to your wishlist.
+                        </div>
+
+                        <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInBasketAlert">
+                            <strong>Hey!</strong> This product is already in your basket.
+                        </div>
+
+                        <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInWishlistAlert">
+                            <strong>Hey!</strong> This product is already in your wishlist.
+                        </div>
 
                     </div>
-
         </div>
     </div>
 </body>

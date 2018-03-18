@@ -19,4 +19,4 @@ app.use(bodyParser.json());
 
 const router = require('./config/routes.js')(app)
 
-app.listen(3000, () => console.log('Example app listening on port 80!'))
+app.listen(80, () => console.log('Example app listening on port 80!'))

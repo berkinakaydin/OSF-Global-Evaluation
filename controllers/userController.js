@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 const MongoClient = require('mongodb').MongoClient;
 const categoryDBModel = require('../models/category.js')
+const basketDBModel = require('../models/basket.js')
+const wishlistDBModel = require('../models/wishlist.js')
+const productDBModel = require('../models/product.js')
 const userDBModel = require('../models/user.js')
 const nodemailer = require('nodemailer');
 
@@ -8,6 +11,9 @@ const nodemailer = require('nodemailer');
 const file = require('../utils/file')
 var categoryModel = new categoryDBModel.Schema(); //mongoose.model('product', Product);
 var userModel = new userDBModel.Schema();
+var basketModel = new basketDBModel.Schema();
+var wishlistModel = new wishlistDBModel.Schema();
+var productModel = new productDBModel.Schema();
 
 
 exports.loginPage = function (req, res) {
@@ -98,9 +104,9 @@ exports.logout = function (req, res) {
 
 exports.profilePage = function (req, res) {
     var token = req.query.token
-    if(token != null){
+    if (token != null) {
         var user = userDBModel.User().methods.verifyJWT(token)
-        if(user != null){
+        if (user != null) {
             var username = user.username
             userModel.findOne({
                 'username': username
@@ -109,25 +115,26 @@ exports.profilePage = function (req, res) {
                     user: user
                 })
             });
-        }
-        else{
+        } else {
             res.sendStatus(401);
         }
-    }else{
+    } else {
         res.sendStatus(401);
     }
 }
 
-exports.getUser = function(req,res){
+exports.getUser = function (req, res) {
     var token = req.body.token
     var user = userDBModel.User().methods.verifyJWT(token)
     var username = user.username
-    userModel.findOne({  'username': username}, function (err, user) { //QUERIED RESULTS FROM 
+    userModel.findOne({
+        'username': username
+    }, function (err, user) { //QUERIED RESULTS FROM 
         res.json({
             user: user
         })
     });
-    
+
 }
 
 exports.getUsername = function (req, res) {
@@ -195,9 +202,9 @@ exports.updateUser = function (req, res) {
 
 exports.verification = function (req, res) {
     var token = req.query.token
-    if(token != null){
+    if (token != null) {
         var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
-        if(user != null){
+        if (user != null) {
             var username = user.username
             userModel.findOne({
                 'username': username
@@ -206,12 +213,10 @@ exports.verification = function (req, res) {
                 user.save()
                 res.render('verify')
             })
-        }
-        else{
+        } else {
             res.sendStatus(401)
         }
-    }
-    else{
+    } else {
         res.sendStatus(401)
     }
 }
@@ -235,7 +240,7 @@ exports.emailVerify = function (req, res, next) {
             from: 'osfmailer@gmail.com',
             to: user.email,
             subject: 'OSF E-Commerce Verification',
-            text: 'Please click this following link to verify your email \n ' + 'http://localhost:3000/verification?token=' + user.token + '\n This link can be used once 24 hours'
+            text: 'Please click this following link to verify your email \n ' + 'http://localhost/verification?token=' + user.token + '\n This link can be used once 24 hours'
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -253,7 +258,154 @@ exports.emailVerify = function (req, res, next) {
         });
 
     })
+}
 
+exports.addBasket = function (req, res, next) {
+    var token = req.body.token
+    var user = userDBModel.User().methods.verifyJWT(token)
+    var username = user.username
+
+    var userId = username
+    var itemId = req.body.itemId
+
+
+    var query = basketModel.findOne({
+        'userId': userId
+    }) //QUERIED RESULTS FROM 
+
+    var isBasketExist = query.then(function (query) {
+        if (query == null) {
+            return false
+        } else {
+            return true
+        }
+    })
+
+    isBasketExist.then(function (isBasketExist) {
+        if (isBasketExist) {
+            basketModel.findOne({
+                'userId': userId
+            }, function (err, basket) {
+
+                productModel.findOne({
+                    'id': itemId
+                }, function (err, product) {
+
+                    if (!basket.products.filter(function (e) {
+                            return e.id === product.id;
+                        }).length > 0) {
+                        basket.products.push(product)
+                        basket.save(function (err, result) {
+                            if (result) {
+                                console.log(result)
+                                res.json({
+                                    success: true,
+                                    basket: basket.products
+                                })
+                            }
+                        })
+
+                    } else {
+                        res.json({
+                            success: true,
+                            basket: basket.products,
+                            info: true
+                        })
+                    }
+                })
+            })
+
+        } else {
+            var basketEntity = new basketModel();
+            basketEntity.userId = username
+            basketEntity.products = []
+            productModel.findOne({
+                'id': itemId
+            }, function (err, product) {
+                basketEntity.products.push(product)
+                basketEntity.save(function (err, result) {
+                    if (result)
+                        res.json({
+                            success: true,
+                            basket: basketEntity.products
+                        })
+                })
+            })
+
+        }
+    })
+}
+
+exports.addWishlist = function (req, res) {
+    var token = req.body.token
+    var user = userDBModel.User().methods.verifyJWT(token)
+    var username = user.username
+
+
+    var userId = username
+    var itemId = req.body.itemId
+
+    var query = wishlistModel.findOne({
+        'userId': userId
+    }) //QUERIED RESULTS FROM 
+
+    var isWishlistExist = query.then(function (query) {
+        if (query == null) {
+            return false
+        } else {
+            return true
+        }
+    })
+
+    isWishlistExist.then(function (isWishlistExist) {
+        if (isWishlistExist) {
+            wishlistModel.findOne({
+                'userId': userId
+            }, function (err, wishlist) {
+                productModel.findOne({
+                    'id': itemId
+                }, function (err, product) {
+
+                    if (!wishlist.products.filter(function (e) {
+                            return e.id === product.id;
+                        }).length > 0) {
+                        wishlist.products.push(product)
+                        wishlist.save(function (err, result) {
+                            if (result) {
+                                res.json({
+                                    success: true,
+                                    wishlist: wishlist.products
+                                })
+                            }
+                        })
+                    } else {
+                        res.json({
+                            success: true,
+                            wishlist: wishlist.products,
+                            info: true
+                        })
+                    }
+                })
+            })
+        } else {
+            var wishlistEntity = new wishlistModel();
+            wishlistEntity.userId = username
+            wishlistEntity.products = []
+            productModel.findOne({
+                'id': itemId
+            }, function (err, product) {
+                wishlistEntity.products.push(product)
+                wishlistEntity.save(function (err, result) {
+                    if (result)
+                        res.json({
+                            success: true,
+                            wishlist: wishlistEntity.products
+                        })
+                })
+            })
+
+        }
+    })
 }
 
 exports.authenticate = function (req, res, next) {

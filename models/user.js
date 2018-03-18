@@ -27,16 +27,12 @@ var User = new Schema({
         required: [true, "can't be blank"],
         index: true,
         trim: true
-    },
-    wishlistId: String,
-    cartId: String
+    }
 });
 
 User.plugin(uniqueValidator, {
     message: 'is already taken.'
 });
-
-
 
 User.methods.cryptPassword = function(password, callback) {
     const saltRounds = 10;

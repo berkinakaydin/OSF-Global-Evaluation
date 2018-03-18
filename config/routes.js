@@ -25,4 +25,6 @@ module.exports = function(app){
     app.post('/api/register', userController.register);
     app.post('/api/login', userController.login);
     app.post('/api/logout', userController.authenticate, userController.logout);  //AUTHORIZATION REQUIRED
+    app.post('/api/addBasket', userController.authenticate, userController.addBasket);  //AUTHORIZATION REQUIRED
+    app.post('/api/addWishlist', userController.authenticate, userController.addWishlist);  //AUTHORIZATION REQUIRED
 }

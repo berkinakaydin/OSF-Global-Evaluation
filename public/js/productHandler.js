@@ -1,4 +1,4 @@
-var app = angular.module('product', ['index','userFactory']);
+var app = angular.module('product', ['index', 'userFactory']);
 
 app.service('productColorService', ['$location', '$http', function ($location, $http) {
     var url = $location.absUrl();
@@ -111,7 +111,7 @@ app.controller('colorController', function ($scope, productColorService) {
         }
     }
 
-    
+
 });
 
 app.controller('headerController', function ($scope, indexService, userService) {
@@ -122,7 +122,7 @@ app.controller('headerController', function ($scope, indexService, userService) 
         $scope.objects = data
     });
 
-    categories.then(function(categories){
+    categories.then(function (categories) {
         $scope.categories = categories
     })
 
@@ -158,18 +158,80 @@ app.controller('priceController', function ($scope, productPriceService) {
                     newPrice = 3.7852979 * price;
                     break;
             }
-          
+
             $scope.newPrice = newPrice.toFixed(2)
 
         };
     });
 
-$scope.currencies = [
-    "USD",
-     "TRY",
-    "EUR",
-    "GBP",
-    "RON"
-]
-
+    $scope.currencies = [
+        "USD",
+        "TRY",
+        "EUR",
+        "GBP",
+        "RON"
+    ]
 });
+
+app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', function ($timeout, $http, $scope, $location) {
+    var url = $location.absUrl().split('/').pop()
+    var token = localStorage.getItem('jwt')
+    $scope.addBasket = function () {
+        var itemId = url;
+        $http.post('/api/addBasket', {
+            token: token,
+            itemId: itemId
+        }).then(function (response) {
+            var info = response.data.info
+            var status = response.data.success
+
+            if (status) {
+                if (info) {
+                    $scope.alreadyInBasketAlert = true
+                    $timeout(function () {
+                        $scope.alreadyInBasketAlert = false
+                    }, 2000);
+                }
+                else{
+                    $scope.basketAlert = true
+                    $timeout(function () {
+                        $scope.basketAlert = false
+                    }, 2000);
+                }
+                
+                console.log(response.data)
+            }
+
+        })
+    }
+
+    $scope.addWishlist = function () {
+        var itemId = url;
+        $http.post('/api/addWishlist', {
+            token: token,
+            itemId: itemId
+        }).then(function (response) {
+            var info = response.data.info
+            var status = response.data.success
+
+            if (status) {
+                if (info) {
+                    $scope.alreadyInWishlistAlert = true
+                    $timeout(function () {
+                        $scope.alreadyInWishlistAlert = false
+                    }, 2000);
+                }
+                else{
+                    $scope.wishlistAlert = true
+                    $timeout(function () {
+                        $scope.wishlistAlert = false
+                    }, 2000);
+                }
+                
+                console.log(response.data)
+            }
+
+            console.log(response.data)
+        })
+    }
+}])
