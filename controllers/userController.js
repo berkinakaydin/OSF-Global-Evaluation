@@ -180,12 +180,22 @@ exports.headerInformation = function (req, res) {
 
     basketModel.findOne({'userId':username},function(err,basket){
         wishlistModel.findOne({'userId':username},function(err,wishlist){
-            res.json({
-                username: username,
-                basket : basket,
-                wishlist : wishlist,
-                success: true
-            })
+            if(basket != null && wishlist != null){
+                res.json({
+                    username: username,
+                    basket : basket,
+                    wishlist : wishlist,
+                    success: true
+                })
+            }
+            else{
+                res.json({
+                    username: username,
+                    basket : null,
+                    wishlist : null,
+                    success: true
+                })
+            }
         })
     })
 }

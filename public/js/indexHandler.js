@@ -35,7 +35,7 @@ app.controller('indexController', ['$scope', '$location', '$window', '$http', 'i
 
 app.service('indexService', ['$http','$location', '$window', function ($http,$location, $window) {
     var headerButtons = function () {
-        var token = $window.localStorage.getItem('jwt')
+        var token = localStorage.getItem('jwt')
         var objects = []
         return $http.post('/api/headerInformation', {'token': token}).then(function (response) {
             if (response.data.success === true) {
@@ -43,8 +43,6 @@ app.service('indexService', ['$http','$location', '$window', function ($http,$lo
                 var basket = response.data.basket
                 var wishlist = response.data.wishlist
 
-                console.log(basket)
-                console.log(wishlist)
                 var profile = {
                     type: 'profile',
                     text: username
@@ -53,18 +51,25 @@ app.service('indexService', ['$http','$location', '$window', function ($http,$lo
                     type: 'logout',
                     text: 'Log Out',
                 }
-                var basket = {
-                    type: 'basket',
-                    text: 'Basket ',
-                    count : basket.products.length
+                if(basket == null){
+                    var basket = {
+                        type: 'basket',
+                        text: 'Basket ',
+                        count : 0
+                    }
+                    objects.push(basket)
                 }
-                var wishlist = {
-                    type: 'wishlist',
-                    text: 'Wish List',
-                    count : wishlist.products.length
+                if(wishlist == null){
+                    var wishlist = {
+                        type: 'wishlist',
+                        text: 'Wish List',
+                        count : 0
+                    }
+                    objects.push(wishlist)
                 }
-                objects.push(basket)
-                objects.push(wishlist)
+                
+                
+                
                 objects.push(profile)
                 objects.push(logout)
                 return objects

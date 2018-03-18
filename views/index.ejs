@@ -38,9 +38,9 @@
                   <span class="glyphicon glyphicon-shopping-cart"></span> {{item.text}}   
                     <p class="rounded" style="float: right;text-align:center;margin-left: 5px;">  {{item.count}}</p>
               </a>
-                  <a name="profile" ng-if="item.type === 'profile'" ng-click="profile()">{{item.text}}</a>
-                  <a name="logout" ng-if="item.type === 'logout'" ng-click="logout()">{{item.text}}</a>         
-                  <a ng-if="item.type === 'unAuth'" href='{{item.url}}'>{{item.text}}</a>
+                  <a name="profile" ng-if="item.type === 'profile'" ng-click="profile()"style="cursor:pointer" >{{item.text}}</a>
+                  <a name="logout" ng-if="item.type === 'logout'" ng-click="logout()"style="cursor:pointer" >{{item.text}}</a>         
+                  <a ng-if="item.type === 'unAuth'" href='{{item.url}}'style="cursor:pointer" >{{item.text}}</a>
                </li>
           </ul>
         </div>
