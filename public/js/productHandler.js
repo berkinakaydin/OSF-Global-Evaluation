@@ -114,7 +114,7 @@ app.controller('colorController', function ($scope, productColorService) {
 
 });
 
-app.controller('headerController', function ($scope, indexService, userService) {
+app.controller('headerController',['$scope','$window','indexService', 'userService' ,function ($scope,$window, indexService, userService) {
     var objects = indexService.headerButtons()
     var categories = indexService.getCategories()
 
@@ -129,7 +129,22 @@ app.controller('headerController', function ($scope, indexService, userService) 
     $scope.logout = function () {
         userService.Logout();
     }
-})
+
+    $scope.profile = function () {
+        var token = $window.localStorage.getItem('jwt')
+        $window.location.href = '/profile?token=' + token
+    }
+
+    $scope.basket = function () {
+        var token = $window.localStorage.getItem('jwt')
+        $window.location.href = '/basket?token=' + token
+    }
+
+    $scope.wishlist = function () {
+        var token = $window.localStorage.getItem('jwt')
+        $window.location.href = '/wishlist?token=' + token
+    }
+}])
 
 app.controller('priceController', function ($scope, productPriceService) {
 
@@ -198,6 +213,8 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
                         $scope.basketAlert = false
                     }, 2000);
                 }
+
+                //TODO NUMBER
                 
                 console.log(response.data)
             }
@@ -231,7 +248,37 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
                 console.log(response.data)
             }
 
-            console.log(response.data)
         })
     }
+}])
+
+app.controller('urlController',['$scope','$location','indexService', 'userService' ,function ($scope,$location, indexService, userService) {
+    
+    var parsedURL = $location.absUrl().split('/');
+    console.log(parsedURL)
+    var urls = []
+    urls.push({url : '', text : 'Home'})
+    for(var i=3; i<parsedURL.length-1;i++){
+        var categoryText = parsedURL[i].split('-').pop()
+        categoryText = categoryText.replace(/\b\w/g, function(l){ return l.toUpperCase() })
+        var path = ""
+
+        for(var j= urls.length-1; j>=0;j--){
+            if(i>2 && j>0){
+                path += parsedURL[i-j] +'/'
+            }
+            else{
+                path += parsedURL[i-j]
+            }
+        }
+
+        var url = {
+            url : path,
+            text: categoryText
+        }
+        urls.push(url)
+       
+    }
+    $scope.urls = urls
+
 }])

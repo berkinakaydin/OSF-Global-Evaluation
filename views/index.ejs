@@ -1,12 +1,13 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
-  <link rel="stylesheet" type="text/css" href="/css/index.css">
+  <link rel="stylesheet" type="text/css" href="/css/header.css">
   <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
   <script src="/js/angular.js" type="text/javascript"></script>
   <script src="/js/bootstrap.min.js" type="text/javascript"></script>
   <script src="/js/indexHandler.js" type="text/javascript"></script>
   <script src="/js/userFactory.js" type="text/javascript"></script>
+  <script src="/js/productHandler.js" type="text/javascript"></script>
   <title>
     OSF GLOBAL
   </title>
@@ -28,12 +29,18 @@
               </li>
           </ul>
           <ul class="nav navbar-nav navbar-right" >
-              <li ng-repeat="url in objects">
-                  <a name="wishlist" ng-if="url.type === 'wishlist'" ng-click="wishlist()">{{url.text}}</a>
-                  <a name="basket" ng-if="url.type === 'basket'" ng-click="basket()">{{url.text}}</a>
-                  <a name="profile" ng-if="url.type === 'profile'" ng-click="profile()">{{url.text}}</a>
-                  <a name="logout" ng-if="url.type === 'logout'" ng-click="logout()">{{url.text}}</a>         
-                  <a ng-if="url.type === 'unAuth'" href='{{url.url}}'>{{url.text}}</a>
+              <li ng-repeat="item in objects">
+                <a name="wishlist" ng-if="item.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer" >
+                  <span class="glyphicon glyphicon-star"></span> {{item.text}}    
+                    <p class="rounded" style="float: right;text-align:center;margin-left: 5px;">  {{item.count}}</p>
+              </a>
+              <a name="basket" ng-if="item.type === 'basket'" ng-click="basket()" style="cursor:pointer" >
+                  <span class="glyphicon glyphicon-shopping-cart"></span> {{item.text}}   
+                    <p class="rounded" style="float: right;text-align:center;margin-left: 5px;">  {{item.count}}</p>
+              </a>
+                  <a name="profile" ng-if="item.type === 'profile'" ng-click="profile()">{{item.text}}</a>
+                  <a name="logout" ng-if="item.type === 'logout'" ng-click="logout()">{{item.text}}</a>         
+                  <a ng-if="item.type === 'unAuth'" href='{{item.url}}'>{{url.text}}</a>
                </li>
           </ul>
         </div>

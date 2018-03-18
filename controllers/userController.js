@@ -32,6 +32,61 @@ exports.registerPage = function (req, res) {
     });
 }
 
+exports.profilePage = function (req, res) {
+    var token = req.query.token
+    if (token != null) {
+        var user = userDBModel.User().methods.verifyJWT(token)
+        if (user != null) {
+            var username = user.username
+            userModel.findOne({
+                'username': username
+            }, function (err, user) { //QUERIED RESULTS FROM 
+                res.render('profile', {
+                    user: user
+                })
+            });
+        } else {
+            res.sendStatus(401);
+        }
+    } else {
+        res.sendStatus(401);
+    }
+}
+
+exports.basketPage = function(req,res){
+    var token = req.query.token
+    if (token != null) {
+        var user = userDBModel.User().methods.verifyJWT(token)
+        if (user != null) {
+            var username = user.username
+            userModel.findOne({'username': username}, function (err, user) { //QUERIED RESULTS FROM 
+                res.render('basket', {user: user })
+            });
+        } else {
+            res.sendStatus(401);
+        }
+    } else {
+        res.sendStatus(401);
+    }
+}
+
+exports.wishlistPage = function(req,res){
+    var token = req.query.token
+    if (token != null) {
+        var user = userDBModel.User().methods.verifyJWT(token)
+        if (user != null) {
+            var username = user.username
+            userModel.findOne({'username': username}, function (err, user) { //QUERIED RESULTS FROM 
+                res.render('wishlist', {user: user})
+            });
+        } else {
+            res.sendStatus(401);
+        }
+    } else {
+        res.sendStatus(401);
+    }
+}
+
 exports.login = function (req, res) {
     var username = req.body.user.username
     var password = req.body.user.password
@@ -102,26 +157,7 @@ exports.logout = function (req, res) {
 }
 
 
-exports.profilePage = function (req, res) {
-    var token = req.query.token
-    if (token != null) {
-        var user = userDBModel.User().methods.verifyJWT(token)
-        if (user != null) {
-            var username = user.username
-            userModel.findOne({
-                'username': username
-            }, function (err, user) { //QUERIED RESULTS FROM 
-                res.render('profile', {
-                    user: user
-                })
-            });
-        } else {
-            res.sendStatus(401);
-        }
-    } else {
-        res.sendStatus(401);
-    }
-}
+
 
 exports.getUser = function (req, res) {
     var token = req.body.token
@@ -137,13 +173,20 @@ exports.getUser = function (req, res) {
 
 }
 
-exports.getUsername = function (req, res) {
+exports.headerInformation = function (req, res) {
     var token = req.body.token
     var user = userDBModel.User().methods.verifyJWT(token)
     var username = user.username
-    res.json({
-        username: username,
-        success: true
+
+    basketModel.findOne({'userId':username},function(err,basket){
+        wishlistModel.findOne({'userId':username},function(err,wishlist){
+            res.json({
+                username: username,
+                basket : basket,
+                wishlist : wishlist,
+                success: true
+            })
+        })
     })
 }
 

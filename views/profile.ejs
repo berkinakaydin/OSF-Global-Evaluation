@@ -32,8 +32,14 @@
                             </ul>
                     <ul class="nav navbar-nav navbar-right" >
                             <li ng-repeat="url in objects">
-                                <a name="wishlist" ng-if="url.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer" >{{url.text}}</a>
-                                <a name="basket" ng-if="url.type === 'basket'" ng-click="basket()" style="cursor:pointer">{{url.text}}</a>
+                                <a name="wishlist" ng-if="item.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer" >
+                                    <span class="glyphicon glyphicon-star"></span> {{item.text}}    
+                                      <p class="rounded" style="float: right;text-align:center;margin-left: 5px;">  {{item.count}}</p>
+                                </a>
+                                <a name="basket" ng-if="item.type === 'basket'" ng-click="basket()" style="cursor:pointer" >
+                                    <span class="glyphicon glyphicon-shopping-cart"></span> {{item.text}}   
+                                      <p class="rounded" style="float: right;text-align:center;margin-left: 5px;">  {{item.count}}</p>
+                                </a>
                                 <a name="profile" ng-if="url.type === 'profile'" ng-click="profile()" style="cursor:pointer">{{url.text}}</a>
                                 <a name="logout" ng-if="url.type === 'logout'" ng-click="logout()" style="cursor:pointer">{{url.text}}</a>         
                                 <a ng-if="url.type === 'unAuth'" href='{{url.url}}' style="cursor:pointer">{{url.text}}</a>

@@ -1,4 +1,4 @@
-app = angular.module('index', ['userFactory'])
+app = angular.module('index', ['userFactory','product'])
 
 app.controller('indexController', ['$scope', '$location', '$window', '$http', 'indexService', 'userService', function ($scope, $location, $window, $http, indexService, userService) {
     var objects = indexService.headerButtons()
@@ -20,6 +20,16 @@ app.controller('indexController', ['$scope', '$location', '$window', '$http', 'i
         var token = $window.localStorage.getItem('jwt')
         $window.location.href = '/profile?token=' + token
     }
+
+    $scope.basket = function () {
+        var token = $window.localStorage.getItem('jwt')
+        $window.location.href = '/basket?token=' + token
+    }
+
+    $scope.wishlist = function () {
+        var token = $window.localStorage.getItem('jwt')
+        $window.location.href = '/wishlist?token=' + token
+    }
 }])
 
 
@@ -27,9 +37,14 @@ app.service('indexService', ['$http','$location', '$window', function ($http,$lo
     var headerButtons = function () {
         var token = $window.localStorage.getItem('jwt')
         var objects = []
-        return $http.post('/api/getUsername', {'token': token}).then(function (response) {
+        return $http.post('/api/headerInformation', {'token': token}).then(function (response) {
             if (response.data.success === true) {
                 var username = response.data.username
+                var basket = response.data.basket
+                var wishlist = response.data.wishlist
+
+                console.log(basket)
+                console.log(wishlist)
                 var profile = {
                     type: 'profile',
                     text: username
@@ -40,11 +55,13 @@ app.service('indexService', ['$http','$location', '$window', function ($http,$lo
                 }
                 var basket = {
                     type: 'basket',
-                    text: 'Basket '
+                    text: 'Basket ',
+                    count : basket.products.length
                 }
                 var wishlist = {
                     type: 'wishlist',
-                    text: 'Wish List'
+                    text: 'Wish List',
+                    count : wishlist.products.length
                 }
                 objects.push(basket)
                 objects.push(wishlist)
