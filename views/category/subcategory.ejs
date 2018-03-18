@@ -41,7 +41,7 @@
                                                         </a>
                                                         <a name="profile" ng-if="item.type === 'profile'" ng-click="profile()" style="cursor:pointer">{{item.text}}</a>
                                                         <a name="logout" ng-if="item.type === 'logout'" ng-click="logout()" style="cursor:pointer">{{item.text}}</a>
-                                                        <a ng-if="item.type === 'unAuth'" href='{{item.url}}'>{{url.text}}</a>
+                                                        <a ng-if="item.type === 'unAuth'" href='{{item.url}}'>{{item.text}}</a>
                                                 </li>
                                         </ul>
                                 </div>
