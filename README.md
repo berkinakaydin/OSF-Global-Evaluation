@@ -2,6 +2,10 @@
 
 A simple e-commerce website to evalute in OSF Academy
 
+## URL - In Development
+
+http://165.227.131.19
+
 ### Prerequisites
 
 npm install to install requested packages
