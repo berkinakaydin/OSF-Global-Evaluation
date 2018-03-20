@@ -1,6 +1,6 @@
 var app = angular.module('register', ['userFactory','header']);
 
-app.controller('registerController', ['$scope', 'userService', '$location', function ($scope, userService, $location) {
+app.controller('registerController', ['$http', '$scope', 'userService', '$location', function ($http,$scope, userService, $location) {
     $scope.inputType = 'password'
     $scope.inputTypeForCheck = 'password'
  
@@ -57,5 +57,19 @@ app.controller('registerController', ['$scope', 'userService', '$location', func
                 }                                             
             }
         });
+    }
+
+    $scope.reset = function(){
+        var password = $scope.password
+        var token = $location.absUrl().split('?')[1].split('=')[1]
+
+        $http.post('/api/forgotPasswordVerify', {token:token, password : password}).then(function(response){
+            if(response.data.success === true){
+                $("#myModal").modal()
+            }
+            else{
+                $scope.alert = true
+            }
+        })
     }
 }]);

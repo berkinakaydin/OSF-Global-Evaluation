@@ -12,6 +12,8 @@ module.exports = function(app){
     app.get('/basket',userController.basketPage); //AUTHORIZATION REQUIRED
     app.get('/wishlist',userController.wishlistPage); //AUTHORIZATION REQUIRED
     app.get('/verification', userController.verification); //AUTHORIZATION REQUIRED
+    app.get('/forgotPasswordVerify', userController.forgotPasswordVerify); //AUTHORIZATION REQUIRED
+    app.get('/forgotPassword', userController.forgotPassword); //AUTHORIZATION REQUIRED
     app.get('/:category/:subcategory/:category_product/:product', productController.index);
     app.get('/:category/:subcategory/:category_product', categoryController.category_product);
     app.get('/:category/:subcategory', categoryController.subcategory);
@@ -22,6 +24,8 @@ module.exports = function(app){
     app.post('/api/getCategory_Products', categoryController.getCategory_Products); //AUTHORIZATION REQUIRED
     app.post('/api/updateUser', userController.authenticate,userController.updateUser); //AUTHORIZATION REQUIRED
     app.post('/api/emailVerify', userController.authenticate,userController.emailVerify); //AUTHORIZATION REQUIRED
+    app.post('/api/forgotPasswordVerify', userController.authenticate,userController.forgotPasswordVerify); //AUTHORIZATION REQUIRED
+    app.post('/api/forgotPassword', userController.forgotPassword); 
     app.post('/api/headerInformation', userController.authenticate, userController.headerInformation)  //AUTHORIZATION REQUIRED
     app.post('/api/getUser', userController.authenticate, userController.getUser)  //AUTHORIZATION REQUIRED
     app.post('/api/register', userController.register);
@@ -29,4 +33,6 @@ module.exports = function(app){
     app.post('/api/logout', userController.authenticate, userController.logout);  //AUTHORIZATION REQUIRED
     app.post('/api/addBasket', userController.authenticate, userController.addBasket);  //AUTHORIZATION REQUIRED
     app.post('/api/addWishlist', userController.authenticate, userController.addWishlist);  //AUTHORIZATION REQUIRED
+    app.post('/api/isEmailExist', userController.isEmailExist);  
+    
 }

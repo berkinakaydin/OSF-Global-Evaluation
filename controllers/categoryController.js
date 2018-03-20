@@ -1,6 +1,5 @@
 const categoryDBModel = require('../models/category.js')
 const productDBModel = require('../models/product.js')
-const MongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose')
 
 var categoryModel = new categoryDBModel.Schema(); //mongoose.model('product', Product);

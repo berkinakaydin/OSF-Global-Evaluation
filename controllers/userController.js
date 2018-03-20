@@ -1,15 +1,11 @@
 const mongoose = require('mongoose')
-const MongoClient = require('mongodb').MongoClient;
-const categoryDBModel = require('../models/category.js')
 const basketDBModel = require('../models/basket.js')
 const wishlistDBModel = require('../models/wishlist.js')
 const productDBModel = require('../models/product.js')
 const userDBModel = require('../models/user.js')
 const nodemailer = require('nodemailer');
 
-
 const file = require('../utils/file')
-var categoryModel = new categoryDBModel.Schema(); //mongoose.model('product', Product);
 var userModel = new userDBModel.Schema();
 var basketModel = new basketDBModel.Schema();
 var wishlistModel = new wishlistDBModel.Schema();
@@ -17,16 +13,11 @@ var productModel = new productDBModel.Schema();
 
 
 exports.loginPage = function (req, res) {
-    console.log('hi')
-        res.render('login')
-            
-
+    res.render('login')
 };
 
 exports.registerPage = function (req, res) {
-    
-        res.render('register')
-    
+    res.render('register')
 }
 
 exports.profilePage = function (req, res) {
@@ -50,14 +41,18 @@ exports.profilePage = function (req, res) {
     }
 }
 
-exports.basketPage = function(req,res){
+exports.basketPage = function (req, res) {
     var token = req.query.token
     if (token != null) {
         var user = userDBModel.User().methods.verifyJWT(token)
         if (user != null) {
             var username = user.username
-            userModel.findOne({'username': username}, function (err, user) { //QUERIED RESULTS FROM 
-                res.render('basket', {user: user })
+            userModel.findOne({
+                'username': username
+            }, function (err, user) { //QUERIED RESULTS FROM 
+                res.render('basket', {
+                    user: user
+                })
             });
         } else {
             res.sendStatus(401);
@@ -67,14 +62,18 @@ exports.basketPage = function(req,res){
     }
 }
 
-exports.wishlistPage = function(req,res){
+exports.wishlistPage = function (req, res) {
     var token = req.query.token
     if (token != null) {
         var user = userDBModel.User().methods.verifyJWT(token)
         if (user != null) {
             var username = user.username
-            userModel.findOne({'username': username}, function (err, user) { //QUERIED RESULTS FROM 
-                res.render('wishlist', {user: user})
+            userModel.findOne({
+                'username': username
+            }, function (err, user) { //QUERIED RESULTS FROM 
+                res.render('wishlist', {
+                    user: user
+                })
             });
         } else {
             res.sendStatus(401);
@@ -153,8 +152,96 @@ exports.logout = function (req, res) {
     })
 }
 
+/*exports.forgotPasswordForm = function(req,res){
+    var token = req.query.token
 
+}*/
 
+//USER CLICKS EMAIL LINK
+exports.forgotPasswordVerify = function (req, res) {
+    if(req.method == 'POST'){
+        var password = req.body.password
+        var token = req.body.token
+        var hashedPassword = userDBModel.User().methods.cryptPassword(password)
+        var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
+
+        var email = user.username
+        
+        userModel.findOne({ 'email': email},function(err,user){
+            user.password = hashedPassword
+            user.save((err, data) => {
+                if (data) {
+                    res.json({success:true})
+                } else {
+                    res.json({success:false})
+                }
+            })
+        })
+
+        
+        console.log(user)
+    }
+    else{
+        var token = req.query.token
+        if (token != null) {
+            var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
+            if (user != null) {
+                var email = user.username
+                userModel.findOne({ 'email': email
+                }, function (err, user) {
+                    if(user){
+                        res.render('passwordReset')
+                    }
+                })
+            } else {
+                res.sendStatus(401)
+            }
+        } else {
+            res.sendStatus(401)
+        }
+    }
+    
+}
+
+//FORGOT PASSWORD BUTTON CLICKED
+exports.forgotPassword = function (req, res) {
+    if (req.method === "POST") {
+        var email = req.body.email
+
+        var jwt = userDBModel.User().methods.generateJWT(email)
+        console.log(jwt)
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'osfmailer@gmail.com',
+                pass: 'osfmailer123'
+            }
+        });
+
+        var mailOptions = {
+            from: 'osfmailer@gmail.com',
+            to: email,
+            subject: 'OSF E-Commerce Reset Password',
+            text: 'Please click this following link to reset your password \n' + 'http://localhost/forgotPasswordVerify?token=' + jwt + '\nThis link can be used once 24 hours'
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+                res.json({
+                    success: false
+                })
+            } else {
+                console.log('Email sent: ' + info.response);
+                res.json({
+                    success: true
+                })
+            }
+        });
+    } else {
+        res.render('forgotPassword')
+    }
+}
 
 exports.getUser = function (req, res) {
     var token = req.body.token
@@ -164,7 +251,7 @@ exports.getUser = function (req, res) {
         'username': username
     }, function (err, user) { //QUERIED RESULTS FROM 
         res.json({
-            success:true,
+            success: true,
             user: user
         })
     });
@@ -176,21 +263,24 @@ exports.headerInformation = function (req, res) {
     var user = userDBModel.User().methods.verifyJWT(token)
     var username = user.username
 
-    basketModel.findOne({'userId':username},function(err,basket){
-        wishlistModel.findOne({'userId':username},function(err,wishlist){
-            if(basket != null && wishlist != null){
+    basketModel.findOne({
+        'userId': username
+    }, function (err, basket) {
+        wishlistModel.findOne({
+            'userId': username
+        }, function (err, wishlist) {
+            if (basket != null && wishlist != null) {
                 res.json({
                     username: username,
-                    basket : basket,
-                    wishlist : wishlist,
+                    basket: basket,
+                    wishlist: wishlist,
                     success: true
                 })
-            }
-            else{
+            } else {
                 res.json({
                     username: username,
-                    basket : null,
-                    wishlist : null,
+                    basket: null,
+                    wishlist: null,
                     success: true
                 })
             }
@@ -260,9 +350,12 @@ exports.verification = function (req, res) {
             userModel.findOne({
                 'username': username
             }, function (err, user) {
-                user.emailVerify = true
-                user.save()
-                res.render('verify')
+                if(user){
+                    user.emailVerify = true
+                    user.save()
+                    res.render('verify')
+                }
+                
             })
         } else {
             res.sendStatus(401)
@@ -272,6 +365,22 @@ exports.verification = function (req, res) {
     }
 }
 
+exports.isEmailExist = function (req, res) {
+    var email = req.body.email
+    userModel.findOne({
+        'email': email
+    }, function (err, email) {
+        if (email)
+            res.json({
+                success: true
+            })
+        else
+            res.json({
+                success: false
+            })
+    })
+}
+
 exports.emailVerify = function (req, res, next) {
     var token = req.body.token
     var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
@@ -279,7 +388,6 @@ exports.emailVerify = function (req, res, next) {
     userModel.findOne({
         'username': username
     }, function (err, user) {
-        console.log(user)
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
