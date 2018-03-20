@@ -5,11 +5,13 @@ app.controller('profileController', ['$scope', '$timeout', 'userService', functi
     var response = userService.GetByToken(token)
 
     response.then(function(response){
-
+        var user = response.user
+        $scope.verify = user.emailVerify
+        
         $scope.user = {
-            name : response.user.name,
-            surname : response.user.surname,
-            email : response.user.email
+            name : user.name,
+            surname : user.surname,
+            email : user.email
         }
     })
  

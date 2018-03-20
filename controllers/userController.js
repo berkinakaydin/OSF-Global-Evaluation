@@ -279,6 +279,7 @@ exports.emailVerify = function (req, res, next) {
     userModel.findOne({
         'username': username
     }, function (err, user) {
+        console.log(user)
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
