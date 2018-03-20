@@ -27,6 +27,7 @@ app.controller('loginController',['$scope','$timeout','userService','loginServic
    }
 
    $scope.validEmailSet = function(){ 
+      $scope.alert = false  
         $scope.forgotPasswordForm.email.$setValidity("valid", true)  
     }
 

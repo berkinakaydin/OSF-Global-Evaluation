@@ -259,27 +259,14 @@ exports.headerInformation = function (req, res) {
     var user = userDBModel.User().methods.verifyJWT(token)
     var username = user.username
 
-    basketModel.findOne({
-        'userId': username
-    }, function (err, basket) {
-        wishlistModel.findOne({
-            'userId': username
-        }, function (err, wishlist) {
-            if (basket != null && wishlist != null) {
+    basketModel.findOne({'userId': username}, function (err, basket) {
+        wishlistModel.findOne({'userId': username}, function (err, wishlist) {     
                 res.json({
                     username: username,
-                    basket: basket,
-                    wishlist: wishlist,
+                    basket: (basket != null)?basket:null,
+                    wishlist: (wishlist != null)?wishlist:null,
                     success: true
                 })
-            } else {
-                res.json({
-                    username: username,
-                    basket: null,
-                    wishlist: null,
-                    success: true
-                })
-            }
         })
     })
 }
@@ -425,6 +412,10 @@ exports.addBasket = function (req, res, next) {
     var itemId = req.body.itemId
 
 
+    var size = req.body.size
+    var color = req.body.color
+    console.log(size)
+    console.log(color)
     var query = basketModel.findOne({
         'userId': userId
     }) //QUERIED RESULTS FROM 
@@ -439,17 +430,11 @@ exports.addBasket = function (req, res, next) {
 
     isBasketExist.then(function (isBasketExist) {
         if (isBasketExist) {
-            basketModel.findOne({
-                'userId': userId
-            }, function (err, basket) {
-
-                productModel.findOne({
-                    'id': itemId
-                }, function (err, product) {
-
-                    if (!basket.products.filter(function (e) {
-                            return e.id === product.id;
-                        }).length > 0) {
+            basketModel.findOne({ 'userId': userId },function (err, basket) {
+                productModel.findOne({'id': itemId  }).lean().exec(function (err, product){
+                    product.size = size
+                    product.color = color
+                    if (!basket.products.filter(function (e) { return e.id === product.id; }).length > 0) {
                         basket.products.push(product)
                         basket.save(function (err, result) {
                             if (result) {
@@ -474,15 +459,18 @@ exports.addBasket = function (req, res, next) {
             var basketEntity = new basketModel();
             basketEntity.userId = username
             basketEntity.products = []
-            productModel.findOne({
-                'id': itemId
-            }, function (err, product) {
+            productModel.findOne({ 'id': itemId }).lean().exec(function (err, product) {
+                console.log(color)
+                console.log(size)
+                product.size = size
+                product.color = color
                 basketEntity.products.push(product)
+
                 basketEntity.save(function (err, result) {
                     if (result)
                         res.json({
                             success: true,
-                            basket: basketEntity.products
+                            basket: basketEntity.products,
                         })
                 })
             })
@@ -500,6 +488,9 @@ exports.addWishlist = function (req, res) {
     var userId = username
     var itemId = req.body.itemId
 
+    var size = req.body.size
+    var color = req.body.color
+
     var query = wishlistModel.findOne({
         'userId': userId
     }) //QUERIED RESULTS FROM 
@@ -514,16 +505,11 @@ exports.addWishlist = function (req, res) {
 
     isWishlistExist.then(function (isWishlistExist) {
         if (isWishlistExist) {
-            wishlistModel.findOne({
-                'userId': userId
-            }, function (err, wishlist) {
-                productModel.findOne({
-                    'id': itemId
-                }, function (err, product) {
-
-                    if (!wishlist.products.filter(function (e) {
-                            return e.id === product.id;
-                        }).length > 0) {
+            wishlistModel.findOne({  'userId': userId}, function (err, wishlist) {
+                productModel.findOne({'id': itemId}).lean().exec( function (err, product) {
+                    if (!wishlist.products.filter(function (e) {return e.id === product.id; }).length > 0) {
+                        product.size = size
+                        product.color = color
                         wishlist.products.push(product)
                         wishlist.save(function (err, result) {
                             if (result) {
@@ -546,9 +532,9 @@ exports.addWishlist = function (req, res) {
             var wishlistEntity = new wishlistModel();
             wishlistEntity.userId = username
             wishlistEntity.products = []
-            productModel.findOne({
-                'id': itemId
-            }, function (err, product) {
+            productModel.findOne({  'id': itemId }).lean().exec( function (err, product) {
+                product.size = size
+                product.color = color
                 wishlistEntity.products.push(product)
                 wishlistEntity.save(function (err, result) {
                     if (result)
@@ -559,6 +545,36 @@ exports.addWishlist = function (req, res) {
                 })
             })
 
+        }
+    })
+}
+
+exports.getBasketProducts = function(req,res,next){
+    var token = req.body.token
+    var user = userDBModel.User().methods.verifyJWT(token)
+    var username = user.username
+
+    basketModel.findOne({'userId' : username},function(err,user){
+        if(user){
+            res.json({success:true,products:user.products})
+        }
+        else{
+            res.json({success:false})
+        }
+    })
+}
+
+exports.getWishlistProducts = function(req,res,next){
+    var token = req.body.token
+    var user = userDBModel.User().methods.verifyJWT(token)
+    var username = user.username
+
+    wishlistModel.findOne({'userId' : username},function(err,user){
+        if(user){
+            res.json({success:true,products:user.products})
+        }
+        else{
+            res.json({success:false})
         }
     })
 }

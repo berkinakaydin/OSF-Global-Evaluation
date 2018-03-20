@@ -3,6 +3,7 @@ var app = angular.module('product', ['header']);
 app.controller('colorController', function ($scope, productService) {
     //var product = productService.GetProduct()
     var product = productService.product()
+    
     product.then(function (product) {
 
         var sizes = []
@@ -24,20 +25,24 @@ app.controller('colorController', function ($scope, productService) {
 
             $scope.colors = colors
             $scope.selectedColor = colors[0] //INITIALIZE SELECTED COLOR AS FIRST COLOR
-
+            
+            
             $scope.sizes = sizes
             $scope.selectedSize = sizes[0] //INITIALIZE SELECTED SIZE AS FIRST SIZE
-
+            
             var colorType = $scope.selectedColor.value //FOR EXAMPLE EJ3
             var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
-
+            productService.color = colorType
+            productService.size = sizeType
             var images = getImages(product, colorType, sizeType)
 
             printImage(images)
         } else {
             $scope.sizes = sizes
             $scope.selectedSize = sizes[0] //INITIALIZE SELECTED SIZE AS FIRST SIZE
+            
             var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
+            productService.size = sizeType
 
             var images = getImages(product, undefined, sizeType)
             printImage(images)
@@ -51,6 +56,8 @@ app.controller('colorController', function ($scope, productService) {
 
             var colorType = $scope.selectedColor.value //FOR EXAMPLE EJ3
             var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
+            productService.color = colorType
+            productService.size = sizeType
 
             var images = getImages(product, colorType, sizeType)
             printImage(images)
@@ -64,9 +71,11 @@ app.controller('colorController', function ($scope, productService) {
 
             if (typeof $scope.selectedColor != 'undefined') {
                 var colorType = $scope.selectedColor.value //FOR EXAMPLE EJ3
+                productService.color = colorType
             }
             if (typeof $scope.selectedSize != 'undefined') {
                 var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
+                productService.size = sizeType
             }
 
             var images = getImages(product, colorType, sizeType)
@@ -82,7 +91,7 @@ app.controller('colorController', function ($scope, productService) {
             $scope.selectedImage = '/images/' + product.images[0].link //PRINT FIRST COLOR
         }
     }
-
+    
     //GET ALL IMAGES OF A PRODUCT WITH SELECTED TYPE
     getImages = function (product, colorType, sizeType) {
         for (var i = 0; i < product.image_groups.length; i++) {
@@ -145,14 +154,21 @@ app.controller('productInformationController', function ($scope, productService)
     })
 })
 
-app.controller('buttonController', function ($timeout, $http, $scope, $location) {
+app.controller('buttonController', ['$timeout', '$http', '$scope', '$location','productService', function ($timeout, $http, $scope, $location, productService) {
     var url = $location.absUrl().split('/').pop()
     var token = localStorage.getItem('jwt')
+
+    
     $scope.addBasket = function () {
+        var color = (productService.color)?productService.color:'default'
+        var size = (productService.size)?productService.size:'default'
+     
         var itemId = url;
         $http.post('/api/addBasket', {
             token: token,
-            itemId: itemId
+            itemId: itemId,
+            color : color,
+            size : size
         }).then(function (response) {
             var info = response.data.info
             var status = response.data.success
@@ -170,15 +186,18 @@ app.controller('buttonController', function ($timeout, $http, $scope, $location)
                     }, 2000);
                 }
             }
-
         })
     }
 
     $scope.addWishlist = function () {
         var itemId = url;
+        var color = (productService.color)?productService.color.value:'default'
+        var size = (productService.size)?productService.size:'default'
         $http.post('/api/addWishlist', {
             token: token,
-            itemId: itemId
+            itemId: itemId,
+            color : color,
+            size : size
         }).then(function (response) {
             var info = response.data.info
             var status = response.data.success
@@ -199,12 +218,13 @@ app.controller('buttonController', function ($timeout, $http, $scope, $location)
 
         })
     }
-})
+}])
 
 app.factory('productService', ['$http', '$location', function ($http, $location) {
     var service = {};
+    service.color = null
+    service.size = null
     service.product = GetProduct
-
     return service
 
     //POST REQUEST TO GET PRODUCT

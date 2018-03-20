@@ -67,10 +67,10 @@
 
 
     <div id='main'>
-        <div id=product class="container">
+        <div id=product class="container" ng-controller="colorController">
             
                 <!--TO PREVENT EMPTY DROPDOWN LISTS-->
-                <div id='image' ng-controller="colorController">
+                <div id='image' >
                     
                     <img ng-src={{selectedImage}}>
                    
@@ -103,7 +103,7 @@
                             {{page_description}}
                         </p>
                     </div>
-                    <div id='buttons' ng-controller="buttonController">
+                    <div id='buttons' ng-controller="buttonController">                 
                         <button ng-click='addBasket()' type="button" class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-shopping-cart"></span> Add To Basket
                         </button>
