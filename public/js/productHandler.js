@@ -32,6 +32,7 @@ app.controller('colorController', function ($scope, productService) {
             
             var colorType = $scope.selectedColor.value //FOR EXAMPLE EJ3
             var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
+
             productService.color = colorType
             productService.size = sizeType
             var images = getImages(product, colorType, sizeType)
@@ -191,7 +192,7 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location','
 
     $scope.addWishlist = function () {
         var itemId = url;
-        var color = (productService.color)?productService.color.value:'default'
+        var color = (productService.color)?productService.color:'default'
         var size = (productService.size)?productService.size:'default'
         $http.post('/api/addWishlist', {
             token: token,

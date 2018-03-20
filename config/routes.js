@@ -18,7 +18,6 @@ module.exports = function(app){
     app.get('/:category/:subcategory/:category_product/:product', productController.index);
     app.get('/:category/:subcategory/:category_product', categoryController.category_product);
     app.get('/:category/:subcategory', categoryController.subcategory);
-    
     app.get('/:category', categoryController.index);
     app.post('/api/getProductById', productController.getProductById);
     app.post('/api/getCategories', categoryController.getCategories); //AUTHORIZATION REQUIRED

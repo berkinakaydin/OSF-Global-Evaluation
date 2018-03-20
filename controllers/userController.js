@@ -411,11 +411,12 @@ exports.addBasket = function (req, res, next) {
     var userId = username
     var itemId = req.body.itemId
 
-
     var size = req.body.size
     var color = req.body.color
+
     console.log(size)
     console.log(color)
+
     var query = basketModel.findOne({
         'userId': userId
     }) //QUERIED RESULTS FROM 

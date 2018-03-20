@@ -13,7 +13,7 @@ app.controller('basketController', ['$scope', 'basketService', function ($scope,
             for (var i = 0; i < products.length; i++) {
                 var color = products[i].color
                 var size = products[i].size
-                console.log(color)
+                
                 var imagePath = function (color, size) {
                     if (color != 'default') {
                         for (var j = 0; j < products[i].image_groups.length; j++) {              
@@ -57,7 +57,7 @@ app.controller('basketController', ['$scope', 'basketService', function ($scope,
     }
 }])
 
-app.controller('wishlistController', ['$scope', 'basketService', function ($scope, basketService) {
+app.controller('wishlistController', ['$timeout', '$scope', 'basketService', function ($timeout,$scope, basketService) {
 
     var token = localStorage.getItem('jwt')
     var response = basketService.getWishlistProducts(token)
@@ -70,7 +70,6 @@ app.controller('wishlistController', ['$scope', 'basketService', function ($scop
             for (var i = 0; i < products.length; i++) {
                 var color = products[i].color
                 var size = products[i].size
-                console.log(color)
                 var imagePath = function (color, size) {
                     if (color != 'default') {
                         for (var j = 0; j < products[i].image_groups.length; j++) {              
@@ -80,7 +79,6 @@ app.controller('wishlistController', ['$scope', 'basketService', function ($scop
                         }
                         return products[i].image_groups[0].images[0].link  //not found
                     } else {
-                        console.log(products[i])
                         return products[i].image_groups[0].images[0].link
                     }
                 }
@@ -90,6 +88,7 @@ app.controller('wishlistController', ['$scope', 'basketService', function ($scop
                     currency: products[i].currency,
                     size : products[i].size,
                     id : products[i].id,
+                    color : products[i].color,
                     image: 'images/' + imagePath(color, size)
                 }
                 $scope.total += product.price
@@ -109,6 +108,31 @@ app.controller('wishlistController', ['$scope', 'basketService', function ($scop
         })
     }
 
+    $scope.addBasket = function(product){
+        var token = localStorage.getItem('jwt')
+        var pid = product.id
+        var color = product.color
+        var size = product.size
+
+        var response = basketService.addItemToBasket(token,pid,color,size)
+
+        response.then(function(response){
+            var info = response.data.info
+            if (info) {
+                $scope.alreadyInBasketAlert = true
+                $timeout(function () {
+                    $scope.alreadyInBasketAlert = false
+                }, 2000);
+            }
+            else{
+                $scope.basketAlert = true
+                $timeout(function () {
+                    $scope.basketAlert = false
+                }, 2000);
+            }
+        })
+    }
+
 }])
 
 app.factory('basketService', ['$http', '$location', function ($http, $location) {
@@ -117,6 +141,7 @@ app.factory('basketService', ['$http', '$location', function ($http, $location) 
     service.getWishlistProducts = getWishlistProducts
     service.removeItemFromBasket = removeItemFromBasket
     service.removeItemFromWishlist = removeItemFromWishlist
+    service.addItemToBasket = addItemToBasket
     return service
 
     function getBasketProducts(token) {
@@ -148,6 +173,17 @@ app.factory('basketService', ['$http', '$location', function ($http, $location) 
     function getWishlistProducts(token) {
         return $http.post('/api/getWishlistProducts', {
             token: token
+        }).then(function (response) {
+            return response
+        })
+    }
+    
+    function addItemToBasket(token,pid,color,size){
+        return $http.post('/api/addBasket', {
+            token: token,
+            itemId : pid,
+            color : color,
+            size : size
         }).then(function (response) {
             return response
         })

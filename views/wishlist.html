@@ -59,41 +59,49 @@
         </nav>
 
         <div style="width: 80%;  display: table;margin: 20 auto;margin-top: -20px;" id='url' ng-controller="urlController" class="well well-sm">
-                <span ng-repeat="url in urls">
-                        <a ng-href="/{{url.url}}">{{url.text}} </a>/
-                </span>
+            <span ng-repeat="url in urls">
+                <a ng-href="/{{url.url}}">{{url.text}} </a>/
+            </span>
         </div>
     </header>
 
     <div id='main' class="container" ng-controller="wishlistController">
-            <div id='product' ng-repeat='product in products' class='col-md-12'>
-                    <div id='image' style="float: left;display: inline-block;">
-                            <img ng-src="{{product.image}}" style="max-width: 100px; ">
-                        </div>
-                        <div id='information' style="margin-left: 10px; display: inline-block;">
-                            <a ng-href='/product/{{product.id}}'><h3 style="vertical-align: bottom; display: table-cell;">{{product.name}}</h3> </a>
-                            <h4>
-                                    {{product.size}} 
-                            </h4>
-                            <h5>{{product.price}} {{product.currency}}</h5>
-                            <button ng-click='remove(product)' type="button" class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-remove"></span> Delete
-                            </button>
-                        </div>
-                        
-                        <hr>
-                        
+        <div id='product' ng-repeat='product in products' class='col-md-12'>
+            <div id='image' style="float: left;display: inline-block;">
+                <img ng-src="{{product.image}}" style="max-width: 100px; ">
             </div>
-            <p>You have {{products.length}} item in your cart</p>
-    
-            <div id='price' style="display: table-row">
-                    <h3 style="vertical-align: bottom; display: table-cell;">Total {{total}} {{currency}}</h3>
-                    <button style="margin-left:10px" ng-click='checkout()' type="button" class="btn btn-default btn-sm">
-                            <span class="glyphicon glyphicon-shopping-cart"></span> Checkout
-                    </button>
+            <div id='information' style="margin-left: 10px; display: inline-block;">
+                <a ng-href='/product/{{product.id}}'>
+                    <h3 style="vertical-align: bottom; display: table-cell;">{{product.name}}</h3>
+                </a>
+                <h4>
+                    {{product.size}}
+                </h4>
+                <h5>{{product.price}} {{product.currency}}</h5>
+                <button ng-click='remove(product)' type="button" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-remove"></span> Delete
+                </button>
+
+                <button ng-click='addBasket(product)' type="button" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-plus"></span> Add Basket
+                </button>
             </div>
-            
+            <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="basketAlert">
+                <strong>Confirm!</strong> This product has been added to your basket.
+            </div>
+            <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInBasketAlert">
+                    <strong>Hey!</strong> This product is already in your basket.
+                </div>
+            <hr>
+
         </div>
+        <p>You have {{products.length}} item in your wishlist</p>
+
+        <div id='price' style="display: table-row">
+            <h3 style="vertical-align: bottom; display: table-cell;">Total {{total}} {{currency}}</h3>
+        </div>
+
+    </div>
 </body>
 
 </html>
