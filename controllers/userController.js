@@ -160,34 +160,40 @@ exports.logout = function (req, res) {
 
 //USER CLICKS EMAIL LINK
 exports.forgotPasswordVerify = function (req, res) {
-    if(req.method == 'POST'){
+    if (req.method == 'POST') {
         var password = req.body.password
         var token = req.body.token
         var hashedPassword = userDBModel.User().methods.cryptPassword(password)
         var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
 
         var email = user.username
-        
-        userModel.findOne({ 'email': email},function(err,user){
+
+        userModel.findOne({
+            'email': email
+        }, function (err, user) {
             user.password = hashedPassword
             user.save((err, data) => {
                 if (data) {
-                    res.json({success:true})
+                    res.json({
+                        success: true
+                    })
                 } else {
-                    res.json({success:false})
+                    res.json({
+                        success: false
+                    })
                 }
             })
         })
-    }
-    else{
+    } else {
         var token = req.query.token
         if (token != null) {
             var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
             if (user != null) {
                 var email = user.username
-                userModel.findOne({ 'email': email
+                userModel.findOne({
+                    'email': email
                 }, function (err, user) {
-                    if(user){
+                    if (user) {
                         res.render('passwordReset')
                     }
                 })
@@ -198,7 +204,7 @@ exports.forgotPasswordVerify = function (req, res) {
             res.sendStatus(401)
         }
     }
-    
+
 }
 
 //FORGOT PASSWORD BUTTON CLICKED
@@ -259,14 +265,18 @@ exports.headerInformation = function (req, res) {
     var user = userDBModel.User().methods.verifyJWT(token)
     var username = user.username
 
-    basketModel.findOne({'userId': username}, function (err, basket) {
-        wishlistModel.findOne({'userId': username}, function (err, wishlist) {     
-                res.json({
-                    username: username,
-                    basket: (basket != null)?basket:null,
-                    wishlist: (wishlist != null)?wishlist:null,
-                    success: true
-                })
+    basketModel.findOne({
+        'userId': username
+    }, function (err, basket) {
+        wishlistModel.findOne({
+            'userId': username
+        }, function (err, wishlist) {
+            res.json({
+                username: username,
+                basket: (basket != null) ? basket : null,
+                wishlist: (wishlist != null) ? wishlist : null,
+                success: true
+            })
         })
     })
 }
@@ -333,12 +343,12 @@ exports.verification = function (req, res) {
             userModel.findOne({
                 'username': username
             }, function (err, user) {
-                if(user){
+                if (user) {
                     user.emailVerify = true
                     user.save()
                     res.render('verify')
                 }
-                
+
             })
         } else {
             res.sendStatus(401)
@@ -346,6 +356,43 @@ exports.verification = function (req, res) {
     } else {
         res.sendStatus(401)
     }
+}
+
+exports.checkout = function (req, res) {
+    if (req.method === 'POST') {
+        var token = req.body.token
+        var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
+        var username = user.username
+
+        basketModel.remove({'userId' : username},function(err,basket){
+            if(!err){
+                res.json({success:true})
+            }
+            else{
+                res.json({success:false})
+            }
+        })
+    } else {
+        var token = req.query.token
+        if (token != null) {
+            var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
+            if (user != null) {
+                var username = user.username
+                userModel.findOne({
+                    'username': username
+                }, function (err, user) {
+                    if (user) {
+                        res.render('checkout')
+                    }
+                })
+            } else {
+                res.sendStatus(401)
+            }
+        } else {
+            res.sendStatus(401)
+        }
+    }
+
 }
 
 exports.isEmailExist = function (req, res) {
@@ -383,7 +430,7 @@ exports.emailVerify = function (req, res, next) {
             from: 'osfmailer@gmail.com',
             to: user.email,
             subject: 'OSF E-Commerce Verification',
-            text: 'Please click this following link to verify your email \n ' + 'http://'+ ip+ '/verification?token=' + user.token + '\n This link can be used once 24 hours'
+            text: 'Please click this following link to verify your email \n ' + 'http://' + ip + '/verification?token=' + user.token + '\n This link can be used once 24 hours'
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -414,9 +461,6 @@ exports.addBasket = function (req, res, next) {
     var size = req.body.size
     var color = req.body.color
 
-    console.log(size)
-    console.log(color)
-
     var query = basketModel.findOne({
         'userId': userId
     }) //QUERIED RESULTS FROM 
@@ -431,11 +475,17 @@ exports.addBasket = function (req, res, next) {
 
     isBasketExist.then(function (isBasketExist) {
         if (isBasketExist) {
-            basketModel.findOne({ 'userId': userId },function (err, basket) {
-                productModel.findOne({'id': itemId  }).lean().exec(function (err, product){
+            basketModel.findOne({
+                'userId': userId
+            }, function (err, basket) {
+                productModel.findOne({
+                    'id': itemId
+                }).lean().exec(function (err, product) {
                     product.size = size
                     product.color = color
-                    if (!basket.products.filter(function (e) { return e.id === product.id; }).length > 0) {
+                    if (!basket.products.filter(function (e) {
+                            return e.id === product.id;
+                        }).length > 0) {
                         basket.products.push(product)
                         basket.save(function (err, result) {
                             if (result) {
@@ -460,9 +510,9 @@ exports.addBasket = function (req, res, next) {
             var basketEntity = new basketModel();
             basketEntity.userId = username
             basketEntity.products = []
-            productModel.findOne({ 'id': itemId }).lean().exec(function (err, product) {
-                console.log(color)
-                console.log(size)
+            productModel.findOne({
+                'id': itemId
+            }).lean().exec(function (err, product) {
                 product.size = size
                 product.color = color
                 basketEntity.products.push(product)
@@ -506,9 +556,15 @@ exports.addWishlist = function (req, res) {
 
     isWishlistExist.then(function (isWishlistExist) {
         if (isWishlistExist) {
-            wishlistModel.findOne({  'userId': userId}, function (err, wishlist) {
-                productModel.findOne({'id': itemId}).lean().exec( function (err, product) {
-                    if (!wishlist.products.filter(function (e) {return e.id === product.id; }).length > 0) {
+            wishlistModel.findOne({
+                'userId': userId
+            }, function (err, wishlist) {
+                productModel.findOne({
+                    'id': itemId
+                }).lean().exec(function (err, product) {
+                    if (!wishlist.products.filter(function (e) {
+                            return e.id === product.id;
+                        }).length > 0) {
                         product.size = size
                         product.color = color
                         wishlist.products.push(product)
@@ -533,7 +589,9 @@ exports.addWishlist = function (req, res) {
             var wishlistEntity = new wishlistModel();
             wishlistEntity.userId = username
             wishlistEntity.products = []
-            productModel.findOne({  'id': itemId }).lean().exec( function (err, product) {
+            productModel.findOne({
+                'id': itemId
+            }).lean().exec(function (err, product) {
                 product.size = size
                 product.color = color
                 wishlistEntity.products.push(product)
@@ -550,69 +608,89 @@ exports.addWishlist = function (req, res) {
     })
 }
 
-exports.getBasketProducts = function(req,res,next){
+exports.getBasketProducts = function (req, res, next) {
     var token = req.body.token
     var user = userDBModel.User().methods.verifyJWT(token)
     var username = user.username
 
-    basketModel.findOne({'userId' : username},function(err,user){
-        if(user){
-            res.json({success:true,products:user.products})
-        }
-        else{
-            res.json({success:false})
+    basketModel.findOne({
+        'userId': username
+    }, function (err, user) {
+        if (user) {
+            res.json({
+                success: true,
+                products: user.products
+            })
+        } else {
+            res.json({
+                success: false
+            })
         }
     })
 }
 
-exports.getWishlistProducts = function(req,res,next){
+exports.getWishlistProducts = function (req, res, next) {
     var token = req.body.token
     var user = userDBModel.User().methods.verifyJWT(token)
     var username = user.username
 
-    wishlistModel.findOne({'userId' : username},function(err,user){
-        if(user){
-            res.json({success:true,products:user.products})
-        }
-        else{
-            res.json({success:false})
+    wishlistModel.findOne({
+        'userId': username
+    }, function (err, user) {
+        if (user) {
+            res.json({
+                success: true,
+                products: user.products
+            })
+        } else {
+            res.json({
+                success: false
+            })
         }
     })
 }
 
-exports.removeItemFromBasket = function(req,res,next){
+exports.removeItemFromBasket = function (req, res, next) {
     var token = req.body.token
     var user = userDBModel.User().methods.verifyJWT(token)
     var username = user.username
     var pid = req.body.pid
     console.log(pid)
     console.log(username)
-    basketModel.findOne({'userId' : username},function(err,user){
-        user.products.filter(function( obj ) {
-            if(obj.id === pid){
+    basketModel.findOne({
+        'userId': username
+    }, function (err, user) {
+        user.products.filter(function (obj) {
+            if (obj.id === pid) {
                 user.products.remove(obj)
             }
         });
         user.save()
-        res.json({success:true})
+        res.json({
+            success: true
+        })
     })
 }
 
-exports.removeItemFromWishlist = function(req,res,next){
+exports.removeItemFromWishlist = function (req, res, next) {
     var token = req.body.token
     var user = userDBModel.User().methods.verifyJWT(token)
     var username = user.username
     var pid = req.body.pid
     console.log(pid)
     console.log(username)
-    wishlistModel.findOne({'userId' : username},function(err,user){
-        user.products.filter(function( obj ) {
-            if(obj.id === pid){
+    wishlistModel.findOne({
+        'userId': username
+    }, function (err, user) {
+        user.products.filter(function (obj) {
+            if (obj.id === pid) {
                 user.products.remove(obj)
             }
         });
         user.save()
-        res.json({success:true})
+        res.json({
+            success: true
+        })
     })
 }
 

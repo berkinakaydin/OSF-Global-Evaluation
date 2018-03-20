@@ -87,9 +87,14 @@
 
         <div id='price' style="display: table-row">
                 <h3 style="vertical-align: bottom; display: table-cell;">Total {{total}} {{currency}}</h3>
-                <button style="margin-left:10px" ng-click='checkout()' type="button" class="btn btn-default btn-sm">
+                <button ng-disabled="!isUserVerified" style="margin-left:10px" ng-click='checkout()' type="button" class="btn btn-default btn-sm">
                         <span class="glyphicon glyphicon-credit-card"></span> Checkout
                 </button>
+                
+                
+        </div>
+        <div class="col-md-6 alert alert-warning ng-cloak" ng-show="verifyAccount">
+                <strong>Verify!</strong> You must verify your account to checkout.
         </div>
         
     </div>

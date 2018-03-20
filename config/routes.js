@@ -12,6 +12,7 @@ module.exports = function(app){
     app.get('/basket',userController.basketPage); //AUTHORIZATION REQUIRED
     app.get('/wishlist',userController.wishlistPage); //AUTHORIZATION REQUIRED
     app.get('/verification', userController.verification); //AUTHORIZATION REQUIRED
+    app.get('/checkout', userController.checkout); //AUTHORIZATION REQUIRED
     app.get('/forgotPasswordVerify', userController.forgotPasswordVerify); //AUTHORIZATION REQUIRED
     app.get('/forgotPassword', userController.forgotPassword); //AUTHORIZATION REQUIRED
     app.get('/product/:product',productController.index);
@@ -30,6 +31,7 @@ module.exports = function(app){
     app.post('/api/getUser', userController.authenticate, userController.getUser)  //AUTHORIZATION REQUIRED
     app.post('/api/register', userController.register);
     app.post('/api/login', userController.login);
+    app.post('/api/checkout', userController.authenticate, userController.checkout);
     app.post('/api/logout', userController.authenticate, userController.logout);  //AUTHORIZATION REQUIRED
     app.post('/api/addBasket', userController.authenticate, userController.addBasket);  //AUTHORIZATION REQUIRED
     app.post('/api/addWishlist', userController.authenticate, userController.addWishlist);  //AUTHORIZATION REQUIRED

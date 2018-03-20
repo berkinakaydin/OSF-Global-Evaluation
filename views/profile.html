@@ -13,9 +13,7 @@
 </head>
 
 <body ng-app="profile"  ng-controller="headerController">
-        <title>
-            {{user.name}}
-            </title>
+        
     <header>
             <nav class="navbar navbar-default navbar-fixed-top">
 
@@ -60,6 +58,9 @@
 
     <div id='main'>
         <div class='container' ng-controller="profileController">
+                <title>
+                        {{user.username}}
+                    </title>
             <div id='input-group' class="well col-md-6" style="float: none;  margin: 0 auto;">
                 <form name='updateForm' ng-submit="update()" role="form">
                     <div class="form-group">
@@ -78,9 +79,9 @@
                         <span ng-show="updateForm.email.$error.unique">Email has taken!</span>
                     </div>
 
-                    <div id='emailVerify' ng-controller="verifyController">
-                        <h5 style="float:left">
-                            {{verify}}
+                    <div id='emailVerify' ng-controller="verifyController" style="display:inline-block">
+                        <h5 style="float:left; margin-right:10px">
+                                {{message}}
                         </h5>
 
                         <div class="modal fade" id="myModal" role="dialog">
@@ -106,7 +107,7 @@
                         <a ng-if='verify == false' ng-click='verifyEmail()' class='btn btn-info' type="button">Verify</a>
                     </div>
 
-                    <button ng-disabled="updateForm.email.$invalid" type="submit" class="btn btn-primary">Update Profile</button>
+                    <button ng-disabled="updateForm.email.$invalid" type="submit" class="btn btn-primary" style="float:right">Update Profile</button>
                 </form>
             </div>
 

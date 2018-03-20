@@ -1,9 +1,24 @@
-app = angular.module('basket', ['header'])
+app = angular.module('basket', ['header','userFactory'])
 
-app.controller('basketController', ['$scope', 'basketService', function ($scope, basketService) {
+app.controller('basketController', ['$scope', 'basketService','userService', function ($scope, basketService,userService) {
 
     var token = localStorage.getItem('jwt')
     var response = basketService.getBasketProducts(token)
+
+    var userResponse = userService.GetByToken(token)
+    userResponse.then(function(userResponse){
+        var isUserVerified = userResponse.user.emailVerify
+        if(isUserVerified){
+            $scope.isUserVerified = true
+            $scope.verifyAccount = false
+        }
+        else{
+            $scope.isUserVerified = false
+            $scope.verifyAccount = true
+        }
+    })
+    
+
 
     $scope.products = []
     response.then(function (response) {
@@ -43,7 +58,14 @@ app.controller('basketController', ['$scope', 'basketService', function ($scope,
     })
 
     $scope.checkout = function(){
-        debugger
+        var userResponse = userService.GetByToken(token)
+        userResponse.then(function(userResponse){
+            var isUserVerified = userResponse.user.emailVerify
+            var token = localStorage.getItem('jwt')
+            if(isUserVerified){
+                location.href = '/checkout?token=' + token
+            }
+        })
     }
 
     $scope.remove = function(product){

@@ -6,12 +6,21 @@ app.controller('profileController', ['$scope', '$timeout', 'userService', functi
 
     response.then(function(response){
         var user = response.user
-        $scope.verify = user.emailVerify
+
+        if(user.emailVerify){
+            $scope.message = 'Your account is verified'
+            $scope.verify = true
+        }
+        else{
+            $scope.message = 'Please verify your account'
+            $scope.verify = false
+        }
         
         $scope.user = {
             name : user.name,
             surname : user.surname,
-            email : user.email
+            email : user.email,
+            username : user.username
         }
     })
  
