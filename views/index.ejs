@@ -7,48 +7,56 @@
   <script src="/js/bootstrap.min.js" type="text/javascript"></script>
   <script src="/js/indexHandler.js" type="text/javascript"></script>
   <script src="/js/userFactory.js" type="text/javascript"></script>
-  <script src="/js/productHandler.js" type="text/javascript"></script>
+  <script src="/js/headerHandler.js" type="text/javascript"></script>
   <title>
     OSF GLOBAL
   </title>
 </head>
 
-<body ng-app="index" ng-controller="indexController">
+<body ng-app="index" ng-controller="headerController">
   <header>
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/" style="padding-top:3px">
-            <img width="200" height="40" src="/images/logo.png" style="float:left">
-          </a>
-        </div>
-        <div id='navbar' class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">            
-              <li ng-repeat="category in categories">
-                    <a href="{{category.url}}">{{category.text}}</a>
-              </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right" >
-              <li ng-repeat="item in objects">
-                <a name="wishlist" ng-if="item.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer" >
-                  <span class="glyphicon glyphicon-star"></span> {{item.text}}    
-                    <p class="rounded" style="float: right;text-align:center;margin-left: 5px;">  {{item.count}}</p>
-              </a>
-              <a name="basket" ng-if="item.type === 'basket'" ng-click="basket()" style="cursor:pointer" >
-                  <span class="glyphicon glyphicon-shopping-cart"></span> {{item.text}}   
-                    <p class="rounded" style="float: right;text-align:center;margin-left: 5px;">  {{item.count}}</p>
-              </a>
-                  <a name="profile" ng-if="item.type === 'profile'" ng-click="profile()"style="cursor:pointer" >{{item.text}}</a>
-                  <a name="logout" ng-if="item.type === 'logout'" ng-click="logout()"style="cursor:pointer" >{{item.text}}</a>         
-                  <a ng-if="item.type === 'unAuth'" href='{{item.url}}'style="cursor:pointer" >{{item.text}}</a>
-               </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+      <nav class="navbar navbar-default navbar-fixed-top">
+
+          <div class="container">
+
+              <div class="navbar-header">
+                  <a class="navbar-brand" href="/" style="padding-top:3px">
+                      <img width="200" height="40" src="/images/logo.png" style="float:left">
+                  </a>
+              </div>
+
+              <div id='navbar' class="navbar-collapse collapse">
+
+                  <ul class="nav navbar-nav">
+                      <li ng-repeat="category in categories">
+                          <a href="/{{category.url}}">{{category.text}}</a>
+                      </li>
+                  </ul>
+
+                  <ul class="nav navbar-nav navbar-right">
+                      <li ng-repeat="item in navbarObjects">
+                          <a name="wishlist" ng-if="item.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer">
+                              <span class="glyphicon glyphicon-star"></span> {{item.text}}
+                              <p class="rounded" style="float: right;text-align:center;margin-left: 5px;"> {{item.count}}</p>
+                          </a>
+                          <a name="basket" ng-if="item.type === 'basket'" ng-click="basket()" style="cursor:pointer">
+                              <span class="glyphicon glyphicon-shopping-cart"></span> {{item.text}}
+                              <p class="rounded" style="float: right;text-align:center;margin-left: 5px;"> {{item.count}}</p>
+                          </a>
+                          <a name="profile" ng-if="item.type === 'profile'" ng-click="profile()" style="cursor:pointer">{{item.text}}</a>
+                          <a name="logout" ng-if="item.type === 'logout'" ng-click="logout()" style="cursor:pointer">{{item.text}}</a>
+                          <a ng-if="item.type === 'unAuth'" href='{{item.url}}'>{{item.text}}</a>
+                      </li>
+                  </ul>
+
+              </div>
+
+          </div>
+
+      </nav>
   </header>
 
-  <div id='main' class="container jumbotron">
+  <div id='main' class="container jumbotron" >
       <div id='category' class="well col-md-12" ng-repeat="category in categories">
         <div class="panel panel-default">
           <div class="panel-heading">

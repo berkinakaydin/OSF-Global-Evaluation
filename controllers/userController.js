@@ -350,7 +350,6 @@ exports.addBasket = function (req, res, next) {
                         basket.products.push(product)
                         basket.save(function (err, result) {
                             if (result) {
-                                console.log(result)
                                 res.json({
                                     success: true,
                                     basket: basket.products

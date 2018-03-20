@@ -1,156 +1,104 @@
-var app = angular.module('product', ['index', 'userFactory']);
+var app = angular.module('product', ['header']);
 
-app.service('productColorService', ['$location', '$http', function ($location, $http) {
-    var url = $location.absUrl();
-    var pid = url.split('/').pop()
+app.controller('colorController',  function ($scope, productService) {
+    //var product = productService.GetProduct()
+    var product = productService.product
+    product.then(function (product) {
 
-    var jsonURL = '/color/' + pid
+        var sizes = []
 
-    var getColors = function () {
-        var colors = []
-
-        return $http({
-            method: 'GET',
-            url: jsonURL
-        }).then(function onSuccess(response) {
-            for (var i = 0; i < response.data.productColors.length; i++) {
-                var color = response.data.productColors[i]
-
-                colors.push(color)
+        for (var i = 0; i < product.image_groups.length; i++) {
+            if (typeof product.image_groups[i].variation_value == 'undefined') {
+                var size = product.image_groups[i].view_type
+                size = size.replace(/\b\w/g, function (l) {
+                    return l.toUpperCase()
+                })
+                sizes.push(size)
             }
-            return colors
+        }
 
-        }).catch(function onError(error) {
-            console.log(error);
-        });
-    }
+        //SOME PRODUCTS HAVENT GOT ANY VARIATION ATTRIBUTES
+        if (typeof product.variation_attributes[0] != 'undefined' && typeof product.image_groups != 'undefined') {
 
-    var getImages = function (type) {
-        var images = []
+            var colors = product.variation_attributes[0].values //PRODUCT'S COLORS
+            
+            $scope.colors = colors
+            $scope.selectedColor = colors[0] //INITIALIZE SELECTED COLOR AS FIRST COLOR
 
-        return $http({
-            method: 'GET',
-            url: jsonURL
-        }).then(function onSuccess(response) {
-            var images = response.data.productImages
+            $scope.sizes = sizes
+            $scope.selectedSize = sizes[0] //INITIALIZE SELECTED SIZE AS FIRST SIZE
 
-            var obj = images.find((o, i) => {
-                if (o.variation_value === type) {
-                    return images[i]
-                }
-            });
-            if (obj === undefined) {
-                obj = {
-                    variation_value: 'default'
-                }
-            }
-            return obj
+            var colorType = $scope.selectedColor.value //FOR EXAMPLE EJ3
+            var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
 
-        }).catch(function onError(error) {
-            console.log(error);
-        });
-    }
+            var images = getImages(product, colorType, sizeType)
+            printImage(images)
+        } else {
 
-    return {
-        getColors: getColors,
-        getImages: getImages
-    }
-}]);
+            $scope.sizes = sizes
+            $scope.selectedSize = sizes[0] //INITIALIZE SELECTED SIZE AS FIRST SIZE
+            var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
 
-app.service('productPriceService', ['$location', '$http', function ($location, $http) {
+            var images = getImages(product, undefined, sizeType)
+            printImage(images)
+        }
+    })
 
-    var url = $location.absUrl();
-    var pid = url.split('/').pop()
-
-    var jsonURL = '/price/' + pid
-
-    var getPrice = function () {
-        return $http({
-            method: 'GET',
-            url: jsonURL
-        }).then(function onSuccess(response) {
-            var price = response.data.price
-
-            return price
-        }).catch(function onError(error) {
-            console.log(error);
-        });
-    }
-
-    return {
-        getPrice: getPrice
-    }
-}]);
-
-app.controller('colorController', function ($scope, productColorService) {
-    var colors = productColorService.getColors()
-    colors.then(function (data) {
-        $scope.colors = data
-        $scope.selectedColor = $scope.colors[0];
-
-        var images = productColorService.getImages($scope.selectedColor.value)
-        images.then(function (data) {
-            printImage(data)
-        });
-    });
-
-    $scope.selected = function () {
+    //WHEN COLOR SELECTED FROM DROPDOWN LIST
+    $scope.colorSelected = function () {
         $scope.value = $scope.selectedColor;
+        product.then(function (product) {
 
-        var images = productColorService.getImages($scope.selectedColor.value)
-        images.then(function (data) {
-            printImage(data)
-        });
+            var colorType = $scope.selectedColor.value //FOR EXAMPLE EJ3
+            var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
+
+            var images = getImages(product, colorType, sizeType)
+            printImage(images)
+        })
     };
 
-    var printImage = function (data) {
-        if (data.variation_value === 'default') {
+    //WHEN COLOR SELECTED FROM DROPDOWN LIST
+    $scope.sizeSelected = function () {
+        $scope.value = $scope.selectedSize;
+        product.then(function (product) {
+           
+            if(typeof $scope.selectedColor != 'undefined'){
+                var colorType = $scope.selectedColor.value //FOR EXAMPLE EJ3
+            }
+            if(typeof $scope.selectedSize != 'undefined'){
+                var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
+            }
+            
+            var images = getImages(product, colorType, sizeType)
+            printImage(images)
+        })
+    };
+
+    //PRINT IMAGE
+    printImage = function (product) {
+        if (product.variation_value === 'default') {
             $scope.selectedImage = '/images/products/default.png'
         } else {
-            $scope.selectedImage = '/images/' + data.images[0].link
+            $scope.selectedImage = '/images/' + product.images[0].link //PRINT FIRST COLOR
         }
     }
 
-
+    //GET ALL IMAGES OF A PRODUCT WITH SELECTED TYPE
+    getImages = function (product, colorType, sizeType) {
+        console.log(product)
+        for (var i = 0; i < product.image_groups.length; i++) {
+            if (product.image_groups[i].variation_value === colorType && product.image_groups[i].view_type.toUpperCase() === sizeType.toUpperCase()) {
+                return product.image_groups[i]
+            }
+        }
+    }
 });
 
-app.controller('headerController',['$scope','$window','indexService', 'userService' ,function ($scope,$window, indexService, userService) {
-    var objects = indexService.headerButtons()
-    var categories = indexService.getCategories()
 
-    objects.then(function (data) {
-        $scope.objects = data
-    });
-
-    categories.then(function (categories) {
-        $scope.categories = categories
-    })
-
-    $scope.logout = function () {
-        userService.Logout();
-    }
-
-    $scope.profile = function () {
-        var token = $window.localStorage.getItem('jwt')
-        $window.location.href = '/profile?token=' + token
-    }
-
-    $scope.basket = function () {
-        var token = $window.localStorage.getItem('jwt')
-        $window.location.href = '/basket?token=' + token
-    }
-
-    $scope.wishlist = function () {
-        var token = $window.localStorage.getItem('jwt')
-        $window.location.href = '/wishlist?token=' + token
-    }
-}])
-
-app.controller('priceController', function ($scope, productPriceService) {
-
-    var price = productPriceService.getPrice()
-
-    price.then(function (price) {
+app.controller('priceController', function ($scope, productService) {
+    var product = productService.product
+    product.then(function (product) {   
+        var price = product.price
         $scope.newPrice = price
         $scope.selected = function () {
             $scope.value = $scope.selectedCurrency;
@@ -188,7 +136,16 @@ app.controller('priceController', function ($scope, productPriceService) {
     ]
 });
 
-app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', function ($timeout, $http, $scope, $location) {
+app.controller('productInformationController', function ($scope, productService) {
+    var product = productService.product
+    product.then(function (product) {
+        $scope.title = (typeof product.page_title != 'undefined') ? product.page_title : product.id
+        $scope.name = product.name
+        $scope.page_description = product.page_description
+    })
+})
+
+app.controller('buttonController', function ($timeout, $http, $scope, $location) {
     var url = $location.absUrl().split('/').pop()
     var token = localStorage.getItem('jwt')
     $scope.addBasket = function () {
@@ -206,17 +163,12 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
                     $timeout(function () {
                         $scope.alreadyInBasketAlert = false
                     }, 2000);
-                }
-                else{
+                } else {
                     $scope.basketAlert = true
                     $timeout(function () {
                         $scope.basketAlert = false
                     }, 2000);
                 }
-
-                //TODO NUMBER
-                
-                console.log(response.data)
             }
 
         })
@@ -237,48 +189,32 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
                     $timeout(function () {
                         $scope.alreadyInWishlistAlert = false
                     }, 2000);
-                }
-                else{
+                } else {
                     $scope.wishlistAlert = true
                     $timeout(function () {
                         $scope.wishlistAlert = false
                     }, 2000);
                 }
-                
-                console.log(response.data)
             }
 
         })
     }
-}])
+})
 
-app.controller('urlController',['$scope','$location','indexService', 'userService' ,function ($scope,$location, indexService, userService) {
-    
-    var parsedURL = $location.absUrl().split('/');
-    console.log(parsedURL)
-    var urls = []
-    urls.push({url : '', text : 'Home'})
-    for(var i=3; i<parsedURL.length-1;i++){
-        var categoryText = parsedURL[i].split('-').pop()
-        categoryText = categoryText.replace(/\b\w/g, function(l){ return l.toUpperCase() })
-        var path = ""
+app.factory('productService', ['$http','$location', function ($http,$location) {
+    var service = {};
+    service.product = GetProduct()
 
-        for(var j= urls.length-1; j>=0;j--){
-            if(i>2 && j>0){
-                path += parsedURL[i-j] +'/'
+    return service
+
+    //POST REQUEST TO GET PRODUCT
+    function GetProduct() {
+        var url = $location.absUrl();
+        var pid = url.split('/').pop()
+        return $http.post('/api/getProduct', {pid: pid}).then(function (response) {
+            if (response.data.success === true) {
+                return response.data.product
             }
-            else{
-                path += parsedURL[i-j]
-            }
-        }
-
-        var url = {
-            url : path,
-            text: categoryText
-        }
-        urls.push(url)
-       
+        })
     }
-    $scope.urls = urls
-
 }])

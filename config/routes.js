@@ -4,10 +4,7 @@ const productController = require('../controllers/productController')
 const userController = require('../controllers/userController')
 
 module.exports = function(app){
-    
     app.get('/', homeController.index);
-    app.get('/color/:pid', productController.getColor);
-    app.get('/price/:pid', productController.getPrice);
     app.get('/:category/:subcategory/:category_product/:product', productController.index);
     app.get('/:category/:subcategory/:category_product', categoryController.products);
     app.get('/:category/:subcategory', categoryController.subcategory);
@@ -19,6 +16,7 @@ module.exports = function(app){
     app.get('/basket',userController.basketPage); //AUTHORIZATION REQUIRED
     app.get('/wishlist',userController.wishlistPage); //AUTHORIZATION REQUIRED
     app.get('/verification', userController.verification); //AUTHORIZATION REQUIRED
+    app.post('/api/getProduct', productController.getProduct);
     app.post('/api/getCategories', categoryController.getCategories); //AUTHORIZATION REQUIRED
     app.post('/api/updateuser', userController.authenticate,userController.updateUser); //AUTHORIZATION REQUIRED
     app.post('/api/emailverify', userController.authenticate,userController.emailVerify); //AUTHORIZATION REQUIRED

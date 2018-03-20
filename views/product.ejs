@@ -1,81 +1,94 @@
 <html>
-
 <head>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/css/header.css">
     <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
     <script src="/js/angular.js" type="text/javascript"></script>
     <script src="/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="/js/productHandler.js" type="text/javascript"></script>
     <script src="/js/indexHandler.js" type="text/javascript"></script>
+    <!--HEADER DEPENDENCY-->
     <script src="/js/userFactory.js" type="text/javascript"></script>
-    <title>
-        <%= title %>
-    </title>
+    <!--HEADER DEPENDENCY-->
+    <script src="/js/headerHandler.js" type="text/javascript"></script>
+    <!--HEADER OPTIONS-->
+    <script src="/js/productHandler.js" type="text/javascript"></script>
+
 </head>
 
 <body ng-app="product">
     <header ng-controller="headerController">
+
         <nav class="navbar navbar-default navbar-fixed-top">
+
             <div class="container">
+
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/" style="padding-top:3px">
                         <img width="200" height="40" src="/images/logo.png" style="float:left">
                     </a>
                 </div>
+
                 <div id='navbar' class="navbar-collapse collapse">
+
                     <ul class="nav navbar-nav">
                         <li ng-repeat="category in categories">
                             <a href="/{{category.url}}">{{category.text}}</a>
                         </li>
                     </ul>
+
                     <ul class="nav navbar-nav navbar-right">
-                        <li ng-repeat="item in objects">
-                            <a name="wishlist" ng-if="item.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer" >
-                                <span class="glyphicon glyphicon-star"></span> {{item.text}}    
-                                  <p class="rounded" style="float: right;text-align:center;margin-left: 5px;">  {{item.count}}</p>
+                        <li ng-repeat="item in navbarObjects">
+                            <a name="wishlist" ng-if="item.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer">
+                                <span class="glyphicon glyphicon-star"></span> {{item.text}}
+                                <p class="rounded" style="float: right;text-align:center;margin-left: 5px;"> {{item.count}}</p>
                             </a>
-                            <a name="basket" ng-if="item.type === 'basket'" ng-click="basket()" style="cursor:pointer" >
-                                <span class="glyphicon glyphicon-shopping-cart"></span> {{item.text}}   
-                                  <p class="rounded" style="float: right;text-align:center;margin-left: 5px;">  {{item.count}}</p>
+                            <a name="basket" ng-if="item.type === 'basket'" ng-click="basket()" style="cursor:pointer">
+                                <span class="glyphicon glyphicon-shopping-cart"></span> {{item.text}}
+                                <p class="rounded" style="float: right;text-align:center;margin-left: 5px;"> {{item.count}}</p>
                             </a>
-                            <a name="profile" ng-if="item.type === 'profile'" ng-click="profile()" style="cursor:pointer" >{{item.text}}</a>
-                            <a name="logout" ng-if="item.type === 'logout'" ng-click="logout()" style="cursor:pointer" >{{item.text}}</a>         
+                            <a name="profile" ng-if="item.type === 'profile'" ng-click="profile()" style="cursor:pointer">{{item.text}}</a>
+                            <a name="logout" ng-if="item.type === 'logout'" ng-click="logout()" style="cursor:pointer">{{item.text}}</a>
                             <a ng-if="item.type === 'unAuth'" href='{{item.url}}'>{{item.text}}</a>
-                         </li>
+                        </li>
                     </ul>
+
                 </div>
+
             </div>
+
         </nav>
-        
-        <div style="width: 80%;  display: table;margin: 20 auto;margin-top: -20px;"  id='url' ng-controller="urlController" class="well well-sm">
-                <span ng-repeat="url in urls">
-                        <a ng-href="/{{url.url}}" >{{url.text}} </a>/
-                </span>
+
+        <div style="width: 80%;  display: table;margin: 20 auto;margin-top: -20px;" id='url' ng-controller="urlController" class="well well-sm">
+            <span ng-repeat="url in urls">
+                <a ng-href="/{{url.url}}">{{url.text}} </a>/
+            </span>
         </div>
     </header>
 
-    
+
 
     <div id='main'>
         <div id=product class="container">
-
-            <%if(product.variation_attributes[0]){%>
+            
                 <!--TO PREVENT EMPTY DROPDOWN LISTS-->
-
                 <div id='image' ng-controller="colorController">
+                    
                     <img ng-src={{selectedImage}}>
-
+                   
                     <div id='dropdown'>
-                        <select ng-change="selected()" ng-model="selectedColor" ng-options="s.name for s in colors" ng-init="selectedColor=colors[0]">{{color.name}}</select>
+                        <select ng-change="colorSelected()" ng-model="selectedColor" ng-options="s.name for s in colors" ng-init="selectedColor=colors[0]"></select>
+                        <select ng-change="sizeSelected()" ng-model="selectedSize" ng-options="s for s in sizes" ng-init="selectedSize=sizes[0]"></select>
                     </div>
 
                 </div>
-                <%}%>
 
-                    <div id='information'>
+                    <div id='information' ng-controller="productInformationController">
+                        <title>
+                            {{title}}
+                        </title>
+
                         <p>
-                            <%=product.name%>
+                            {{name}}
                         </p>
                         <div ng-controller="priceController">
                             <p id='price'>
@@ -88,7 +101,7 @@
                             </p>
                         </div>
                         <p>
-                            <%=product.page_description%>
+                            {{page_description}}
                         </p>
                     </div>
                     <div id='buttons' ng-controller="buttonController">

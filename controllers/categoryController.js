@@ -45,7 +45,9 @@ exports.subcategory = function (req, res, next) {
 
 exports.getCategories = function (req, res) {
     var categories = categoryModel.find()
+ 
     categories.then(function (categories) {
+       
         res.json({
             categories: categories
         })
