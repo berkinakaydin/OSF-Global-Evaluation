@@ -579,6 +579,42 @@ exports.getWishlistProducts = function(req,res,next){
     })
 }
 
+exports.removeItemFromBasket = function(req,res,next){
+    var token = req.body.token
+    var user = userDBModel.User().methods.verifyJWT(token)
+    var username = user.username
+    var pid = req.body.pid
+    console.log(pid)
+    console.log(username)
+    basketModel.findOne({'userId' : username},function(err,user){
+        user.products.filter(function( obj ) {
+            if(obj.id === pid){
+                user.products.remove(obj)
+            }
+        });
+        user.save()
+        res.json({success:true})
+    })
+}
+
+exports.removeItemFromWishlist = function(req,res,next){
+    var token = req.body.token
+    var user = userDBModel.User().methods.verifyJWT(token)
+    var username = user.username
+    var pid = req.body.pid
+    console.log(pid)
+    console.log(username)
+    wishlistModel.findOne({'userId' : username},function(err,user){
+        user.products.filter(function( obj ) {
+            if(obj.id === pid){
+                user.products.remove(obj)
+            }
+        });
+        user.save()
+        res.json({success:true})
+    })
+}
+
 exports.authenticate = function (req, res, next) {
     var token = req.body.token
     if (token != null) { //To know that user logged in

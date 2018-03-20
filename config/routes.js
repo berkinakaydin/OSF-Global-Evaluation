@@ -14,11 +14,12 @@ module.exports = function(app){
     app.get('/verification', userController.verification); //AUTHORIZATION REQUIRED
     app.get('/forgotPasswordVerify', userController.forgotPasswordVerify); //AUTHORIZATION REQUIRED
     app.get('/forgotPassword', userController.forgotPassword); //AUTHORIZATION REQUIRED
+    app.get('/product/:product',productController.index);
     app.get('/:category/:subcategory/:category_product/:product', productController.index);
     app.get('/:category/:subcategory/:category_product', categoryController.category_product);
     app.get('/:category/:subcategory', categoryController.subcategory);
+    
     app.get('/:category', categoryController.index);
-    app.get('/product/:product',productController.index);
     app.post('/api/getProductById', productController.getProductById);
     app.post('/api/getCategories', categoryController.getCategories); //AUTHORIZATION REQUIRED
     app.post('/api/getCategory_Products', categoryController.getCategory_Products); //AUTHORIZATION REQUIRED
@@ -36,4 +37,6 @@ module.exports = function(app){
     app.post('/api/isEmailExist', userController.isEmailExist);  
     app.post('/api/getWishlistProducts',userController.authenticate,userController.getWishlistProducts)
     app.post('/api/getBasketProducts',userController.authenticate,userController.getBasketProducts)
+    app.post('/api/removeItemFromBasket',userController.authenticate,userController.removeItemFromBasket)
+    app.post('/api/removeItemFromWishlist',userController.authenticate,userController.removeItemFromWishlist)
 }

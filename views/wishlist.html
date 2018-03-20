@@ -2,18 +2,20 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
     <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
     <script src="/js/angular.js" type="text/javascript"></script>
     <script src="/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="/js/userFactory.js" type="text/javascript"></script>
     <script src="/js/loginHandler.js" type="text/javascript"></script>
     <script src="/js/headerHandler.js" type="text/javascript"></script>
+    <script src="/js/basketHandler.js" type="text/javascript"></script>
     <title>
         WISHLIST
     </title>
 </head>
 
-<body ng-app="header">
+<body ng-app="basket">
     <header ng-controller="headerController">
 
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -55,12 +57,42 @@
             </div>
 
         </nav>
+
+        <div style="width: 80%;  display: table;margin: 20 auto;margin-top: -20px;" id='url' ng-controller="urlController" class="well well-sm">
+                <span ng-repeat="url in urls">
+                        <a ng-href="/{{url.url}}">{{url.text}} </a>/
+                </span>
+        </div>
     </header>
 
     <div id='main' class="container" ng-controller="wishlistController">
-            <div id='product' ng-repeat='product in products'>
-                <p>{{product}}</p>
+            <div id='product' ng-repeat='product in products' class='col-md-12'>
+                    <div id='image' style="float: left;display: inline-block;">
+                            <img ng-src="{{product.image}}" style="max-width: 100px; ">
+                        </div>
+                        <div id='information' style="margin-left: 10px; display: inline-block;">
+                            <a ng-href='/product/{{product.id}}'><h3 style="vertical-align: bottom; display: table-cell;">{{product.name}}</h3> </a>
+                            <h4>
+                                    {{product.size}} 
+                            </h4>
+                            <h5>{{product.price}} {{product.currency}}</h5>
+                            <button ng-click='remove(product)' type="button" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-remove"></span> Delete
+                            </button>
+                        </div>
+                        
+                        <hr>
+                        
             </div>
+            <p>You have {{products.length}} item in your cart</p>
+    
+            <div id='price' style="display: table-row">
+                    <h3 style="vertical-align: bottom; display: table-cell;">Total {{total}} {{currency}}</h3>
+                    <button style="margin-left:10px" ng-click='checkout()' type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-shopping-cart"></span> Checkout
+                    </button>
+            </div>
+            
         </div>
 </body>
 
