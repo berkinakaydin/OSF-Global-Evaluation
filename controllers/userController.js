@@ -6,6 +6,7 @@ const userDBModel = require('../models/user.js')
 const nodemailer = require('nodemailer');
 
 const file = require('../utils/file')
+const ip = require('../config/config.js').ip
 var userModel = new userDBModel.Schema();
 var basketModel = new basketDBModel.Schema();
 var wishlistModel = new wishlistDBModel.Schema();
@@ -177,9 +178,6 @@ exports.forgotPasswordVerify = function (req, res) {
                 }
             })
         })
-
-        
-        console.log(user)
     }
     else{
         var token = req.query.token
@@ -207,9 +205,7 @@ exports.forgotPasswordVerify = function (req, res) {
 exports.forgotPassword = function (req, res) {
     if (req.method === "POST") {
         var email = req.body.email
-
         var jwt = userDBModel.User().methods.generateJWT(email)
-        console.log(jwt)
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -222,7 +218,7 @@ exports.forgotPassword = function (req, res) {
             from: 'osfmailer@gmail.com',
             to: email,
             subject: 'OSF E-Commerce Reset Password',
-            text: 'Please click this following link to reset your password \n' + 'http://localhost/forgotPasswordVerify?token=' + jwt + '\nThis link can be used once 24 hours'
+            text: 'Please click this following link to reset your password \n' + 'http://' + ip + '/forgotPasswordVerify?token=' + jwt + '\nThis link can be used once 24 hours'
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -400,7 +396,7 @@ exports.emailVerify = function (req, res, next) {
             from: 'osfmailer@gmail.com',
             to: user.email,
             subject: 'OSF E-Commerce Verification',
-            text: 'Please click this following link to verify your email \n ' + 'http://localhost/verification?token=' + user.token + '\n This link can be used once 24 hours'
+            text: 'Please click this following link to verify your email \n ' + 'http://'+ ip+ '/verification?token=' + user.token + '\n This link can be used once 24 hours'
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
