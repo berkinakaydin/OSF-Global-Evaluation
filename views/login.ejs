@@ -8,8 +8,7 @@
     <script src="/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="/js/userFactory.js" type="text/javascript"></script>
     <script src="/js/loginHandler.js" type="text/javascript"></script>
-    <script src="/js/indexHandler.js" type="text/javascript"></script>
-    <script src="/js/productHandler.js" type="text/javascript"></script>
+    <script src="/js/headerHandler.js" type="text/javascript"></script>
     <title>
         LOGIN
     </title>
@@ -31,9 +30,8 @@
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li ng-repeat="url in objects">
-                            <a ng-if="url.text !== 'Log Out'" href={{url.url}}>{{url.text}}</a>
-                            <a name="logout" ng-if="url.text === 'Log Out'" ng-click="$event.preventDefault(); logout()" style="cursor:pointer">{{url.text}}</a>
+                        <li ng-repeat="item in navbarObjects">
+                                <a ng-if="item.type === 'unAuth'" href='{{item.url}}'>{{item.text}}</a>
                         </li>
                     </ul>
                 </div>

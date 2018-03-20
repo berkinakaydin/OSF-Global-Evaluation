@@ -1,6 +1,6 @@
-var app = angular.module('register', ['userFactory','index']);
+var app = angular.module('register', ['userFactory','header']);
 
-app.controller('registerController', ['$scope', 'userService', '$location', '$window', function ($scope, userService, $location,$window) {
+app.controller('registerController', ['$scope', 'userService', '$location', function ($scope, userService, $location) {
     $scope.inputType = 'password'
     $scope.inputTypeForCheck = 'password'
  
@@ -43,7 +43,7 @@ app.controller('registerController', ['$scope', 'userService', '$location', '$wi
         userService.Create(user)
         .then(function (response) {
             if (response.data === 'OK') {                 
-                $window.location.href = "/";
+                location.href = "/";
             } else {           
                 for(var i = 0; i < response.data.errors.length; i++){
                     var error = response.data.errors[i]
@@ -58,23 +58,4 @@ app.controller('registerController', ['$scope', 'userService', '$location', '$wi
             }
         });
     }
-
-  
 }]);
-
-app.controller('headerController', ['$scope','indexService','userService', function ($scope, indexService, userService) {
-    var objects = indexService.headerButtons()
-    var categories = indexService.getCategories()
-
-    objects.then(function (data) {
-        $scope.objects = data
-    });
-
-    categories.then(function(categories){
-        $scope.categories = categories
-    })
-    
-    $scope.logout = function () {
-        userService.Logout();
-    }
-}])

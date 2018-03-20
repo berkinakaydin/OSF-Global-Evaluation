@@ -1,4 +1,4 @@
-app = angular.module('header',['index','userFactory'])
+app = angular.module('header',['userFactory'])
 
 app.controller('urlController',['$scope', '$location', function ($scope, $location){
     var parsedURL = $location.absUrl().split('/');
@@ -40,8 +40,9 @@ app.controller('headerController', ['$scope', 'userService', 'headerService', fu
     categories.then(function (categories) {
         $scope.categories = categories
     })
-    
+
     headerButtons.then(function (navbarObjects) {
+        console.log(navbarObjects)
         $scope.navbarObjects = navbarObjects
     });
 
@@ -50,17 +51,17 @@ app.controller('headerController', ['$scope', 'userService', 'headerService', fu
     }
 
     $scope.profile = function () {
-        var token = $window.localStorage.getItem('jwt')
+        var token = localStorage.getItem('jwt')
         location.href = '/profile?token=' + token
     }
 
     $scope.basket = function () {
-        var token = $window.localStorage.getItem('jwt')
+        var token = localStorage.getItem('jwt')
         location.href = '/basket?token=' + token
     }
 
     $scope.wishlist = function () {
-        var token = $window.localStorage.getItem('jwt')
+        var token = localStorage.getItem('jwt')
         location.href = '/wishlist?token=' + token
     }
 }])

@@ -1,32 +1,18 @@
-var app = angular.module('profile', ['userFactory', 'index'])
-
-app.controller('headerController', ['$scope', 'indexService', 'userService', function ($scope, indexService, userService) {
-    var objects = indexService.headerButtons()
-    var categories = indexService.getCategories()
-    var user = indexService.getUser()
-
-    objects.then(function (data) {
-        $scope.objects = data
-    });
-
-    categories.then(function(categories){
-        $scope.categories = categories
-    })
-
-    user.then(function(user){
-        $scope.verify = user.emailVerify
-        $scope.user = user
-    })
-
-    $scope.logout = function () {
-        userService.Logout();
-    }
-
-    
-}])
+var app = angular.module('profile', ['userFactory','header'])
 
 app.controller('profileController', ['$scope', '$timeout', 'userService', function ($scope, $timeout, userService) {
+    var token = localStorage.getItem('jwt')
+    var response = userService.GetByToken(token)
 
+    response.then(function(response){
+
+        $scope.user = {
+            name : response.user.name,
+            surname : response.user.surname,
+            email : response.user.email
+        }
+    })
+ 
     $scope.update = function () {
         var user = {}
         user.name = $scope.name
@@ -56,7 +42,7 @@ app.controller('profileController', ['$scope', '$timeout', 'userService', functi
 app.controller('verifyController', ['$scope', '$timeout', '$http', function ($scope, $timeout, $http) {
     $scope.verifyEmail = function () {
         var token = localStorage.getItem('jwt')
-        $http.post('/api/emailverify', {token: token }).then(function (response) {
+        $http.post('/api/emailVerify', {token: token }).then(function (response) {
             if (response.data.success === true) {
                 $("#myModal").modal()
             } else {

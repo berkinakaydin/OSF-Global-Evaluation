@@ -1,6 +1,6 @@
-var app = angular.module('login', ['userFactory','index']);
+var app = angular.module('login', ['userFactory','header']);
 
-app.controller('loginController',['$scope','$window','$timeout','userService', function ($scope,$window,$timeout, userService) {
+app.controller('loginController',['$scope','$timeout','userService', function ($scope,$timeout, userService) {
    $scope.save = function(){
        var user = {}
        user.username = $scope.username
@@ -10,8 +10,8 @@ app.controller('loginController',['$scope','$window','$timeout','userService', f
         .then(function (response) {
             if (response.data.success=== true) {              
                 var token = response.data.token
-                $window.localStorage.setItem('jwt',token)
-                $window.location.href = "/";
+                localStorage.setItem('jwt',token)
+                location.href = "/";
             } else {          
                 if(response.data.error === true){       
                     $scope.alert = true
@@ -24,20 +24,3 @@ app.controller('loginController',['$scope','$window','$timeout','userService', f
         });
    }
 }]);
-
-app.controller('headerController', function ($scope, indexService) {
-    var objects = indexService.headerButtons()
-    var categories = indexService.getCategories()
-
-    objects.then(function (data) {
-        $scope.objects = data
-    });
-
-    categories.then(function(categories){
-        $scope.categories = categories
-    })
-
-    $scope.logout = function () {
-        userService.Logout();
-        }
-})

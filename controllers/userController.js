@@ -167,6 +167,7 @@ exports.getUser = function (req, res) {
         'username': username
     }, function (err, user) { //QUERIED RESULTS FROM 
         res.json({
+            success:true,
             user: user
         })
     });
