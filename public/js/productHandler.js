@@ -1,8 +1,8 @@
 var app = angular.module('product', ['header']);
 
-app.controller('colorController',  function ($scope, productService) {
+app.controller('colorController', function ($scope, productService) {
     //var product = productService.GetProduct()
-    var product = productService.product
+    var product = productService.product()
     product.then(function (product) {
 
         var sizes = []
@@ -21,7 +21,7 @@ app.controller('colorController',  function ($scope, productService) {
         if (typeof product.variation_attributes[0] != 'undefined' && typeof product.image_groups != 'undefined') {
 
             var colors = product.variation_attributes[0].values //PRODUCT'S COLORS
-            
+
             $scope.colors = colors
             $scope.selectedColor = colors[0] //INITIALIZE SELECTED COLOR AS FIRST COLOR
 
@@ -32,9 +32,9 @@ app.controller('colorController',  function ($scope, productService) {
             var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
 
             var images = getImages(product, colorType, sizeType)
+
             printImage(images)
         } else {
-
             $scope.sizes = sizes
             $scope.selectedSize = sizes[0] //INITIALIZE SELECTED SIZE AS FIRST SIZE
             var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
@@ -61,14 +61,14 @@ app.controller('colorController',  function ($scope, productService) {
     $scope.sizeSelected = function () {
         $scope.value = $scope.selectedSize;
         product.then(function (product) {
-           
-            if(typeof $scope.selectedColor != 'undefined'){
+
+            if (typeof $scope.selectedColor != 'undefined') {
                 var colorType = $scope.selectedColor.value //FOR EXAMPLE EJ3
             }
-            if(typeof $scope.selectedSize != 'undefined'){
+            if (typeof $scope.selectedSize != 'undefined') {
                 var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
             }
-            
+
             var images = getImages(product, colorType, sizeType)
             printImage(images)
         })
@@ -76,7 +76,7 @@ app.controller('colorController',  function ($scope, productService) {
 
     //PRINT IMAGE
     printImage = function (product) {
-        if (product.variation_value === 'default') {
+        if (product === null) {
             $scope.selectedImage = '/images/products/default.png'
         } else {
             $scope.selectedImage = '/images/' + product.images[0].link //PRINT FIRST COLOR
@@ -85,19 +85,19 @@ app.controller('colorController',  function ($scope, productService) {
 
     //GET ALL IMAGES OF A PRODUCT WITH SELECTED TYPE
     getImages = function (product, colorType, sizeType) {
-        console.log(product)
         for (var i = 0; i < product.image_groups.length; i++) {
             if (product.image_groups[i].variation_value === colorType && product.image_groups[i].view_type.toUpperCase() === sizeType.toUpperCase()) {
                 return product.image_groups[i]
             }
         }
+        return null
     }
 });
 
 
 app.controller('priceController', function ($scope, productService) {
-    var product = productService.product
-    product.then(function (product) {   
+    var product = productService.product()
+    product.then(function (product) {
         var price = product.price
         $scope.newPrice = price
         $scope.selected = function () {
@@ -137,7 +137,7 @@ app.controller('priceController', function ($scope, productService) {
 });
 
 app.controller('productInformationController', function ($scope, productService) {
-    var product = productService.product
+    var product = productService.product()
     product.then(function (product) {
         $scope.title = (typeof product.page_title != 'undefined') ? product.page_title : product.id
         $scope.name = product.name
@@ -201,9 +201,9 @@ app.controller('buttonController', function ($timeout, $http, $scope, $location)
     }
 })
 
-app.factory('productService', ['$http','$location', function ($http,$location) {
+app.factory('productService', ['$http', '$location', function ($http, $location) {
     var service = {};
-    service.product = GetProduct()
+    service.product = GetProduct
 
     return service
 
@@ -211,7 +211,9 @@ app.factory('productService', ['$http','$location', function ($http,$location) {
     function GetProduct() {
         var url = $location.absUrl();
         var pid = url.split('/').pop()
-        return $http.post('/api/getProduct', {pid: pid}).then(function (response) {
+        return $http.post('/api/getProductById', {
+            pid: pid
+        }).then(function (response) {
             if (response.data.success === true) {
                 return response.data.product
             }

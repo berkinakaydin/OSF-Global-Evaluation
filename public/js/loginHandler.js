@@ -6,8 +6,7 @@ app.controller('loginController',['$scope','$timeout','userService', function ($
        user.username = $scope.username
        user.password = $scope.password
     
-       userService.Login(user)
-        .then(function (response) {
+       userService.Login(user) .then(function (response) {
             if (response.data.success=== true) {              
                 var token = response.data.token
                 localStorage.setItem('jwt',token)
@@ -17,8 +16,7 @@ app.controller('loginController',['$scope','$timeout','userService', function ($
                     $scope.alert = true
                     $timeout(function() {
                         $scope.alert = false
-                     }, 2000);      
-                     
+                     }, 2000);                         
                 }
             }
         });

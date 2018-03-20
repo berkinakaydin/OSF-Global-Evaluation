@@ -8,7 +8,7 @@ exports.index = function (req, res) {
 };
 
 //GET PRODUCTS FOR ANGULARJS
-exports.getProduct = function (req, res) {
+exports.getProductById = function (req, res) {
     var pid = req.body.pid
     productModel.findOne({
         'id': pid

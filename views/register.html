@@ -16,31 +16,29 @@
 </head>
 
 <body ng-app="register">
-    <header ng-controller="headerController">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/" style="padding-top:3px">
-                        <img width="200" height="40" src="/images/logo.png" style="float:left">
-                    </a>
-                </div>
-                <div id='navbar' class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li ng-repeat="category in categories">
-                            <a href="{{category.url}}">{{category.text}}</a>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li ng-repeat="item in navbarObjects">
-                            <a ng-if="item.type === 'unAuth'" href='{{item.url}}'>{{item.text}}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-
+        <header ng-controller="headerController">
+                <nav class="navbar navbar-default navbar-fixed-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="/" style="padding-top:3px">
+                                <img width="200" height="40" src="/images/logo.png" style="float:left">
+                            </a>
+                        </div>
+                        <div id='navbar' class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li ng-repeat="category in categories">
+                                    <a href="{{category.url}}">{{category.text}}</a>
+                                </li>
+                            </ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li ng-repeat="item in navbarObjects">
+                                    <a ng-if="item.type === 'unAuth'" href='{{item.url}}'>{{item.text}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </header>
     <div id='main'>
         <div class='container'>
             <div id='input-group' class="well col-md-6" style="float: none;  margin: 0 auto;">

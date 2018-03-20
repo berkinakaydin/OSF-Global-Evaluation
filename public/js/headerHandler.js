@@ -33,16 +33,15 @@ app.controller('urlController',['$scope', '$location', function ($scope, $locati
 
 
 app.controller('headerController', ['$scope', 'userService', 'headerService', function ($scope, userService, headerService) {
-    var headerButtons = headerService.getHeaderButtons
+    var headerButtons = headerService.getHeaderButtons()
 
-    var categories = headerService.getCategories
+    var categories = headerService.getCategories()
     
     categories.then(function (categories) {
         $scope.categories = categories
     })
 
     headerButtons.then(function (navbarObjects) {
-        console.log(navbarObjects)
         $scope.navbarObjects = navbarObjects
     });
 
@@ -68,8 +67,8 @@ app.controller('headerController', ['$scope', 'userService', 'headerService', fu
 
 app.factory('headerService', ['$http', function ($http) {
     var service = {}
-    service.getHeaderButtons = getHeaderButtons()
-    service.getCategories = getCategories()
+    service.getHeaderButtons = getHeaderButtons
+    service.getCategories = getCategories
 
     return service
 
@@ -127,9 +126,7 @@ app.factory('headerService', ['$http', function ($http) {
     function getCategories() {
         var categories = []
         return $http.post('/api/getCategories').then(function (response) {
-            console.log(response.data)
-            for(var i=0; i<response.data.categories.length;i++){
-                
+            for(var i=0; i<response.data.categories.length;i++){              
                 var category = {
                     text : response.data.categories[i].name,
                     url : response.data.categories[i].id,

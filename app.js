@@ -8,7 +8,8 @@ const config = require("./config/config.js");
 const app = express();
 
 app.set('port', config.port);
-app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 app.set('views', __dirname + '/views');
 
 app.use(express.static(path.join(__dirname, 'public')));

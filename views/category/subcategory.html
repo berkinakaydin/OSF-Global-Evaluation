@@ -8,12 +8,11 @@
         <script src="/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="/js/userFactory.js" type="text/javascript"></script>
         <script src="/js/headerHandler.js" type="text/javascript"></script>
-        <title>
-                <%= title %>
-        </title>
+        <script src="/js/categoryHandler.js" type="text/javascript"></script>
+
 </head>
 
-<body ng-app="header">
+<body ng-app="category">
         <header ng-controller="headerController">
 
                 <nav class="navbar navbar-default navbar-fixed-top">
@@ -63,46 +62,23 @@
                 </div>
         </header>
 
-        <div id='main'>
-                <div id=categories class="container">
-                        <p>
-                                <%=subcategory.name %>
-                        </p>
-                        <p>
-                                <%=subcategory.page_description %>
-                        </p>
-                        <% for(var i=0; i<subcategory.categories.length; i++) {%>
+        <div id='main' class="container" ng-controller="categoryController">
+                <title>
+                        {{title}}
+                </title>
+                <div id=category class="col-md-6" ng-repeat="category in categories">
 
+                        <div id='image'>
+                                <img ng-src="{{category.image}}" style="max-width: 100%; ">
+                        </div>
+                        <div id='information'>
+                                <p>
+                                        {{category.name}} {{category.page_description}}
 
-                                <div id=category class="col-md-6">
-
-                                        <div class="card mb-6 box-shadow">
-                                                <div id='image'>
-                                                        <%if(subcategory.categories[i].image){%>
-                                                                <!--IMPORTANT!! IF CATEGORY HASNT GOT ANY IMAGE, FAVICON CALLS A PAGE TWO TIMES WTF?-->
-                                                                <img src="/images/<%=subcategory.categories[i].image%>" style="max-width: 100% !important; height: auto;width: auto;">
-                                                                <%}else{%>
-                                                                        <img src="/images/categories/default.png" style="max-width: 100px !important; height: auto;width: auto;">
-                                                                        <%}%>
-                                                </div>
-                                                <div id='information'>
-                                                        <p>
-                                                                <%=subcategory.categories[i].page_description%>
-                                                        </p>
-                                                </div>
-                                                <% var url = subcategory.parent_category_id + '/'%>
-                                                        <% url += subcategory.id + '/' %>
-                                                                <% url += subcategory.categories[i].id %>
-                                                                        <p>
-                                                                                <a href="/<%= url %>" class="btn btn-primary" role="button">Go</a>
-                                                                        </p>
-                                        </div>
-                                </div>
-
-
-                                <% } %>
+                                </p>
+                        </div>
+                        <a ng-href="{{category.url}}" class="btn btn-primary" role="button">Go</a>
                 </div>
-        </div>
 </body>
 
 </html>

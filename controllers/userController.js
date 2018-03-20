@@ -17,19 +17,16 @@ var productModel = new productDBModel.Schema();
 
 
 exports.loginPage = function (req, res) {
-    categoryModel.find(function (err, allCategories) { //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
-        res.render('login', {
-            allCategories: allCategories
-        })
-    });
+    console.log('hi')
+        res.render('login')
+            
+
 };
 
 exports.registerPage = function (req, res) {
-    categoryModel.find(function (err, allCategories) { //NOT TO LOSE MENS OR WOMENS FROM NAVBAR !
-        res.render('register', {
-            allCategories: allCategories
-        })
-    });
+    
+        res.render('register')
+    
 }
 
 exports.profilePage = function (req, res) {
