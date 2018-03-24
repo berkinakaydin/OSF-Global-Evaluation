@@ -19,7 +19,8 @@ var Product = new Schema({
     variants : Array,
     type : Array,
     long_description : String,
-    c_isSale : Boolean
+    c_isSale : Boolean,
+    review : Array
 });
 
 module.exports = {
