@@ -3,6 +3,7 @@ const categoryController = require('../controllers/categoryController')
 const productController = require('../controllers/productController')
 const userController = require('../controllers/userController')
 
+
 module.exports = function(app){
     app.get('/', homeController.index);
 
@@ -20,7 +21,8 @@ module.exports = function(app){
     app.get('/:category/:subcategory/:category_product', categoryController.category_product);
     app.get('/:category/:subcategory', categoryController.subcategory);
     app.get('/:category', categoryController.index);
-    app.post('/api/getProductById', productController.getProductById);
+    require('./api/api.js')(app)
+    /*app.post('/api/getProductById', productController.getProductById);
     app.post('/api/getCategories', categoryController.getCategories); //AUTHORIZATION REQUIRED
     app.post('/api/getCategory_Products', categoryController.getCategory_Products); //AUTHORIZATION REQUIRED
     app.post('/api/updateUser', userController.authenticate,userController.updateUser); //AUTHORIZATION REQUIRED
@@ -40,5 +42,5 @@ module.exports = function(app){
     app.post('/api/getBasketProducts',userController.authenticate,userController.getBasketProducts)
     app.post('/api/removeItemFromBasket',userController.authenticate,userController.removeItemFromBasket)
     app.post('/api/removeItemFromWishlist',userController.authenticate,userController.removeItemFromWishlist)
-    app.post('/api/getUserOrders/',userController.authenticate,userController.getUserOrders)
+    app.post('/api/getUserOrders/',userController.authenticate,userController.getUserOrders)*/
 }

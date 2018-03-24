@@ -17,6 +17,6 @@ app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-require('./config/routes.js')(app)
+require('./routes/routes.js')(app)
 
 app.listen(80, () => console.log('Example app listening on port 80!'))
