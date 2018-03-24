@@ -173,7 +173,7 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
         }).then(function (response) {
             var info = response.data.info
             var status = response.data.success
-
+            
             if (status) {
                 if (info) {
                     $scope.alreadyInBasketAlert = true
@@ -181,6 +181,7 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
                         $scope.alreadyInBasketAlert = false
                     }, 2000);
                 } else {
+                    angular.element('#basketCount')[0].innerText++;
                     $scope.basketAlert = true
                     $timeout(function () {
                         $scope.basketAlert = false
@@ -202,7 +203,7 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
         }).then(function (response) {
             var info = response.data.info
             var status = response.data.success
-
+            
             if (status) {
                 if (info) {
                     $scope.alreadyInWishlistAlert = true
@@ -210,6 +211,7 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
                         $scope.alreadyInWishlistAlert = false
                     }, 2000);
                 } else {
+                    angular.element('#wishlistCount')[0].innerText++;
                     $scope.wishlistAlert = true
                     $timeout(function () {
                         $scope.wishlistAlert = false

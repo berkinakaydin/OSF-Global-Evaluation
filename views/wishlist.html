@@ -40,11 +40,11 @@
                         <li ng-repeat="item in navbarObjects">
                             <a name="wishlist" ng-if="item.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer">
                                 <span class="glyphicon glyphicon-star"></span> {{item.text}}
-                                <p class="rounded" style="float: right;text-align:center;margin-left: 5px;"> {{item.count}}</p>
+                                <p id='wishlistCount' class="rounded" style="float: right;text-align:center;margin-left: 5px;"> {{item.count}}</p>
                             </a>
                             <a name="basket" ng-if="item.type === 'basket'" ng-click="basket()" style="cursor:pointer">
                                 <span class="glyphicon glyphicon-shopping-cart"></span> {{item.text}}
-                                <p class="rounded" style="float: right;text-align:center;margin-left: 5px;"> {{item.count}}</p>
+                                <p id='basketCount' class="rounded" style="float: right;text-align:center;margin-left: 5px;"> {{item.count}}</p>
                             </a>
                             <a name="profile" ng-if="item.type === 'profile'" ng-click="profile()" style="cursor:pointer">{{item.text}}</a>
                             <a name="logout" ng-if="item.type === 'logout'" ng-click="logout()" style="cursor:pointer">{{item.text}}</a>
@@ -86,10 +86,10 @@
                     <span class="glyphicon glyphicon-plus"></span> Add Basket
                 </button>
             </div>
-            <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="basketAlert">
+            <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="basketAlert == product.name">
                 <strong>Confirm!</strong> This product has been added to your basket.
             </div>
-            <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInBasketAlert">
+            <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInBasketAlert == product.name">
                     <strong>Hey!</strong> This product is already in your basket.
                 </div>
             <hr>

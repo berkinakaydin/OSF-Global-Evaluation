@@ -19,7 +19,6 @@ app.controller('basketController', ['$scope', 'basketService','userService', fun
     })
     
 
-
     $scope.products = []
     response.then(function (response) {
         $scope.total = 0
@@ -50,7 +49,7 @@ app.controller('basketController', ['$scope', 'basketService','userService', fun
                     id : products[i].id,
                     image: 'images/' + imagePath(color, size)
                 }
-                $scope.total += product.price
+                $scope.total += parseFloat(product.price.toFixed(2))
                 $scope.currency = 'USD'
                 $scope.products.push(product)
             }
@@ -113,7 +112,8 @@ app.controller('wishlistController', ['$timeout', '$scope', 'basketService', fun
                     color : products[i].color,
                     image: 'images/' + imagePath(color, size)
                 }
-                $scope.total += product.price
+                console.log(product.price)
+                $scope.total += parseFloat(product.price.toFixed(2))
                 $scope.currency = 'USD'
                 $scope.products.push(product)
             }
@@ -139,15 +139,15 @@ app.controller('wishlistController', ['$timeout', '$scope', 'basketService', fun
         var response = basketService.addItemToBasket(token,pid,color,size)
 
         response.then(function(response){
-            var info = response.data.info
-            if (info) {
-                $scope.alreadyInBasketAlert = true
+            if (response.data.info) {
+                $scope.alreadyInBasketAlert = product.name
                 $timeout(function () {
                     $scope.alreadyInBasketAlert = false
                 }, 2000);
             }
             else{
-                $scope.basketAlert = true
+                $scope.basketAlert = product.name
+                angular.element('#basketCount')[0].innerText++;
                 $timeout(function () {
                     $scope.basketAlert = false
                 }, 2000);
