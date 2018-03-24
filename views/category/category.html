@@ -66,20 +66,22 @@
             <title>
                     {{title}}
                 </title>
+            <div class="row">
+                    <div id=category class="col-md-6" ng-repeat="category in categories">
 
-        <div id=category class="col-md-6" ng-repeat="category in categories">
-
-            <div id='image'>
-                <img ng-src="{{category.image}}" style="max-width: 100%; ">
+                            <div id='image'>
+                                <img ng-src="{{category.image}}" style="max-width: 100%; ">
+                            </div>
+                            <div id='information'>
+                                <p>
+                                    {{category.name}} {{category.page_description}}
+                
+                                </p>
+                            </div>
+                            <a ng-href="{{category.url}}" class="btn btn-primary" role="button">Go</a>
+                        </div>
             </div>
-            <div id='information'>
-                <p>
-                    {{category.name}} {{category.page_description}}
-
-                </p>
-            </div>
-            <a ng-href="{{category.url}}" class="btn btn-primary" role="button">Go</a>
-        </div>
+ 
     </div>
 </body>
 

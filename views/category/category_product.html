@@ -9,9 +9,6 @@
     <script src="/js/userFactory.js" type="text/javascript"></script>
     <script src="/js/headerHandler.js" type="text/javascript"></script>
     <script src="/js/categoryHandler.js" type="text/javascript"></script>
-
-    <title>
-    </title>
 </head>
 
 <body ng-app="category">
@@ -64,8 +61,11 @@
         </div>
     </header>
 
-    <div id='main' ng-controller="productController">
-        <div id=categories class="container">
+    <div id='main' ng-controller="productController"  class="container">
+            <title>
+                    {{title}}
+                </title>
+        <div class="row">
                 <div id=category class="col-md-6" ng-repeat='product in products'>
                     <div class="card mb-6 box-shadow">
                         <div id='image'>

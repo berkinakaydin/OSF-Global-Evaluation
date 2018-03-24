@@ -312,9 +312,10 @@ exports.updateUser = function (req, res) {
             }, function (err, user) { //QUERIED RESULTS FROM 
                 var user = user[0]
                 user.set({
-                    name: name,
-                    surname: surname,
-                    email: email
+                    email: (typeof email != 'undefined') ? email : user.email,
+                    name: (typeof name != 'undefined') ? name : user.name,
+                    surname: (typeof surname != 'undefined') ? surname : user.surname,
+                    emailVerify: false
                 })
                 user.save(function (err, updatedUser) {
                     if (err) {
@@ -334,6 +335,7 @@ exports.updateUser = function (req, res) {
             })
         }
     })
+
 }
 
 exports.verification = function (req, res) {
@@ -365,7 +367,9 @@ exports.checkout = function (req, res) {
         var token = req.body.token
         var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
         var username = user.username
-        basketModel.findOneAndRemove({ 'userId': username},function (err, basket) {
+        basketModel.findOneAndRemove({
+            'userId': username
+        }, function (err, basket) {
             if (basket) {
                 userModel.findOne({
                     'username': username
@@ -386,15 +390,17 @@ exports.checkout = function (req, res) {
                         mm = '0' + mm
                     }
 
-                    today = mm + '/' + dd + '/' + yyyy + ' ' + hour + ':' + minute; 
+                    today = mm + '/' + dd + '/' + yyyy + ' ' + hour + ':' + minute;
 
                     var orderEntity = new orderModel()
                     orderEntity.date = today
                     orderEntity.products = basket.products
-                    orderEntity.save(function(err,order) {
-                        user.orderHistory.push({'orderId' : order.id})
+                    orderEntity.save(function (err, order) {
+                        user.orderHistory.push({
+                            'orderId': order.id
+                        })
                         user.save()
-                     });
+                    });
 
                     for (var i = 0; i < basket.products.length; i++) {
                         var itemName = basket.products[i].name
@@ -457,22 +463,31 @@ exports.checkout = function (req, res) {
 
 }
 
-exports.getUserOrders = function(req,res){
+exports.getUserOrders = function (req, res) {
     var token = req.body.token
     var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
     var username = user.username
 
 
-    userModel.findOne({ username }, async function (err, user) {
+    userModel.findOne({
+        username
+    }, async function (err, user) {
         if (!user) return;
         const orders = [];
-        for (const { orderId: id } of user.orderHistory) {
-          const order = await orderModel.findOne({ id }).exec();
-          orders.push(order);
+        for (const {
+                orderId: id
+            } of user.orderHistory) {
+            const order = await orderModel.findOne({
+                id
+            }).exec();
+            orders.push(order);
         }
-        
-        res.json({success:true,orders:orders})
-      })
+
+        res.json({
+            success: true,
+            orders: orders
+        })
+    })
 }
 
 exports.isEmailExist = function (req, res) {

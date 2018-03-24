@@ -10,7 +10,11 @@ app.controller('loginController',['$scope','$timeout','userService','loginServic
             if (response.data.success=== true) {              
                 var token = response.data.token
                 localStorage.setItem('jwt',token)
-                location.href = "/";
+                $("#modal").modal()
+                $timeout(function() {
+                    location.href = "/";
+                 }, 2000);                       
+                
             } else {          
                 if(response.data.error === true){       
                     $scope.alert = true
