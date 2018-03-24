@@ -27,6 +27,23 @@ exports.getCategories = function (req, res) {
     })
 }
 
+exports.search = function(req,res){
+    if(req.method === 'POST'){
+        var query = req.body.search
+        productModel.find({'name' : { "$regex": query, "$options": "i" }},function(err,products){
+            if(products){
+                res.json({success:true,result:products})
+            }
+            else{
+                res.json({success:false,result:{}})
+            }         
+        })
+    }
+    else{
+        res.render('search')
+    }
+}
+
 exports.getCategory_Products = function(req,res){
     
     var categoryId = req.body.categoryId

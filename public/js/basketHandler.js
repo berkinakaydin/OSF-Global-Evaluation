@@ -37,7 +37,6 @@ app.controller('basketController', ['$scope', 'basketService','userService', fun
                         }
                         return products[i].image_groups[0].images[0].link  //not found
                     } else {
-                        console.log(products[i])
                         return products[i].image_groups[0].images[0].link
                     }
                 }
@@ -50,6 +49,7 @@ app.controller('basketController', ['$scope', 'basketService','userService', fun
                     image: 'images/' + imagePath(color, size)
                 }
                 $scope.total += parseFloat(product.price.toFixed(2))
+                parseFloat($scope.total.toFixed(2))
                 $scope.currency = 'USD'
                 $scope.products.push(product)
             }
@@ -112,8 +112,8 @@ app.controller('wishlistController', ['$timeout', '$scope', 'basketService', fun
                     color : products[i].color,
                     image: 'images/' + imagePath(color, size)
                 }
-                console.log(product.price)
                 $scope.total += parseFloat(product.price.toFixed(2))
+                parseFloat($scope.total.toFixed(2))
                 $scope.currency = 'USD'
                 $scope.products.push(product)
             }

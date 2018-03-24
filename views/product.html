@@ -75,7 +75,8 @@
 
                     <img ng-src={{selectedImage}}>
                     <div id='dropdown'>
-                        <select ng-if='colors.length > 0' ng-change="colorSelected()" ng-model="selectedColor" ng-options="s.name for s in colors" ng-init="selectedColor=colors[0]"></select>
+                        <select ng-if='colors.length > 0' ng-change="colorSelected()" ng-model="selectedColor" ng-options="s.name for s in colors"
+                            ng-init="selectedColor=colors[0]"></select>
                         <select ng-if='sizes.length > 0' ng-change="sizeSelected()" ng-model="selectedSize" ng-options="s for s in sizes" ng-init="selectedSize=sizes[0]"></select>
                     </div>
 
@@ -100,35 +101,36 @@
                         <p>
                             {{page_description}}
                         </p>
+                        <div id='buttons' ng-controller="buttonController">
+                            <button ng-click='addBasket(id)' type="button" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-shopping-cart"></span> Add To Basket
+                            </button>
+
+                            <button ng-click='addWishlist(id)' type="button" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-star"></span> Add To Wishlist
+                            </button>
+
+
+                            <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="basketAlert">
+                                <strong>Confirm!</strong> This product has been added to your basket.
+                            </div>
+
+                            <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="wishlistAlert">
+                                <strong>Confirm!</strong> This product has been added to your wishlist.
+                            </div>
+
+                            <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInBasketAlert">
+                                <strong>Hey!</strong> This product is already in your basket.
+                            </div>
+
+                            <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInWishlistAlert">
+                                <strong>Hey!</strong> This product is already in your wishlist.
+                            </div>
+
+                        </div>
                     </div>
 
-                    <div id='buttons' ng-controller="buttonController">
-                        <button ng-click='addBasket()' type="button" class="btn btn-default btn-sm">
-                            <span class="glyphicon glyphicon-shopping-cart"></span> Add To Basket
-                        </button>
 
-                        <button ng-click='addWishlist()' type="button" class="btn btn-default btn-sm">
-                            <span class="glyphicon glyphicon-star"></span> Add To Wishlist
-                        </button>
-
-
-                        <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="basketAlert">
-                            <strong>Confirm!</strong> This product has been added to your basket.
-                        </div>
-
-                        <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="wishlistAlert">
-                            <strong>Confirm!</strong> This product has been added to your wishlist.
-                        </div>
-
-                        <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInBasketAlert">
-                            <strong>Hey!</strong> This product is already in your basket.
-                        </div>
-
-                        <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInWishlistAlert">
-                            <strong>Hey!</strong> This product is already in your wishlist.
-                        </div>
-
-                    </div>
 
                 </div>
 

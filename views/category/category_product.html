@@ -66,16 +66,27 @@
             {{title}}
         </title>
         <div class="row">
-            <div id=category class="col-md-6" ng-repeat='product in products'>
-                <div class="card mb-6 box-shadow" style="border: .5px solid #A9A9A9; text-align:center; border-radius: 10px; margin-bottom:10px">
-                    <h4>
-                        {{product.name}}
-                    </h4>
-                    <div id='image'>
-                        <img ng-src="{{product.image}}" style="max-width: 100% !important; height: auto;width: auto;">
+            <div id=category class="col-md-6" ng-repeat='product in products' style="margin-bottom:30px">
+                <div class="card mb-12 box-shadow" style=" text-align:center;">
+                    <div>
+                        <h4>
+                            {{product.name}}
+                        </h4>
                     </div>
 
-                    <a ng-href="{{product.url}}" class="btn btn-primary" role="button">Go {{product.name}}</a>
+                    <div id='image' class="col-md-6">
+                        <img ng-src="{{product.image}}" style="max-width: 100% !important; height: auto;width: auto;">
+                    </div>
+                    <div id="information" class="col-md-6">
+                        <h5>
+                            {{product.price}} USD
+                        </h5>
+                        <p>
+                            {{product.page_description}}
+                        </p>
+                    </div>
+
+                    <a ng-href="{{product.url}}" class="btn btn-primary" role="button">More Info</a>
                     </p>
                 </div>
             </div>

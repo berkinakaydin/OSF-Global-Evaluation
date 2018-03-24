@@ -756,8 +756,6 @@ exports.removeItemFromBasket = function (req, res, next) {
     var user = userDBModel.User().methods.verifyJWT(token)
     var username = user.username
     var pid = req.body.pid
-    console.log(pid)
-    console.log(username)
     basketModel.findOne({
         'userId': username
     }, function (err, user) {
@@ -778,8 +776,6 @@ exports.removeItemFromWishlist = function (req, res, next) {
     var user = userDBModel.User().methods.verifyJWT(token)
     var username = user.username
     var pid = req.body.pid
-    console.log(pid)
-    console.log(username)
     wishlistModel.findOne({
         'userId': username
     }, function (err, user) {

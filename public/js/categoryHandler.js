@@ -53,7 +53,9 @@ app.controller('productController', ['$scope', 'categoryService', '$location', f
                 var product = {
                     name : products[i].name,
                     image : '/images/' + products[i].image_groups[0].images[0].link,
-                    url : $location.absUrl() + '/' +  products[i].id
+                    url : $location.absUrl() + '/' +  products[i].id,
+                    price : products[i].price,
+                    page_description : products[i].page_description
                 }
                 $scope.products.push(product)
             }

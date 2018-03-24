@@ -5,7 +5,7 @@ app.controller('colorController', function ($scope, productService) {
     var product = productService.product()
 
     product.then(function (product) {
-
+        $scope.id = product.id
         var sizes = []
 
         for (var i = 0; i < product.image_groups.length; i++) {
@@ -156,24 +156,17 @@ app.controller('productInformationController', function ($scope, productService)
 })
 
 app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 'productService', function ($timeout, $http, $scope, $location, productService) {
-    var url = $location.absUrl().split('/').pop()
     var token = localStorage.getItem('jwt')
 
-
-    $scope.addBasket = function () {
+    $scope.addBasket = function (itemId) {
         var color = (productService.color) ? productService.color : 'default'
         var size = (productService.size) ? productService.size : 'default'
 
-        var itemId = url;
-        $http.post('/api/addBasket', {
-            token: token,
-            itemId: itemId,
-            color: color,
-            size: size
-        }).then(function (response) {
-            var info = response.data.info
-            var status = response.data.success
-            console.log(response)
+        var response = productService.AddBasket(token,itemId,color,size);
+
+        response.then(function(response){
+            var info = response.info
+            var status = response.success
             if (status) {
                 if (info) {
                     $scope.alreadyInBasketAlert = true
@@ -191,18 +184,15 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
         })
     }
 
-    $scope.addWishlist = function () {
-        var itemId = url;
+    $scope.addWishlist = function (itemId) {
         var color = (productService.color) ? productService.color : 'default'
         var size = (productService.size) ? productService.size : 'default'
-        $http.post('/api/addWishlist', {
-            token: token,
-            itemId: itemId,
-            color: color,
-            size: size
-        }).then(function (response) {
-            var info = response.data.info
-            var status = response.data.success
+
+        var response = productService.AddWishlist(token,itemId,color,size)
+
+        response.then(function(response){
+            var info = response.info
+            var status = response.success
             
             if (status) {
                 if (info) {
@@ -218,7 +208,6 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
                     }, 2000);
                 }
             }
-
         })
     }
 }])
@@ -268,8 +257,6 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
                 $scope.reviews.push(review)
 
             }
-            console.log($scope.reviews)
-
         }
     })
 
@@ -280,7 +267,6 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
         var message = $scope.message
         var url = $location.absUrl();
         var pid = url.split('/').pop()
-        console.log(message)
         if(typeof message != 'undefined' && message.length > 0){
             $http.post('/api/addReview', {
                 token: token,
@@ -334,6 +320,8 @@ app.factory('productService', ['$http', '$location', function ($http, $location)
     service.product = GetProduct
     service.AddReview = AddReview
     service.GetReview = GetReview
+    service.AddBasket = AddBasket
+    service.AddWishlist = AddWishlist
     return service
 
     //POST REQUEST TO GET PRODUCT
@@ -372,6 +360,28 @@ app.factory('productService', ['$http', '$location', function ($http, $location)
 
             return response.data
 
+        })
+    }
+
+    function AddBasket(token,itemId,color,size){
+        return $http.post('/api/addBasket', {
+            token: token,
+            itemId: itemId,
+            color: color,
+            size: size
+        }).then(function (response) {
+            return response.data
+        })
+    }
+
+    function AddWishlist(token,itemId,color,size){
+        return $http.post('/api/addWishlist', {
+            token: token,
+            itemId: itemId,
+            color: color,
+            size: size
+        }).then(function (response) {
+            return response.data
         })
     }
 }])

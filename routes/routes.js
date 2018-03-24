@@ -6,7 +6,7 @@ const userController = require('../controllers/userController')
 
 module.exports = function(app){
     app.get('/', homeController.index);
-
+    app.get('/search', categoryController.search);
     app.get('/login', userController.loginPage);
     app.get('/register', userController.registerPage);
     app.get('/profile',userController.profilePage); //AUTHORIZATION REQUIRED

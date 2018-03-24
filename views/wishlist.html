@@ -35,6 +35,13 @@
                             <a href="/{{category.url}}">{{category.text}}</a>
                         </li>
                     </ul>
+                    
+                    <ul class="nav navbar-nav" style="margin-top:8px">
+                            <form ng-submit="search()">
+                                <input id='search' type="text" class="form-control" placeholder="Search for..." style="display: inline-block;">
+                                <button class="btn btn-default" type="submit">Go!</button>            
+                            </form>
+                        </ul>
 
                     <ul class="nav navbar-nav navbar-right">
                         <li ng-repeat="item in navbarObjects">

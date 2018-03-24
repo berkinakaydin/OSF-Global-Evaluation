@@ -27,5 +27,5 @@ module.exports = function(app){
     app.post('/api/getUserOrders/',userController.authenticate,userController.getUserOrders)
     app.post('/api/addReview/',userController.authenticate,productController.addReview)
     app.post('/api/getReview/',productController.getReview)
-
+    app.post('/api/search', categoryController.search);
 }

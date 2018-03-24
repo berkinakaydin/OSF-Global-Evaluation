@@ -36,7 +36,7 @@ app.controller('headerController', ['$scope', 'userService', 'headerService', fu
     var headerButtons = headerService.getHeaderButtons()
 
     var categories = headerService.getCategories()
-    
+
     categories.then(function (categories) {
         $scope.categories = categories
     })
@@ -63,12 +63,38 @@ app.controller('headerController', ['$scope', 'userService', 'headerService', fu
         var token = localStorage.getItem('jwt')
         location.href = '/wishlist?token=' + token
     }
+
+    $scope.search = function(){
+        var search =angular.element('#search').val();
+        location.href = "/search?q=" + search
+    }
+}])
+
+app.controller('searchController',['$scope','$location','headerService', function($scope,$location,headerService){
+    var search =$location.absUrl().split('/').pop().split('=').pop()
+    var response = headerService.search(search)
+
+    $scope.results = []
+    response.then(function(response){
+        for(var i=0;i < response.result.length; i++){
+            var result = {
+                name : response.result[i].name,
+                price : response.result[i].price,
+                image : '/images/' + response.result[i].image_groups[0].images[0].link,
+                currency : response.result[i].currency,
+                category : response.result[i].primary_category_id,
+                id : response.result[i].id
+            }
+            $scope.results.push(result)
+        }
+    })
 }])
 
 app.factory('headerService', ['$http', function ($http) {
     var service = {}
     service.getHeaderButtons = getHeaderButtons
     service.getCategories = getCategories
+    service.search = search
 
     return service
 
@@ -136,6 +162,12 @@ app.factory('headerService', ['$http', function ($http) {
                 categories.push(category)
             }
             return categories
+        })
+    }
+
+    function search(search){
+        return $http.post('/api/search',{'search':search}).then(function (response) {
+            return response.data
         })
     }
 }])

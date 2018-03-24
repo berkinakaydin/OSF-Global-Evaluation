@@ -1,0 +1,142 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script src="/js/angular.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/js/userFactory.js" type="text/javascript"></script>
+    <script src="/js/headerHandler.js" type="text/javascript"></script>
+    <script src="/js/productHandler.js" type="text/javascript"></script>
+    <title>
+        OSF GLOBAL
+    </title>
+</head>
+
+<body ng-app='product'>
+    <header ng-controller="headerController">
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/" style="padding-top:3px">
+                        <img width="200" height="40" src="/images/logo.png" style="float:left">
+                    </a>
+                </div>
+
+                <div id='navbar' class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav">
+                        <li ng-repeat="category in categories">
+                            <a href="/{{category.url}}">{{category.text}}</a>
+                        </li>
+                    </ul>
+
+                    <ul class="nav navbar-nav" style="margin-top:8px">
+                        <form ng-submit="search()">
+                            <input id='search' type="text" class="form-control" placeholder="Search for..." style="display: inline-block;">
+                            <button class="btn btn-default" type="submit">Go!</button>
+                        </form>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li ng-repeat="item in navbarObjects">
+                            <a name="wishlist" ng-if="item.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer">
+                                <span class="glyphicon glyphicon-star"></span> {{item.text}}
+                                <p id='wishlistCount' class="rounded" style="float: right;text-align:center;margin-left: 5px;"> {{item.count}}</p>
+                            </a>
+                            <a name="basket" ng-if="item.type === 'basket'" ng-click="basket()" style="cursor:pointer">
+                                <span class="glyphicon glyphicon-shopping-cart"></span> {{item.text}}
+                                <p id='basketCount' class="rounded" style="float: right;text-align:center;margin-left: 5px;"> {{item.count}}</p>
+                            </a>
+                            <a name="profile" ng-if="item.type === 'profile'" ng-click="profile()" style="cursor:pointer">{{item.text}}</a>
+                            <a name="logout" ng-if="item.type === 'logout'" ng-click="logout()" style="cursor:pointer">{{item.text}}</a>
+                            <a ng-if="item.type === 'unAuth'" href='{{item.url}}'>{{item.text}}</a>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </nav>
+    </header>
+
+    <div id='main' class="container" ng-controller="searchController">
+        <div class="row" id='tags'>
+            <div class="col-md-3">
+                <h4>Images</h4>
+            </div>
+            <div class="col-md-3">
+                <h4>Name</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>Type</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>Price</h4>
+            </div>
+            <div class="col-md-1">
+                <h4>Cart</h4>
+            </div>
+            <div class="col-md-1">
+                <h4>Wishlist</h4>
+            </div>
+
+        </div>
+        <hr>
+        <div ng-repeat="result in results" ng-controller="buttonController">
+            <div class="row">
+
+                <div id='image' class="col-md-3">
+                    <img ng-src="{{result.image}}" style="max-width: 100px; ">
+                </div>
+
+                <div class="col-md-3">
+                    <a ng-href='/product/{{result.id}}'>
+                        <h3>{{result.name}}</h3>
+                    </a>
+                </div>
+                <div class="col-md-2">
+                    <h5 style="margin-top:30px">{{result.category}}</h5>
+                </div>
+                <div class="col-md-2">
+                    <h5 style="margin-top:30px">{{result.price}} {{result.currency}}</h5>
+                </div>
+                <div class="col-md-1">
+                    <button ng-click='addBasket(result.id)' type="button" class="btn btn-default btn-sm" style="margin-top:30px">
+                        <span class="glyphicon glyphicon-shopping-cart"></span>
+                    </button>
+                </div>
+
+                <div class="col-md-1">
+                    <button ng-click='addWishlist(result.id)' type="button" class="btn btn-default btn-sm" style="margin-top:30px">
+                        <span class="glyphicon glyphicon-star"></span>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="basketAlert">
+                    <strong>Confirm!</strong> This product has been added to your basket.
+                </div>
+
+                <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="wishlistAlert">
+                    <strong>Confirm!</strong> This product has been added to your wishlist.
+                </div>
+
+                <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInBasketAlert">
+                    <strong>Hey!</strong> This product is already in your basket.
+                </div>
+
+                <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInWishlistAlert">
+                    <strong>Hey!</strong> This product is already in your wishlist.
+                </div>
+            <hr>
+        </div>
+
+</body>
+
+</html>
