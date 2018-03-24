@@ -363,13 +363,65 @@ exports.checkout = function (req, res) {
         var token = req.body.token
         var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
         var username = user.username
+        basketModel.findOneAndRemove({ 'userId': username},function (err, basket) {
+            if (basket) {
+                userModel.findOne({
+                    'username': username
+                }, function (err, user) {
+                    var text = "\n"
+                    var today = new Date();
+                    var dd = today.getDate();
+                    var mm = today.getMonth() + 1; //January is 0!
+                    var yyyy = today.getFullYear();
+                    var hour = today.getHours()
+                    var minute = today.getMinutes()
+                    if (dd < 10) {
+                        dd = '0' + dd
+                    }
 
-        basketModel.remove({'userId' : username},function(err,basket){
-            if(!err){
-                res.json({success:true})
-            }
-            else{
-                res.json({success:false})
+                    if (mm < 10) {
+                        mm = '0' + mm
+                    }
+
+                    today = mm + '/' + dd + '/' + yyyy + ' ' + hour + ':' + minute; 
+
+                    for (var i = 0; i < basket.products.length; i++) {
+                        var itemName = basket.products[i].name
+                        text += itemName + "\n"
+                    }
+                    var transporter = nodemailer.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            user: 'osfmailer@gmail.com',
+                            pass: 'osfmailer123'
+                        }
+                    });
+
+                    var mailOptions = {
+                        from: 'osfmailer@gmail.com',
+                        to: user.email,
+                        subject: 'You Bought Some Items',
+                        text: 'You bought these items :' + text + today
+                    };
+
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log(error);
+                            res.json({
+                                success: false
+                            })
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                            res.json({
+                                success: true
+                            })
+                        }
+                    });
+                })
+            } else {
+                res.json({
+                    success: false
+                })
             }
         })
     } else {
