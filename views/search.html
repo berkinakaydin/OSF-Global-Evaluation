@@ -66,22 +66,22 @@
 
     <div id='main' class="container" ng-controller="searchController">
         <div class="row" id='tags'>
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-3">
                 <h4>Images</h4>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-3">
                 <h4>Name</h4>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 col-sm-2">
                 <h4>Type</h4>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 col-sm-2">
                 <h4>Price</h4>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1 col-sm-1">
                 <h4>Cart</h4>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1 col-sm-1">
                 <h4>Wishlist</h4>
             </div>
 
@@ -90,28 +90,28 @@
         <div ng-repeat="result in results" ng-controller="buttonController">
             <div class="row">
 
-                <div id='image' class="col-md-3">
+                <div id='image' class="col-md-3 col-sm-3">
                     <img ng-src="{{result.image}}" style="max-width: 100px; ">
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-3 col-sm-3">
                     <a ng-href='/product/{{result.id}}'>
                         <h3>{{result.name}}</h3>
                     </a>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 col-sm-2">
                     <h5 style="margin-top:30px">{{result.category}}</h5>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 col-sm-2">
                     <h5 style="margin-top:30px">{{result.price}} {{result.currency}}</h5>
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-1 col-sm-1">
                     <button ng-click='addBasket(result.id)' type="button" class="btn btn-default btn-sm" style="margin-top:30px">
                         <span class="glyphicon glyphicon-shopping-cart"></span>
                     </button>
                 </div>
 
-                <div class="col-md-1">
+                <div class="col-md-1 col-sm-1">
                     <button ng-click='addWishlist(result.id)' type="button" class="btn btn-default btn-sm" style="margin-top:30px">
                         <span class="glyphicon glyphicon-star"></span>
                     </button>
@@ -119,19 +119,19 @@
 
             </div>
 
-            <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="basketAlert">
+            <div class="col-md-6 col-sm-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="basketAlert">
                     <strong>Confirm!</strong> This product has been added to your basket.
                 </div>
 
-                <div class="col-md-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="wishlistAlert">
+                <div class="col-md-6 col-sm-6 alert alert-info ng-cloak" style="float: none;  margin: 0 auto;" ng-show="wishlistAlert">
                     <strong>Confirm!</strong> This product has been added to your wishlist.
                 </div>
 
-                <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInBasketAlert">
+                <div class="col-md-6 col-sm-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInBasketAlert">
                     <strong>Hey!</strong> This product is already in your basket.
                 </div>
 
-                <div class="col-md-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInWishlistAlert">
+                <div class="col-md-6 col-sm-6 alert alert-warning ng-cloak" style="float: none;  margin: 0 auto;" ng-show="alreadyInWishlistAlert">
                     <strong>Hey!</strong> This product is already in your wishlist.
                 </div>
             <hr>

@@ -181,6 +181,12 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
                     }, 2000);
                 }
             }
+            else{
+                $scope.authorizedAlert = true
+                $timeout(function () {
+                    $scope.authorizedAlert = false
+                }, 2000);
+            }
         })
     }
 
@@ -207,6 +213,11 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
                         $scope.wishlistAlert = false
                     }, 2000);
                 }
+            }else{
+                $scope.authorizedAlert = true
+                $timeout(function () {
+                    $scope.authorizedAlert = false
+                }, 2000);
             }
         })
     }

@@ -66,8 +66,6 @@
         </div>
     </header>
 
-
-
     <div id='main'>
         <div id=product class="container" ng-controller="colorController">
             <div id='row' class="row">
@@ -127,10 +125,12 @@
                                 <strong>Hey!</strong> This product is already in your wishlist.
                             </div>
 
+                            <div class="col-md-6 alert alert-danger ng-cloak" style="float: none;  margin: 0 auto;" ng-show="authorizedAlert">
+                                    <strong>Hey!</strong> You must log in to do this operation.
+                                </div>
+
                         </div>
                     </div>
-
-
 
                 </div>
 
