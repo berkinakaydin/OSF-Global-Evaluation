@@ -27,7 +27,8 @@ var User = new Schema({
         required: [true, "can't be blank"],
         index: true,
         trim: true
-    }
+    },
+    orderHistory : [{orderId : String}]
 });
 
 User.plugin(uniqueValidator, {

@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const basketDBModel = require('../models/basket.js')
 const wishlistDBModel = require('../models/wishlist.js')
 const productDBModel = require('../models/product.js')
+const orderDBModel = require('../models/order.js')
 const userDBModel = require('../models/user.js')
 const nodemailer = require('nodemailer');
 
@@ -11,6 +12,7 @@ var userModel = new userDBModel.Schema();
 var basketModel = new basketDBModel.Schema();
 var wishlistModel = new wishlistDBModel.Schema();
 var productModel = new productDBModel.Schema();
+var orderModel = new orderDBModel.Schema();
 
 
 exports.loginPage = function (req, res) {
@@ -368,6 +370,7 @@ exports.checkout = function (req, res) {
                 userModel.findOne({
                     'username': username
                 }, function (err, user) {
+
                     var text = "\n"
                     var today = new Date();
                     var dd = today.getDate();
@@ -384,6 +387,15 @@ exports.checkout = function (req, res) {
                     }
 
                     today = mm + '/' + dd + '/' + yyyy + ' ' + hour + ':' + minute; 
+
+                    var orderEntity = new orderModel()
+                    orderEntity.userId = user.username
+                    orderEntity.date = today
+                    orderEntity.products = basket.products
+                    orderEntity.save(function(err,order) {
+                        user.orderHistory.push({'orderId' : order.id})
+                        user.save()
+                     });
 
                     for (var i = 0; i < basket.products.length; i++) {
                         var itemName = basket.products[i].name
@@ -406,7 +418,6 @@ exports.checkout = function (req, res) {
 
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
-                            console.log(error);
                             res.json({
                                 success: false
                             })
