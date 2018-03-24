@@ -22,6 +22,19 @@ app.controller('profileController', ['$scope', '$timeout', 'userService', functi
             email : user.email,
             username : user.username
         }
+
+
+        var orderResponse = userService.GetUserOrders(token)
+
+        orderResponse.then(function(orderResponse){
+            var orders = orderResponse.orders
+            var order_products = orders.products
+            console.log(orders)
+            $scope.orderHistory = order_products
+            $scope.orders = orders
+        })
+
+
     })
  
     $scope.update = function () {

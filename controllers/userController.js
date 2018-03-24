@@ -389,7 +389,6 @@ exports.checkout = function (req, res) {
                     today = mm + '/' + dd + '/' + yyyy + ' ' + hour + ':' + minute; 
 
                     var orderEntity = new orderModel()
-                    orderEntity.userId = user.username
                     orderEntity.date = today
                     orderEntity.products = basket.products
                     orderEntity.save(function(err,order) {
@@ -456,6 +455,24 @@ exports.checkout = function (req, res) {
         }
     }
 
+}
+
+exports.getUserOrders = function(req,res){
+    var token = req.body.token
+    var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
+    var username = user.username
+
+
+    userModel.findOne({ username }, async function (err, user) {
+        if (!user) return;
+        const orders = [];
+        for (const { orderId: id } of user.orderHistory) {
+          const order = await orderModel.findOne({ id }).exec();
+          orders.push(order);
+        }
+        
+        res.json({success:true,orders:orders})
+      })
 }
 
 exports.isEmailExist = function (req, res) {

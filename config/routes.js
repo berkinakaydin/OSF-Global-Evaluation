@@ -40,4 +40,5 @@ module.exports = function(app){
     app.post('/api/getBasketProducts',userController.authenticate,userController.getBasketProducts)
     app.post('/api/removeItemFromBasket',userController.authenticate,userController.removeItemFromBasket)
     app.post('/api/removeItemFromWishlist',userController.authenticate,userController.removeItemFromWishlist)
+    app.post('/api/getUserOrders/',userController.authenticate,userController.getUserOrders)
 }

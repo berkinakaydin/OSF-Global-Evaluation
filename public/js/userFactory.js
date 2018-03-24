@@ -3,6 +3,7 @@ var app = angular.module('userFactory', []);
 app.factory('userService', ['$http', function ($http) {
     var service = {};
     service.GetByToken = GetByToken;
+    service.GetUserOrders = GetUserOrders;
     service.Create = Create;
     service.Update = Update;
     service.Login = Login;
@@ -42,6 +43,10 @@ app.factory('userService', ['$http', function ($http) {
         return $http.post('/api/updateUser/' ,{token:token, user:user}).then(handleSuccess, handleError('Error updating user'));
     }
 
+    function GetUserOrders(token){
+        return $http.post('/api/getUserOrders/' ,{token:token}).then(handleSuccess, handleError('Error updating user'));
+    }
+    
     function handleSuccess(res) {
         return res.data;
     }
