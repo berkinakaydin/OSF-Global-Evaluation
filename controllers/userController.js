@@ -321,7 +321,7 @@ exports.updateUser = function (req, res) {
                     email: (typeof email != 'undefined') ? email : user.email,
                     name: (typeof name != 'undefined') ? name : user.name,
                     surname: (typeof surname != 'undefined') ? surname : user.surname,
-                    emailVerify: false
+                    emailVerify: (typeof email == 'undefined')?user.emailVerify:false
                 })
                 user.save(function (err, updatedUser) {
                     if (err) {
