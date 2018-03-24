@@ -173,7 +173,7 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
         }).then(function (response) {
             var info = response.data.info
             var status = response.data.success
-            
+            console.log(response)
             if (status) {
                 if (info) {
                     $scope.alreadyInBasketAlert = true

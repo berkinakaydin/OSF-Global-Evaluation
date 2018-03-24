@@ -61,25 +61,24 @@
         </div>
     </header>
 
-    <div id='main' ng-controller="productController"  class="container">
-            <title>
-                    {{title}}
-                </title>
+    <div id='main' ng-controller="productController" class="container">
+        <title>
+            {{title}}
+        </title>
         <div class="row">
-                <div id=category class="col-md-6" ng-repeat='product in products'>
-                    <div class="card mb-6 box-shadow">
-                        <div id='image'>
-                            <img ng-src="{{product.image}}" style="max-width: 100% !important; height: auto;width: auto;">
-                        </div>
-                        <div id='information'>
-                            <p>
-                                {{product.name}}
-                            </p>
-                        </div>
-                        <a ng-href="{{product.url}}" class="btn btn-primary" role="button">Go</a>
-                        </p>
+            <div id=category class="col-md-6" ng-repeat='product in products'>
+                <div class="card mb-6 box-shadow" style="border: .5px solid #A9A9A9; text-align:center; border-radius: 10px; margin-bottom:10px">
+                    <h4>
+                        {{product.name}}
+                    </h4>
+                    <div id='image'>
+                        <img ng-src="{{product.image}}" style="max-width: 100% !important; height: auto;width: auto;">
                     </div>
+
+                    <a ng-href="{{product.url}}" class="btn btn-primary" role="button">Go {{product.name}}</a>
+                    </p>
                 </div>
+            </div>
         </div>
     </div>
 </body>

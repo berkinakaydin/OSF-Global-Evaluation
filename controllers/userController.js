@@ -264,23 +264,29 @@ exports.getUser = function (req, res) {
 
 exports.headerInformation = function (req, res) {
     var token = req.body.token
-    var user = userDBModel.User().methods.verifyJWT(token)
-    var username = user.username
+    if (token) {
+        var user = userDBModel.User().methods.verifyJWT(token)
+        var username = user.username
 
-    basketModel.findOne({
-        'userId': username
-    }, function (err, basket) {
-        wishlistModel.findOne({
+        basketModel.findOne({
             'userId': username
-        }, function (err, wishlist) {
-            res.json({
-                username: username,
-                basket: (basket != null) ? basket : null,
-                wishlist: (wishlist != null) ? wishlist : null,
-                success: true
+        }, function (err, basket) {
+            wishlistModel.findOne({
+                'userId': username
+            }, function (err, wishlist) {
+                res.json({
+                    username: username,
+                    basket: (basket != null) ? basket : null,
+                    wishlist: (wishlist != null) ? wishlist : null,
+                    success: true
+                })
             })
         })
-    })
+    } else{
+        res.sendStatus(201)
+    }
+        
+
 }
 
 exports.updateUser = function (req, res) {
@@ -796,12 +802,12 @@ exports.authenticate = function (req, res, next) {
         if (user) {
             return next()
         } else {
-            return res.json({
+            return res.status(401).json({
                 success: false
             })
         }
     } else {
-        return res.json({
+        return res.status(401).json({
             success: false
         })
 

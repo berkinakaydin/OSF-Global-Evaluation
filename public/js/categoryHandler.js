@@ -57,7 +57,6 @@ app.controller('productController', ['$scope', 'categoryService', '$location', f
                 }
                 $scope.products.push(product)
             }
-            console.log(response)
             $scope.title = response.title
         }
     })

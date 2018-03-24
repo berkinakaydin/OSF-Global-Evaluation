@@ -11,7 +11,7 @@ module.exports = function(app){
     app.post('/api/emailVerify', userController.authenticate,userController.emailVerify); //AUTHORIZATION REQUIRED
     app.post('/api/forgotPasswordVerify', userController.authenticate,userController.forgotPasswordVerify); //AUTHORIZATION REQUIRED
     app.post('/api/forgotPassword', userController.forgotPassword); 
-    app.post('/api/headerInformation', userController.authenticate, userController.headerInformation)  //AUTHORIZATION REQUIRED
+    app.post('/api/headerInformation', userController.headerInformation)  //AUTHORIZATION REQUIRED
     app.post('/api/getUser', userController.authenticate, userController.getUser)  //AUTHORIZATION REQUIRED
     app.post('/api/register', userController.register);
     app.post('/api/login', userController.login);
