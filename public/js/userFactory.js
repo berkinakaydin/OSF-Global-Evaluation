@@ -11,8 +11,10 @@ app.factory('userService', ['$http', function ($http) {
 
     return service;
 
-    function GetByToken(token){
-        return $http.post('/api/getUser/', {token:token}).then(handleSuccess, handleError('Error getting user by username'));
+    function GetByToken(token) {
+        return $http.post('/api/getUser/', {
+            token: token
+        }).then(handleSuccess, handleError('Error getting user by username'));
     }
 
     function Create(user) {
@@ -40,13 +42,18 @@ app.factory('userService', ['$http', function ($http) {
     }
 
     function Update(user, token) {
-        return $http.post('/api/updateUser/' ,{token:token, user:user}).then(handleSuccess, handleError('Error updating user'));
+        return $http.post('/api/updateUser/', {
+            token: token,
+            user: user
+        }).then(handleSuccess, handleError('Error updating user'));
     }
 
-    function GetUserOrders(token){
-        return $http.post('/api/getUserOrders/' ,{token:token}).then(handleSuccess, handleError('Error updating user'));
+    function GetUserOrders(token) {
+        return $http.post('/api/getUserOrders/', {
+            token: token
+        }).then(handleSuccess, handleError('Error updating user'));
     }
-    
+
     function handleSuccess(res) {
         return res.data;
     }

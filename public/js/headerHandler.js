@@ -1,6 +1,6 @@
-app = angular.module('header',['userFactory'])
+app = angular.module('header', ['userFactory'])
 
-app.controller('urlController',['$scope', '$location', function ($scope, $location){
+app.controller('urlController', ['$scope', '$location', function ($scope, $location) {
     var parsedURL = $location.absUrl().split('/');
     var urls = []
     urls.push({
@@ -64,26 +64,26 @@ app.controller('headerController', ['$scope', 'userService', 'headerService', fu
         location.href = '/wishlist?token=' + token
     }
 
-    $scope.search = function(){
-        var search =angular.element('#search').val();
+    $scope.search = function () {
+        var search = angular.element('#search').val();
         location.href = "/search?q=" + search
     }
 }])
 
-app.controller('searchController',['$scope','$location','headerService', function($scope,$location,headerService){
-    var search =$location.absUrl().split('/').pop().split('=').pop()
+app.controller('searchController', ['$scope', '$location', 'headerService', function ($scope, $location, headerService) {
+    var search = $location.absUrl().split('/').pop().split('=').pop()
     var response = headerService.search(search)
 
     $scope.results = []
-    response.then(function(response){
-        for(var i=0;i < response.result.length; i++){
+    response.then(function (response) {
+        for (var i = 0; i < response.result.length; i++) {
             var result = {
-                name : response.result[i].name,
-                price : response.result[i].price,
-                image : '/images/' + response.result[i].image_groups[0].images[0].link,
-                currency : response.result[i].currency,
-                category : response.result[i].primary_category_id,
-                id : response.result[i].id
+                name: response.result[i].name,
+                price: response.result[i].price,
+                image: '/images/' + response.result[i].image_groups[0].images[0].link,
+                currency: response.result[i].currency,
+                category: response.result[i].primary_category_id,
+                id: response.result[i].id
             }
             $scope.results.push(result)
         }
@@ -98,11 +98,13 @@ app.factory('headerService', ['$http', function ($http) {
 
     return service
 
-    function getHeaderButtons(){
+    function getHeaderButtons() {
         var token = localStorage.getItem('jwt')
         var objects = []
 
-        return $http.post('/api/headerInformation', {'token': token}).then(function (response) {
+        return $http.post('/api/headerInformation', {
+            'token': token
+        }).then(function (response) {
             if (response.data.success === true) {
                 var username = response.data.username
                 var basket = response.data.basket
@@ -119,12 +121,12 @@ app.factory('headerService', ['$http', function ($http) {
                 var basket = {
                     type: 'basket',
                     text: 'Basket ',
-                    count : (basket == null)?0:basket.products.length
+                    count: (basket == null) ? 0 : basket.products.length
                 }
                 var wishlist = {
                     type: 'wishlist',
                     text: 'Wish List',
-                    count : (wishlist == null)?0:wishlist.products.length
+                    count: (wishlist == null) ? 0 : wishlist.products.length
                 }
                 objects.push(basket)
                 objects.push(wishlist)
@@ -152,21 +154,23 @@ app.factory('headerService', ['$http', function ($http) {
     function getCategories() {
         var categories = []
         return $http.post('/api/getCategories').then(function (response) {
-            for(var i=0; i<response.data.categories.length;i++){              
+            for (var i = 0; i < response.data.categories.length; i++) {
                 var category = {
-                    text : response.data.categories[i].name,
-                    url : response.data.categories[i].id,
-                    description : response.data.categories[i].page_description,
-                    image_url : response.data.categories[i].id + '.png'
-                }              
+                    text: response.data.categories[i].name,
+                    url: response.data.categories[i].id,
+                    description: response.data.categories[i].page_description,
+                    image_url: response.data.categories[i].id + '.png'
+                }
                 categories.push(category)
             }
             return categories
         })
     }
 
-    function search(search){
-        return $http.post('/api/search',{'search':search}).then(function (response) {
+    function search(search) {
+        return $http.post('/api/search', {
+            'search': search
+        }).then(function (response) {
             return response.data
         })
     }

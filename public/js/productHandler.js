@@ -162,9 +162,9 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
         var color = (productService.color) ? productService.color : 'default'
         var size = (productService.size) ? productService.size : 'default'
 
-        var response = productService.AddBasket(token,itemId,color,size);
+        var response = productService.AddBasket(token, itemId, color, size);
 
-        response.then(function(response){
+        response.then(function (response) {
             var info = response.info
             var status = response.success
             if (status) {
@@ -180,8 +180,7 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
                         $scope.basketAlert = false
                     }, 2000);
                 }
-            }
-            else{
+            } else {
                 $scope.authorizedAlert = true
                 $timeout(function () {
                     $scope.authorizedAlert = false
@@ -194,12 +193,12 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
         var color = (productService.color) ? productService.color : 'default'
         var size = (productService.size) ? productService.size : 'default'
 
-        var response = productService.AddWishlist(token,itemId,color,size)
+        var response = productService.AddWishlist(token, itemId, color, size)
 
-        response.then(function(response){
+        response.then(function (response) {
             var info = response.info
             var status = response.success
-            
+
             if (status) {
                 if (info) {
                     $scope.alreadyInWishlistAlert = true
@@ -213,7 +212,7 @@ app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 
                         $scope.wishlistAlert = false
                     }, 2000);
                 }
-            }else{
+            } else {
                 $scope.authorizedAlert = true
                 $timeout(function () {
                     $scope.authorizedAlert = false
@@ -278,14 +277,14 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
         var message = $scope.message
         var url = $location.absUrl();
         var pid = url.split('/').pop()
-        if(typeof message != 'undefined' && message.length > 0){
+        if (typeof message != 'undefined' && message.length > 0) {
             $http.post('/api/addReview', {
                 token: token,
                 pid: pid,
                 star: star,
                 message: message
             }).then(function (response) {
-                
+
                 var review = response.data.reviews
                 var status = ''
                 switch (review.star) {
@@ -308,18 +307,17 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
                 review.status = status
                 $scope.reviews.push(review)
             })
-        }
-        else{
-            if(typeof star == 'undefined'){
+        } else {
+            if (typeof star == 'undefined') {
                 $scope.starStatus = false
             }
-            if(typeof message == 'undefined' || message == ""){
+            if (typeof message == 'undefined' || message == "") {
                 $scope.reviewForm.message.$setValidity("empty", false)
             }
-        }    
+        }
     }
 
-    $scope.messageChange = function(){
+    $scope.messageChange = function () {
         $scope.reviewForm.message.$setValidity("empty", true)
     }
 }])
@@ -374,7 +372,7 @@ app.factory('productService', ['$http', '$location', function ($http, $location)
         })
     }
 
-    function AddBasket(token,itemId,color,size){
+    function AddBasket(token, itemId, color, size) {
         return $http.post('/api/addBasket', {
             token: token,
             itemId: itemId,
@@ -385,7 +383,7 @@ app.factory('productService', ['$http', '$location', function ($http, $location)
         })
     }
 
-    function AddWishlist(token,itemId,color,size){
+    function AddWishlist(token, itemId, color, size) {
         return $http.post('/api/addWishlist', {
             token: token,
             itemId: itemId,

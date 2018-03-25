@@ -1,6 +1,7 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/css/product.css">
     <link rel="stylesheet" type="text/css" href="/css/header.css">
@@ -16,27 +17,38 @@
 
 </head>
 
-<body ng-app="product">
-    <header ng-controller="headerController">
+<body ng-app="product" ng-controller="headerController">
+    <header>
 
-        <nav class="navbar navbar-default navbar-fixed-top">
-
+        <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
 
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/" style="padding-top:3px">
-                        <img width="200" height="40" src="/images/logo.png" style="float:left">
+                <ul class="navbar-header col-md-2 col-sm-2" style="padding: 0;margin: 10px;">
+                    <a href="/" style="padding-top:3px">
+                        <img style="max-width: 100%;max-height: 100%;" src="/images/logo.png">
                     </a>
+                </ul>
+
+                <div class="navbar-header" style="float: right;">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                 </div>
 
-                <div id='navbar' class="navbar-collapse collapse">
-
+                <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
                         <li ng-repeat="category in categories">
                             <a href="/{{category.url}}">{{category.text}}</a>
                         </li>
                     </ul>
-
+                    <ul class="nav navbar-nav" style="display:inline-block;margin-top:10px">
+                        <form ng-submit="search()">
+                            <input id='search' type="text" class="form-control" placeholder="Search for..." style="display: inline-block;">
+                            <button class="btn btn-default" type="submit">Go!</button>
+                        </form>
+                    </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li ng-repeat="item in navbarObjects">
                             <a name="wishlist" ng-if="item.type === 'wishlist'" ng-click="wishlist()" style="cursor:pointer">
@@ -52,11 +64,8 @@
                             <a ng-if="item.type === 'unAuth'" href='{{item.url}}'>{{item.text}}</a>
                         </li>
                     </ul>
-
                 </div>
-
             </div>
-
         </nav>
 
         <div style="width: 80%;  display: table;margin: 20 auto;margin-top: -20px;" id='url' ng-controller="urlController" class="well well-sm">
@@ -69,9 +78,8 @@
     <div id='main'>
         <div id=product class="container" ng-controller="colorController">
             <div id='row' class="row">
-                <div class="col-md-6">
-
-                    <img ng-src={{selectedImage}}>
+                <div class="col-md-6 col-sm-6">
+                    <img ng-src={{selectedImage}} style="max-width: 100%;max-height: 100%;">
                     <div id='dropdown'>
                         <select ng-if='colors.length > 0' ng-change="colorSelected()" ng-model="selectedColor" ng-options="s.name for s in colors"
                             ng-init="selectedColor=colors[0]"></select>
@@ -126,8 +134,8 @@
                             </div>
 
                             <div class="col-md-6 alert alert-danger ng-cloak" style="float: none;  margin: 0 auto;" ng-show="authorizedAlert">
-                                    <strong>Hey!</strong> You must log in to do this operation.
-                                </div>
+                                <strong>Hey!</strong> You must log in to do this operation.
+                            </div>
 
                         </div>
                     </div>
