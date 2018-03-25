@@ -153,8 +153,9 @@
                         <div class="col-sm-12 " ng-repeat="review in reviews">
                             <div>
                                 <div class='panel panel-default'>
-                                    <div class="panel-heading">{{review.username}}
+                                    <div class="panel-heading">{{review.title}} 
                                         <span class="glyphicon glyphicon-star" ng-class='review.status' ng-repeat='n in range(1,review.star)'></span>
+                                        <p style="float:right">{{review.username}}</p>
                                     </div>
                                     <div class="panel-body">
                                         </span>
@@ -173,8 +174,9 @@
                                     <option name="fourStar" value="4">4 Star</option>
                                     <option name="fiveStar" value="5">5 Star</option>
                                 </select>
+                                
                             </div>
-
+                            <input ng-model="title" name='title' ng-change='titleChange()' class="form-control" id="title" placeholder="Title"  required/>
                             <textarea ng-change="messageChange()" class="form-control" rows="5" name="message" ng-model="message" style="width: 100%; margin-top:10px"></textarea>
                             <input type="submit" class="btn btn-block btn-success" value="Submit review"></input>
                         </form>

@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 var Review = new Schema({
     id : String,
     userId : String,
-    review : String
+    review : String,
+    title : String
 });
 
 module.exports = {

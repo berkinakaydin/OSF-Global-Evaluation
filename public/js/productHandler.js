@@ -262,7 +262,8 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
                     username: reviews[i].username,
                     star: reviews[i].star,
                     message: reviews[i].message,
-                    status: status
+                    status: status,
+                    title : reviews[i].title
                 }
                 $scope.reviews.push(review)
 
@@ -275,17 +276,14 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
         var token = localStorage.getItem('jwt')
         var star = $scope.star
         var message = $scope.message
-        var url = $location.absUrl();
-        var pid = url.split('/').pop()
-        if (typeof message != 'undefined' && message.length > 0) {
-            $http.post('/api/addReview', {
-                token: token,
-                pid: pid,
-                star: star,
-                message: message
-            }).then(function (response) {
+        var title = $scope.title
 
-                var review = response.data.reviews
+
+        if (typeof message != 'undefined' && message.length > 0 && typeof title != 'undefined' && title.length > 0) {
+            var response = productService.AddReview(star,message,title,token)
+
+            response.then(function(response){
+                var review = response.reviews
                 var status = ''
                 switch (review.star) {
                     case '1':
@@ -314,11 +312,18 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
             if (typeof message == 'undefined' || message == "") {
                 $scope.reviewForm.message.$setValidity("empty", false)
             }
+            if (typeof title == 'undefined' || title == "") {
+                $scope.reviewForm.title.$setValidity("empty", false)
+            }
         }
     }
 
     $scope.messageChange = function () {
         $scope.reviewForm.message.$setValidity("empty", true)
+    }
+
+    $scope.titleChange = function(){
+        $scope.reviewForm.title.$setValidity("empty", true)
     }
 }])
 
@@ -346,7 +351,7 @@ app.factory('productService', ['$http', '$location', function ($http, $location)
         })
     }
 
-    function AddReview(star, message, token) {
+    function AddReview(star, message, title, token) {
         var url = $location.absUrl();
         var pid = url.split('/').pop()
 
@@ -354,6 +359,7 @@ app.factory('productService', ['$http', '$location', function ($http, $location)
             token: token,
             pid: pid,
             star: star,
+            title : title,
             message: message
         }).then(function (response) {
             return response.data

@@ -26,7 +26,8 @@ exports.addReview = function(req,res){
     var pid = req.body.pid
     var star = req.body.star
     var message = req.body.message
-
+    var title = req.body.title
+    console.log(title)
     var token = req.body.token
     var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
     var username = user.username
@@ -36,7 +37,8 @@ exports.addReview = function(req,res){
             var review = {
                 star : star,
                 message : message,
-                username : username
+                username : username,
+                title : title
             }
             product.review.push(review)
             product.save()
