@@ -59,7 +59,7 @@ app.controller('colorController', function ($scope, productService) {
             var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
             productService.color = colorType
             productService.size = sizeType
-            
+
             var images = getImages(product, colorType, sizeType)
             printImage(images)
         })
@@ -146,17 +146,35 @@ app.controller('priceController', function ($scope, productService) {
     ]
 });
 
-app.controller('productInformationController', function ($scope,$location, productService) {
+app.controller('productInformationController', function ($scope, $location, productService) {
     var product = productService.product()
     product.then(function (product) {
-        console.log(product)
         $scope.title = (typeof product.page_title != 'undefined') ? product.page_title : product.id
         $scope.name = product.name
         $scope.page_description = product.page_description
 
-        $('head').append('<meta property="og:title" content='+ $scope.name +' />');
-        $('head').append('<meta property="og:description" content='+ $scope.page_description +' />');
-        $('head').append('<meta property="og:image" content='+ '/images/' + product.image_groups[0].images[0].link +' />');
+        var facebookDesc = (typeof product.page_description != 'undefined') ? product.page_description : product.name
+
+        for (var i = 0; i < 3; i++) {
+            var meta = document.createElement('meta');
+            if (i == 0) {
+                meta.setAttribute('property', 'og:title');
+                meta.content = $scope.name;
+            }
+            if(i==1){
+                meta.setAttribute('property', 'og:description');
+                meta.content = facebookDesc;
+            }
+            else{
+                meta.setAttribute('property', 'og:image');
+                meta.content = '/public/images/' + product.image_groups[0].images[0].link;
+            }
+            document.getElementsByTagName('head')[0].prepend(meta);
+        }
+
+        /*$('head').append('<meta property="og:title" content='+ $scope.name +' />');
+        $('head').append('<meta property="og:description" content='+facebookDesc +' />');
+        $('head').append('<meta property="og:image" content='+ '/public/images/' + product.image_groups[0].images[0].link +' />');*/
     })
 
     $scope.url = $location.absUrl()
@@ -270,7 +288,7 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
                     star: reviews[i].star,
                     message: reviews[i].message,
                     status: status,
-                    title : reviews[i].title
+                    title: reviews[i].title
                 }
                 $scope.reviews.push(review)
             }
@@ -286,10 +304,10 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
 
 
         if (typeof message != 'undefined' && message.length > 0 && typeof title != 'undefined' && title.length > 0) {
-            var response = productService.AddReview(star,message,title,token)
+            var response = productService.AddReview(star, message, title, token)
 
-            response.then(function(response){
-                if(response.success === true){
+            response.then(function (response) {
+                if (response.success === true) {
                     var review = response.reviews
                     var status = ''
                     switch (review.star) {
@@ -330,7 +348,7 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
         $scope.reviewForm.message.$setValidity("empty", true)
     }
 
-    $scope.titleChange = function(){
+    $scope.titleChange = function () {
         $scope.reviewForm.title.$setValidity("empty", true)
     }
 }])
@@ -367,7 +385,7 @@ app.factory('productService', ['$http', '$location', function ($http, $location)
             token: token,
             pid: pid,
             star: star,
-            title : title,
+            title: title,
             message: message
         }).then(function (response) {
             return response.data
@@ -408,4 +426,3 @@ app.factory('productService', ['$http', '$location', function ($http, $location)
         })
     }
 }])
-
