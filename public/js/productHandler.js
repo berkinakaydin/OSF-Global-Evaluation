@@ -35,7 +35,6 @@ app.controller('colorController', function ($scope, productService) {
 
             productService.color = colorType
             productService.size = sizeType
-            console.log(colorType)
             var images = getImages(product, colorType, sizeType)
 
             printImage(images)
@@ -54,7 +53,6 @@ app.controller('colorController', function ($scope, productService) {
     //WHEN COLOR SELECTED FROM DROPDOWN LIST
     $scope.colorSelected = function () {
         $scope.value = $scope.selectedColor;
-        console.log($scope.value)
         product.then(function (product) {
 
             var colorType = $scope.selectedColor.value //FOR EXAMPLE EJ3

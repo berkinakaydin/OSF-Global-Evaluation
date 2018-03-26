@@ -722,12 +722,13 @@ exports.addWishlist = function (req, res) {
         } else if (wishlist) {
             console.log('hi')
             var secondQuery = productDBModel.getProductWithProductId(itemId)
-            secondQuery.exec(function (err, product) {
+            secondQuery.lean().exec(function (err, product) {
                 if (err) {
                     return res.json({
                         success: false
                     })
                 } else if (product) {
+                    console.log(size)
                     product.size = size
                     product.color = color
                     //IF ITEM IS NOT IN BASKET, ADD TO BASKET
@@ -757,13 +758,14 @@ exports.addWishlist = function (req, res) {
             })
         } else {
             var secondQuery = productDBModel.getProductWithProductId(itemId)
-            secondQuery.exec(function (err, product) {
+            secondQuery.lean().exec(function (err, product) {
                 if (err) {
                     return res.json({
                         success: false
                     })
                 }
                 else if(product){
+                    console.log(size)
                     var wishlistEntity = new wishlistModel();
                     wishlistEntity.userId = username
                     wishlistEntity.products = []

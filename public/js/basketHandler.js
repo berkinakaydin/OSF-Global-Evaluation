@@ -88,6 +88,7 @@ app.controller('wishlistController', ['$timeout', '$scope', 'basketService', fun
         if (response.data.success === true) {
             var products = response.data.products
             for (var i = 0; i < products.length; i++) {
+               
                 var color = products[i].color
                 var size = products[i].size
                 var imagePath = function (color, size) {
