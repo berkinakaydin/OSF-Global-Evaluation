@@ -149,9 +149,14 @@ app.controller('priceController', function ($scope, productService) {
 app.controller('productInformationController', function ($scope,$location, productService) {
     var product = productService.product()
     product.then(function (product) {
+        console.log(product)
         $scope.title = (typeof product.page_title != 'undefined') ? product.page_title : product.id
         $scope.name = product.name
         $scope.page_description = product.page_description
+
+        $('head').append('<meta property="og:title" content='+ $scope.name +' />');
+        $('head').append('<meta property="og:description" content='+ $scope.page_description +' />');
+        $('head').append('<meta property="og:image" content='+ '/images/' + product.image_groups[0].images[0].link +' />');
     })
 
     $scope.url = $location.absUrl()
