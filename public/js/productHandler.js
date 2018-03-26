@@ -165,7 +165,7 @@ app.controller('productInformationController', function ($scope, $location, prod
                 meta.setAttribute('property', 'og:description');
                 meta.content = facebookDesc;
             }
-            else{
+            if(i==2){
                 meta.setAttribute('property', 'og:image');
                 meta.content = '/public/images/' + product.image_groups[0].images[0].link;
             }
