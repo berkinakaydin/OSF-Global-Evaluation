@@ -146,13 +146,15 @@ app.controller('priceController', function ($scope, productService) {
     ]
 });
 
-app.controller('productInformationController', function ($scope, productService) {
+app.controller('productInformationController', function ($scope,$location, productService) {
     var product = productService.product()
     product.then(function (product) {
         $scope.title = (typeof product.page_title != 'undefined') ? product.page_title : product.id
         $scope.name = product.name
         $scope.page_description = product.page_description
     })
+
+    $scope.url = $location.absUrl()
 })
 
 app.controller('buttonController', ['$timeout', '$http', '$scope', '$location', 'productService', function ($timeout, $http, $scope, $location, productService) {
@@ -401,3 +403,4 @@ app.factory('productService', ['$http', '$location', function ($http, $location)
         })
     }
 }])
+
