@@ -81,9 +81,8 @@
                 <div class="col-md-6">
                     <img ng-src={{selectedImage}} style="max-width: 100%;max-height: 100%;">
                     <div id='dropdown'>
-                        <select ng-if='colors.length > 0' ng-change="colorSelected()" ng-model="selectedColor" ng-options="s.name for s in colors"
-                            ng-init="selectedColor=colors[0]"></select>
-                        <select ng-if='sizes.length > 0' ng-change="sizeSelected()" ng-model="selectedSize" ng-options="s for s in sizes" ng-init="selectedSize=sizes[0]"></select>
+                        <select ng-show='colors.length > 0' ng-change="colorSelected()" ng-model="selectedColor" ng-options="s.name for s in colors" ng-init="selectedColor=colors[0]"></select>
+                        <select ng-show='sizes.length > 0'  ng-change="sizeSelected()" ng-model="selectedSize" ng-options="s for s in sizes" ng-init="selectedSize=sizes[0]"></select>
                     </div>
 
                     <div id='information' ng-controller="productInformationController">

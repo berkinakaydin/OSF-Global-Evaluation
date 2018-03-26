@@ -1,9 +1,6 @@
 const mongoose = require('mongoose')
-
-const productDBModel = require('../models/product.js')
-const userDBModel = require('../models/user.js')
-var productModel = new productDBModel.Schema();
-var userModel = new userDBModel.Schema()
+,productModel = require('../models/product.js')
+,userModel = require('../models/user.js')
 
 exports.index = function (req, res) {
     res.render('product')
@@ -12,50 +9,82 @@ exports.index = function (req, res) {
 //GET PRODUCTS FOR ANGULARJS
 exports.getProductById = function (req, res) {
     var pid = req.body.pid
-    productModel.findOne({
-        'id': pid
-    }, function (err, product) {
-        res.json({
+    var query = productModel.getProductWithProductId(pid)
+    query.exec(function (err, product) {
+        if (err) {
+            return res.json({
+                success: false
+            })
+        }
+        return res.json({
             success: true,
             product: product
         })
-    });
+    })
 }
 
-exports.addReview = function(req,res){
+
+//ADD REVIEW TO A PRODUCT
+exports.addReview = function (req, res) {
     var pid = req.body.pid
     var star = req.body.star
     var message = req.body.message
     var title = req.body.title
-    console.log(title)
+
     var token = req.body.token
-    var user = userDBModel.User().methods.verifyJWT(token) //GET USERNAME
+    var user = userModel.User().methods.verifyJWT(token) //GET USERNAME
     var username = user.username
 
-    productModel.findOne({'id': pid}, function (err, product) {
-        if(product){
+    var query = productModel.getProductWithProductId(pid)
+    query.exec(function (err, product) {
+        if (err) {
+            return res.json({
+                success: false
+            })
+        }
+
+        if (product) {
             var review = {
-                star : star,
-                message : message,
-                username : username,
-                title : title
+                star: star,
+                message: message,
+                username: username,
+                title: title
             }
             product.review.push(review)
             product.save()
-            res.json({success:true,reviews:review})
+            return res.json({
+                success: true,
+                reviews: review
+            })
         }
+
+        return res.json({
+            success: false
+        })
     })
 }
 
-exports.getReview = function(req,res){
+//GET ALL REVIEWS WHILE PRODUCT PAGE LOADING
+exports.getReview = function (req, res) {
     var pid = req.body.pid
 
-    productModel.findOne({'id': pid}, function (err, product) {
-        if(product && product.review.length > 0){
-            res.json({reviews:product.review})
+    var query = productModel.getProductWithProductId(pid)
+    query.exec(function (err, product) {
+        if (err) {
+            return res.json({
+                success: false
+            })
         }
-        else{
-            res.json(null)
+
+        if (product && product.review.length > 0) {
+            return res.json({
+                success: true,
+                reviews: product.review
+            })
         }
+
+        return res.json({
+            success: false
+        })
     })
 }

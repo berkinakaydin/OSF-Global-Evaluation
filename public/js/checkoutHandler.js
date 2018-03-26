@@ -5,6 +5,7 @@ app.controller('checkoutController', ['$scope', 'basketService', 'checkoutServic
     var response = basketService.getBasketProducts(token)
 
     response.then(function (response) {
+        console.log(response)
         var totalprice = 0
         var products = response.data.products
 

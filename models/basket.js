@@ -12,3 +12,15 @@ module.exports = {
         return mongoose.model('basket', Basket);
     }
 }
+
+var basketModel = mongoose.model('basket', Basket)
+
+module.exports.getBasketByUsername = function(username){
+    var query = basketModel.findOne({'userId' : username})
+    return query
+}
+
+module.exports.removeBasketWithUsername = function(username){
+    var query = basketModel.findOneAndRemove({'userId' : username})
+    return query
+}

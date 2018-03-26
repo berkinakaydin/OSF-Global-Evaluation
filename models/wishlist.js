@@ -12,3 +12,10 @@ module.exports = {
         return mongoose.model('wishlist', Wishlist);
     }
 }
+
+var wishlistModel = mongoose.model('wishlist', Wishlist);
+
+module.exports.getWishlistByUsername = function(username){
+    var query = wishlistModel.findOne({'userId' : username})
+    return query
+}

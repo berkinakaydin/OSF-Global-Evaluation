@@ -16,7 +16,7 @@ app.controller('loginController', ['$scope', '$timeout', 'userService', 'loginSe
                 }, 2000);
 
             } else {
-                if (response.data.error === true) {
+                if (response.data.success === false) {
                     $scope.alert = true
                     $timeout(function () {
                         $scope.alert = false
@@ -44,7 +44,6 @@ app.controller('loginController', ['$scope', '$timeout', 'userService', 'loginSe
                 var response = loginService.forgotPassword(email)
 
                 response.then(function (response) {
-
                     $("#myModal").modal()
                 })
             } else {

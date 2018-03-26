@@ -16,3 +16,10 @@ module.exports = {
         return mongoose.model('Category', Category);
     }
 }
+
+var categoryModel = mongoose.model('Category', Category);
+
+module.exports.getAllCategories = function(){
+    var query = categoryModel.find()
+    return query
+}

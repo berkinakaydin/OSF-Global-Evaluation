@@ -35,6 +35,7 @@ app.controller('colorController', function ($scope, productService) {
 
             productService.color = colorType
             productService.size = sizeType
+            console.log(colorType)
             var images = getImages(product, colorType, sizeType)
 
             printImage(images)
@@ -53,13 +54,14 @@ app.controller('colorController', function ($scope, productService) {
     //WHEN COLOR SELECTED FROM DROPDOWN LIST
     $scope.colorSelected = function () {
         $scope.value = $scope.selectedColor;
+        console.log($scope.value)
         product.then(function (product) {
 
             var colorType = $scope.selectedColor.value //FOR EXAMPLE EJ3
             var sizeType = $scope.selectedSize //FOR EXAMPLE LARGE
             productService.color = colorType
             productService.size = sizeType
-
+            
             var images = getImages(product, colorType, sizeType)
             printImage(images)
         })
@@ -237,7 +239,7 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
     var response = productService.GetReview();
 
     response.then(function (response) {
-        if (response) {
+        if (response.success === true) {
             var reviews = response.reviews
             for (var i = 0; i < reviews.length; i++) {
                 var status = ''
@@ -266,7 +268,6 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
                     title : reviews[i].title
                 }
                 $scope.reviews.push(review)
-
             }
         }
     })
@@ -283,27 +284,29 @@ app.controller('reviewController', ['$http', '$scope', '$location', 'productServ
             var response = productService.AddReview(star,message,title,token)
 
             response.then(function(response){
-                var review = response.reviews
-                var status = ''
-                switch (review.star) {
-                    case '1':
-                        status = 'bad'
-                        break
-                    case '2':
-                        status = 'weak'
-                        break
-                    case '3':
-                        status = 'average'
-                        break
-                    case '4':
-                        status = 'good'
-                        break
-                    case '5':
-                        status = 'perfect'
-                        break
+                if(response.success === true){
+                    var review = response.reviews
+                    var status = ''
+                    switch (review.star) {
+                        case '1':
+                            status = 'bad'
+                            break
+                        case '2':
+                            status = 'weak'
+                            break
+                        case '3':
+                            status = 'average'
+                            break
+                        case '4':
+                            status = 'good'
+                            break
+                        case '5':
+                            status = 'perfect'
+                            break
+                    }
+                    review.status = status
+                    $scope.reviews.push(review)
                 }
-                review.status = status
-                $scope.reviews.push(review)
             })
         } else {
             if (typeof star == 'undefined') {

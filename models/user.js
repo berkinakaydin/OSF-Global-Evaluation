@@ -73,3 +73,15 @@ module.exports = {
         return User
     }
 }
+
+var userModel = mongoose.model('User', User)
+
+module.exports.getUserByUsername = function(username){
+    var query = userModel.findOne({'username' : username})
+    return query
+}
+
+module.exports.getUserByEmail = function(email){
+    var query = userModel.findOne({'email' : email})
+    return query
+}
