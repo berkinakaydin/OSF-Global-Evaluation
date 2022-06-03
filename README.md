@@ -10,10 +10,6 @@ http://165.227.131.19
 
 npm install to install requested packages
 
-### Download
-
-git clone https://berkin768@bitbucket.org/berkin768/osf-webpage.git
-
 ## Communication
 - If you **found a bug**, open an issue.
 - If you **have a feature request**, open an issue.
